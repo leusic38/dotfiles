@@ -1,0 +1,21 @@
+rename A-Dossiers préinstallésg
+x
+shell mkdir scripts
+shell find --name "mirror*"
+ 
+search x11
+search kbd
+
+grep -r -il 'SUDO_ASKPASS'
+[M W3[M#W3
+search doc
+open_with okular
+find 
+open_with 1
+open_with 
+open_with intellij-idea-ultimate-edition
+cd 
+cd /development/Project/
+search X11
+q
+search xconfig

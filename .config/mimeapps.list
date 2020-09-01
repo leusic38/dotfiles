@@ -1,0 +1,20 @@
+[Default Applications]
+text/html=brave.desktop
+x-scheme-handler/http=brave.desktop
+x-scheme-handler/https=brave.desktop
+x-scheme-handler/about=brave.desktop
+x-scheme-handler/unknown=brave.desktop
+x-scheme-handler/postman=Postman.desktop
+application/pdf=org.kde.okular.desktop
+x-scheme-handler/msteams=teams.desktop
+x-scheme-handler/etcher=balena-etcher-electron.desktop
+
+[Added Associations]
+application/vnd.oasis.opendocument.text=libreoffice-writer.desktop;
+image/jpeg=feh;
+image/gif=okularApplication_kimgio.desktop;
+image/png=okularApplication_kimgio.desktop;
+application/pdf=okularApplication_pdf.desktop;
+x-scheme-handler/http=exo-web-browser.desktop;
+x-scheme-handler/https=exo-web-browser.desktop;
+

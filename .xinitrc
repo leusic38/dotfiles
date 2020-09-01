@@ -14,7 +14,7 @@ case $session in
 	i3|i3wm		) exec dbus-launch ssh-agent i3;;
 	xfce|xfce4	) exec startxfce4;;
 	bsp|bspwm	) exec dbus-launch ssh-agent bspwm;;
-	dwm		) dwmblocks & dbus-launch ssh-agent dwm ;;
+	dwm		) dwmlaunch;;
 	*		) exec $session;;
 esac
 

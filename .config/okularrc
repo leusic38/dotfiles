@@ -1,0 +1,30 @@
+[Desktop Entry]
+FullScreen=false
+
+[MainWindow]
+Height 1024=999
+Height 1080=1055
+State=AAAA/wAAAAD9AAAAAAAABUcAAAPmAAAABAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAIAAAAWAG0AYQBpAG4AVABvAG8AbABCAGEAcgEAAAAA/////wAAAAAAAAAAAAAAIgBhAG4AbgBvAHQAYQB0AGkAbwBuAFQAbwBvAGwAQgBhAHIAAAAAAP////8AAAAAAAAAAA==
+ToolBarsMovable=Disabled
+Width 1280=900
+Width 1920=1351
+
+[Recent Files]
+File1[$e]=/hdd/Documents/0618-javascript-es6-de-a-a-z.pdf
+File2[$e]=/hdd/Documents/1740926.pdf
+File3[$e]=/hdd/Downloads/hqc446_20_dfu_fra.pdf
+File4[$e]=/hdd/Ecole/Bouyguestelecom_Facture_20200413.pdf
+File5[$e]=/hdd/Documents/Attestation_de_tiers_payant_FARCIS_EMMANUEL.pdf
+File6[$e]=/hdd/Documents/theia/salaire_05_20.pdf
+File7[$e]=/hdd/Documents/Notice Version 1.pdf
+File8[$e]=/hdd/Downloads/Bouyguestelecom_Facture_20200713.pdf
+File9[$e]=/hdd/Downloads/C446.pdf
+Name1[$e]=0618-javascript-es6-de-a-a-z.pdf
+Name2[$e]=1740926.pdf
+Name3[$e]=hqc446_20_dfu_fra.pdf
+Name4[$e]=Bouyguestelecom_Facture_20200413.pdf
+Name5[$e]=Attestation_de_tiers_payant_FARCIS_EMMANUEL.pdf
+Name6[$e]=salaire_05_20.pdf
+Name7[$e]=Notice Version 1.pdf
+Name8[$e]=Bouyguestelecom_Facture_20200713.pdf
+Name9[$e]=C446.pdf
