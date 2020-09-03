@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+#xProfile Profile file run on login
+xcompmgr -c &
+xset dpms 300 &
+xss-lock -- slock &
+dbus-launch &
+numlocks &
+dunst &
+udiskie &
+bgconf &
+spotify &
+#exec startx
+
