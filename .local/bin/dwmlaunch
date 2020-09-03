@@ -1,0 +1,9 @@
+#!/bin/sh
+xset dpms 300 &
+xss-lock -- slock &
+dbus-launch &
+ssh-agent &
+numlocks &
+dwmblocks &
+dwm
+
