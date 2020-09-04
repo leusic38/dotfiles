@@ -5,5 +5,5 @@ dbus-launch &
 ssh-agent &
 numlocks &
 dwmblocks &
-dwm
+exec dwm
 
