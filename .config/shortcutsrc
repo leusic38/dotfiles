@@ -22,13 +22,14 @@ alias df='dfc'
 alias sn='shutdown now'
 alias rn='sudo reboot now'
 mkcd() { mkdir -p "$@" && cd "$_"; }
-cdpj() { cd /development/Projects/"$@"; }
+cdpj() { cd /hdd/development/Projects/"$@"; }
 hdd() { cd /hdd/"$@"; }
 cdi() { cd /hdd/Images/"$@"; }
 cdv() { cd /hdd/videos/"$@"; }
 msk() { cd /hdd/mysuckless/"$@"; }
 cdc() { cd ~/.config/"$@"; }
 cds() { cd ~/.local/bin/"$@"; }
+cd../() { cd ../"$@"; }
 alias pl='cd /hdd/playlist/ && rm ./*.m3u && unzip ./s_iptv.zip && unzip ./fr_iptv.zip'
 alias dc='docker-compose up -d'
 alias r='ranger'
