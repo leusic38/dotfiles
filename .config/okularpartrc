@@ -1,5 +1,3 @@
 [Main View]
-SplitterSizes=273,543
-
-[PageView]
-MouseMode=RectSelect
+ShowLeftPanel=false
+SplitterSizes=297,1050

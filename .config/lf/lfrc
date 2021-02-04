@@ -73,7 +73,7 @@ map m
 map n
 map "'"
 map '"'
-map d
+#map d
 map c
 map e
 map f
@@ -86,9 +86,9 @@ map z $view "$f"
 
 # Basic Functions
 map f :broot_jump
-map dd delete
+map dl delete
 map p paste
-map x cut
+map d cut
 map y copy
 map <enter> open
 map mf mkfile

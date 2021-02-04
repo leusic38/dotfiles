@@ -17,6 +17,10 @@
 # When = PostTransaction
 # Exec = /usr/bin/pkill -RTMIN+8 dwmblocks # Or i3blocks if using i3.
 
+#notify-send "update mirror list"
+#sudo reflector --country 'France' --country 'Germany' --age 12 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+
+
 case $BLOCK_BUTTON in
 	1) notify-send "🎁 Upgrade module" "📦: number of upgradable packages
 - center click to upgrade all packages

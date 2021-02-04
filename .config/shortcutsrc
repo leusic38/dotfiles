@@ -22,7 +22,8 @@ alias df='dfc'
 alias sn='shutdown now'
 alias rn='sudo reboot now'
 mkcd() { mkdir -p "$@" && cd "$_"; }
-cdpj() { cd /hdd/development/Projects/"$@"; }
+cdpj() { cd /development/Projects/"$@"; }
+mkpj() { cd /development/Projects/ && mkcd "$@"; }
 hdd() { cd /hdd/"$@"; }
 cdi() { cd /hdd/Images/"$@"; }
 cdv() { cd /hdd/videos/"$@"; }

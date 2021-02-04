@@ -133,6 +133,8 @@ endfunction
 nnoremap <C-x><C-t> :call Toggle_transparent_background()<CR>
 filetype plugin on
 set number
+set tabstop=4
+autocmd Filetype js setlocal tabstop=4
 set relativenumber
 set nocompatible
 set smartindent
