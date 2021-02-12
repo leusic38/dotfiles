@@ -117,8 +117,8 @@ export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-if [ -f ~/.shortcutsrc ]; then
-SHORTCUTS=~/.config/shortcutsrc
+if [ -f ~/.config/shell/aliasesrc ]; then
+SHORTCUTS=~/.config/shell/aliasesrc
 source $SHORTCUTS
 fi
 

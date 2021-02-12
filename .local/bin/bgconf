@@ -8,15 +8,15 @@
 # You may also give a directory name to select a random image from that
 # directory as a wallpaper. Be careful that the directory only has images.
 
-[ -f "$1" ] && cp "$1" ~/.config/wallpaper.png && notify-send -i "$HOME/.config/wallpaper.png" "Wallpaper changed."
+[ -f "$1" ] && cp "$1" ~/.config/x11/wallpaper.png && notify-send -i "$HOME/.config/x11/wallpaper.png" "Wallpaper changed."
 
-[ -d "$1" ] && cp "$(find "$1" -name "*.jpg" -o -name "*.jpeg" -o -name "*.png" -type f | shuf -n 1)" ~/.config/wall.png && notify-send -i "$HOME/.config/wallpaper.png" "Random Wallpaper chosen."
+[ -d "$1" ] && cp "$(find "$1" -name "*.jpg" -o -name "*.jpeg" -o -name "*.png" -type f | shuf -n 1)" ~/.config/x11/wall.png && notify-send -i "$HOME/.config/x11/wallpaper.png" "Random Wallpaper chosen."
 
 # If pywal is installed, use it.
 type wal >/dev/null 2>&1 && { wal -c
-	wal -s -i ~/.config/wallpaper.png -o ~/.config/wal/postrun
+	wal -s -i ~/.config/x11/wallpaper.png -o ~/.config/wal/postrun
 	xsetroot -name "fsignal:xrdb"
 	killall dwmblocks
 	setsid dwmblocks >/dev/null & } >/dev/null 2>&1
 
-xwallpaper --zoom ~/.config/wallpaper.png
+xwallpaper --output VGA-1 --zoom /hdd/Images/wallpapers/golf-national-ryder-cup-ecperience-03.jpg --output HDMI-1 --zoom /hdd/Images/wallpapers/2126_Le_Golf_National_PMillereau_1.jpg

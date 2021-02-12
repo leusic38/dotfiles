@@ -1,1 +1,1 @@
-/home/manu/.config/xinitrc
+/home/manu/.config/shell/xinitrc

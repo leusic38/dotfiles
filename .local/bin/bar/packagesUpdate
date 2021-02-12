@@ -31,8 +31,8 @@ case $BLOCK_BUTTON in
 	3) notify-send "$(/usr/bin/pacman -Qu)
 	------------------------
 		$(/usr/bin/yay -Qua)" ;;
-	8) setsid -f "$TERMINAL" -e pacUpgrade ;;
-	9) setsid -f "$TERMINAL" -e popAurUpgrade ;;
+	6) setsid -f "$TERMINAL" -e pacUpgrade ;;
+	7) setsid -f "$TERMINAL" -e popAurUpgrade ;;
 esac
 pacCount=$(sudo pacman -Qu | grep -Fcv "[ignored]")
 aurCount=$(yay -Qua | grep -Fcv "[ignored]")
