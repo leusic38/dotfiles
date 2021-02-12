@@ -1,0 +1,61 @@
+#!/usr/bin/env sh
+#XDG configuration
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_CACHE_HOME="$HOME/.cache"
+
+export PATH="$PATH:$(ruby -e 'print Gem.user_dir')/bin"
+export GEM_HOME=$HOME/.gem
+export SUDO_ASKPATH="$HOME/.local/bin/getpass"
+export PATH="$PATH:$(du "$HOME/.local/bin/" | cut -f2 | tr '\n' ':' | sed 's/:*$//')"
+export EDITOR="nvim"
+export READER="okular"
+export CODEEDIT="code"
+export EDI="intellij-idea-ultimate-edition"
+export TERMINAL="st"
+export BROWSER_3="google-chrome-stable"
+export BROWSER_2="brave"
+export BROWSER="firefox"
+export COLORTERM="truecolor"
+export PAGER="less"
+export WM="bspwm"
+export GTK2_RC_FILES=~/.config/gtk-2.0/gtkrc
+export ZDOTDIR="$HOME/.config/zsh/"
+export NPM_CONFIG_USERCONFIG=$XDG_CONFIG_HOME/npm/npmrc
+export LF_ICONS="di=:fi=:ln=:or=:ex=:*.c=:*.cc=:*.clj=:*.coffee=:*.cpp=:*.css=:*.d=:*.dart=:*.erl=:*.exs=:*.fs=:*.go=:*.h=:*.hh=:*.hpp=:*.hs=:*.html=:*.java=:*.jl=:*.js=:*.json=:*.lua=:*.md=:*.php=:*.pl=:*.pro=:*.py=:*.rb=:*.rs=:*.scala=:*.ts=:*.vim=:*.cmd=:*.ps1=:*.sh=:*.bash=:*.zsh=:*.fish=:*.tar=:*.tgz=:*.arc=:*.arj=:*.taz=:*.lha=:*.lz4=:*.lzh=:*.lzma=:*.tlz=:*.txz=:*.tzo=:*.t7z=:*.zip=:*.z=:*.dz=:*.gz=:*.lrz=:*.lz=:*.lzo=:*.xz=:*.zst=:*.tzst=:*.bz2=:*.bz=:*.tbz=:*.tbz2=:*.tz=:*.deb=:*.rpm=:*.jar=:*.war=:*.ear=:*.sar=:*.rar=:*.alz=:*.ace=:*.zoo=:*.cpio=:*.7z=:*.rz=:*.cab=:*.wim=:*.swm=:*.dwm=:*.esd=:*.jpg=:*.jpeg=:*.mjpg=:*.mjpeg=:*.gif=:*.bmp=:*.pbm=:*.pgm=:*.ppm=:*.tga=:*.xbm=:*.xpm=:*.tif=:*.tiff=:*.png=:*.svg=:*.svgz=:*.mng=:*.pcx=:*.mov=:*.mpg=:*.mpeg=:*.m2v=:*.mkv=:*.webm=:*.ogm=:*.mp4=:*.m4v=:*.mp4v=:*.vob=:*.qt=:*.nuv=:*.wmv=:*.asf=:*.rm=:*.rmvb=:*.flc=:*.avi=:*.fli=:*.flv=:*.gl=:*.dl=:*.xcf=:*.xwd=:*.yuv=:*.cgm=:*.emf=:*.ogv=:*.ogx=:*.aac=:*.au=:*.flac=:*.m4a=:*.mid=:*.midi=:*.mka=:*.mp3=:*.mpc=:*.ogg=:*.ra=:*.wav=:*.oga=:*.opus=:*.spx=:*.xspf=:*.pdf="
+
+#start graphical environment startx
+#
+# setup ssh-agent
+#
+
+# set environment variables if user's agent already exists
+[ -z "$SSH_AUTH_SOCK" ] && SSH_AUTH_SOCK=$(ls -l /tmp/ssh-*/agent.* 2> /dev/null | grep $(whoami) | awk '{print $9}')
+[ -z "$SSH_AGENT_PID" -a -z `echo $SSH_AUTH_SOCK | cut -d. -f2` ] && SSH_AGENT_PID=$((`echo $SSH_AUTH_SOCK | cut -d. -f2` + 1))
+[ -n "$SSH_AUTH_SOCK" ] && export SSH_AUTH_SOCK
+[ -n "$SSH_AGENT_PID" ] && export SSH_AGENT_PID
+
+# start agent if necessary
+if [ -z $SSH_AGENT_PID ] && [ -z $SSH_TTY ]; then  # if no agent & not in ssh
+  eval `ssh-agent -s` > /dev/null
+fi
+
+# setup addition of keys when needed
+if [ -z "$SSH_TTY" ] ; then                     # if not using ssh
+  ssh-add -l > /dev/null                        # check for keys
+  if [ $? -ne 0 ] ; then
+    alias ssh='ssh-add -l > /dev/null || ssh-add && unalias ssh ; ssh'
+    if [ -f "/usr/lib/ssh/x11-ssh-askpass" ] ; then
+      SSH_ASKPASS="/usr/lib/ssh/x11-ssh-askpass" ; export SSH_ASKPASS
+    fi
+  fi
+fi
+if [ "$(tty)" = "/dev/tty1" ] && ! pgrep -u $USER startx &>/dev/null;
+	then echo "aucune session détecté laquelle lancer? [bsp|i3|dwm|xfce]"
+	read session;
+	if [ $session != "" ]; then
+		exec startx ~/.xinitrc $session 
+	else;
+		echo "X11 ne sera pas lancer"
+	fi
+fi
