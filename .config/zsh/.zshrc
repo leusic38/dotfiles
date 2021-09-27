@@ -131,8 +131,8 @@ fi
 #zstyle ':vcs_info:git:*' formats 'on branch %b'
 #precmd_functions+=( precmd_vcs_info )
 #setopt PROMPT_SUSTR
-source ~/.config/zsh/plugin/zsh-autosuggestions/zsh-autosuggestions.zsh
-source ~/.config/zsh/plugin/zsh-git-prompt/zshrc.sh
+source ~/.config/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source ~/.config/zsh/plugins/zsh-git-prompt/zshrc.sh
 setopt prompt_subst
 autoload -Uz vcs_info
 zstyle ':vcs_info:*' actionformats \

@@ -40,3 +40,4 @@ export  ZSH_THEME_GIT_PROMPT_LOCAL=" L"
 # The remote branch will be shown between these two
 export  ZSH_THEME_GIT_PROMPT_UPSTREAM_FRONT=" {%{$fg_bold[blue]%}"
 export  ZSH_THEME_GIT_PROMPT_UPSTREAM_END="%{${reset_color}%}}"
+source "$HOME/.cargo/env"

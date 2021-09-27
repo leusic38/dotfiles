@@ -1,24 +1,26 @@
 #!/usr/bin/env sh
 #XDG configuration
+source "$HOME/.cargo/env"
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_CACHE_HOME="$HOME/.cache"
 
+export PATH="$PATH:$(du "$HOME/.local/bin/" | cut -f2 | tr '\n' ':' | sed 's/:*$//')"
 export PATH="$PATH:$(ruby -e 'print Gem.user_dir')/bin"
+export PATH="$PATH:$HOME/.cargo/bin"
 export GEM_HOME=$HOME/.gem
 export SUDO_ASKPATH="$HOME/.local/bin/getpass"
-export PATH="$PATH:$(du "$HOME/.local/bin/" | cut -f2 | tr '\n' ':' | sed 's/:*$//')"
 export EDITOR="nvim"
 export READER="okular"
 export CODEEDIT="code"
 export EDI="intellij-idea-ultimate-edition"
 export TERMINAL="st"
-export BROWSER_3="google-chrome-stable"
-export BROWSER_2="brave"
+export BROWSER_2="google-chrome-stable"
+export BROWSER_3="brave"
 export BROWSER="firefox"
 export COLORTERM="truecolor"
 export PAGER="less"
-export WM="bspwm"
+export WM="dwm"
 export GTK2_RC_FILES=~/.config/gtk-2.0/gtkrc
 export ZDOTDIR="$HOME/.config/zsh/"
 export NPM_CONFIG_USERCONFIG=$XDG_CONFIG_HOME/npm/npmrc
@@ -37,7 +39,7 @@ export LF_ICONS="di=:fi=:ln=:or=:ex=:*.c=:*.cc=:*.clj=:*
 
 # start agent if necessary
 if [ -z $SSH_AGENT_PID ] && [ -z $SSH_TTY ]; then  # if no agent & not in ssh
-  eval `ssh-agent -s` > /dev/null
+  eval $`ssh-agent -s` > /dev/null
 fi
 
 # setup addition of keys when needed
@@ -55,7 +57,7 @@ if [ "$(tty)" = "/dev/tty1" ] && ! pgrep -u $USER startx &>/dev/null;
 	read session;
 	if [ $session != "" ]; then
 		exec startx ~/.xinitrc $session 
-	else;
+	else
 		echo "X11 ne sera pas lancer"
 	fi
 fi

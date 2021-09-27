@@ -24,15 +24,16 @@
 case $BLOCK_BUTTON in
 	1) notify-send "🎁 Upgrade module" "📦: number of upgradable packages
 - center click to upgrade all packages
-- center left click to upgrade pacman packages
+- right side front click to upgrade pacman packages
 - center right click to upgrade aur packages
-- right click to show upgradable packages" ;;
+- right  click to show upgradable packages
+- right side rear click to upgrade AUR packages" ;;
 	2) setsid -f "$TERMINAL" -e allUpgrade ;;
 	3) notify-send "$(/usr/bin/pacman -Qu)
 	------------------------
 		$(/usr/bin/yay -Qua)" ;;
-	6) setsid -f "$TERMINAL" -e pacUpgrade ;;
-	7) setsid -f "$TERMINAL" -e popAurUpgrade ;;
+	9) setsid -f "$TERMINAL" -e pacUpgrade ;;
+	8) setsid -f "$TERMINAL" -e popAurUpgrade ;;
 esac
 pacCount=$(sudo pacman -Qu | grep -Fcv "[ignored]")
 aurCount=$(yay -Qua | grep -Fcv "[ignored]")

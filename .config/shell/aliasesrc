@@ -4,8 +4,8 @@ command -v make >/dev/null && alias m="make"
 
 alias mu='mirror && update'
 alias u='sudo pacman -Syu'
-alias ua='pikaur -Sua'
-alias orf='pikaur -Rns $(pikaur -Qdqtt)'
+alias ua='yay -Sua'
+alias orf='yay -Rns $(yay -Qdqtt)'
 alias ls='exa --icons'
 alias ll='exa -lg --icons'
 alias la='exa -lag --icons'
@@ -22,7 +22,7 @@ alias df='dfc'
 alias sn='shutdown now'
 alias rn='sudo reboot now'
 mkcd() { mkdir -p "$@" && cd "$_"; }
-cdpj() { cd /development/Projects/"$@"; }
+gpj() { cd /development/Projects/"$@"; }
 mkpj() { cd /development/Projects/ && mkcd "$@"; }
 gdd() { cd /hdd/"$@"; }
 gi() { cd /hdd/Images/"$@"; }
@@ -33,8 +33,8 @@ gb() { cd ~/.local/bin/"$@"; }
 cd../() { cd ../"$@"; }
 alias pl='cd /hdd/playlist/ && rm ./*.m3u && unzip ./s_iptv.zip && unzip ./fr_iptv.zip'
 alias dc='docker-compose up -d'
-alias r='ranger'
-alias sr='sudo ranger'
+alias r='lf'
+alias sr='sudo lf'
 alias ei3='nvim ~/.config/i3/config'
 alias ebs='nvim ~/.config/bspwm/bspwmrc'
 alias esx='nvim ~/.config/sxhkd/sxhkdrc'
@@ -42,7 +42,7 @@ alias ep='nvim ~/.config/polybar/config'
 alias ev='nvim ~/.config/nvim/init.vim'
 alias elf='nvim ~/.config/lf/lfrc'
 alias ez='nvim ~/.config/zsh/.zshrc'
-alias esh='nvim ~/.config/shortcutsrc'
+alias esh='nvim ~/.config/shell/aliasesrc'
 alias exr='nvim ~/.config/Xresources'
 alias exi='nvim ~/.xinitrc'
 alias exp='nvim ~/.xprofile'

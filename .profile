@@ -1,0 +1,1 @@
+/home/manu/.config/shell/profile
