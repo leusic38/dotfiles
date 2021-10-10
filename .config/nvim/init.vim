@@ -24,12 +24,15 @@ Plug 'tpope/vim-commentary'
 Plug 'vim-scripts/c.vim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-fugitive'
+Plug 'mhinz/vim-signify'
+Plug 'tpope/vim-rhubarb'
+Plug 'junegunn/gv.vim'
 " Working with tags
 Plug 'alvan/vim-closetag'
 Plug 'AndrewRadev/tagalong.vim'
 " Nerd Tree plugins
 Plug 'preservim/nerdtree'
-"Plug 'tsony-tsonev/nerdtree-git-plugin'
+Plug 'tsony-tsonev/nerdtree-git-plugin'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'ryanoasis/vim-devicons'
 Plug 'scrooloose/nerdcommenter'
@@ -70,36 +73,11 @@ let g:airline_theme='codedark'
 
 let g:coloresque_extra_filetypes = ['h']
 
+source ~/.config/nvim/plugin-config/nerd.vim
+source ~/.config/nvim/plugin-config/signify.vim
 
-" ------NERDTree Settings------
-nmap <C-f> :NERDTreeToggle<CR>
-vmap ++ <plug>NERDCommenterToggle
-nmap ++ <plug>NERDCommenterToggle
-
-" open NERDTree automatically
-"autocmd VimEnter * NERDTree
-
-" Close if only NERDTree is open
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
-let g:NERDTreeGitStatusWithFlags = 1
-let g:WebDevIconsUnicodeDecorateFolderNodes = 1
-let g:NERDTreeGitStatusNodeColorization = 1
-let g:NERDTreeColorMapCustom = {
-    \ "Staged"    : "#0ee375",
-    \ "Modified"  : "#d9bf91",
-    \ "Renamed"   : "#51C9FC",
-    \ "Untracked" : "#FCE77C",
-    \ "Unmerged"  : "#FC51E6",
-    \ "Dirty"     : "#FFBD61",
-    \ "Clean"     : "#87939A",
-    \ "Ignored"   : "#808080"
-    \ }
-
-let NERDTreeShowHidden=1
 " air-line
 let g:airline_powerline_fonts = 1
-
 if !exists('g:airline_symbols')
     let g:airline_symbols = {}
 endif
@@ -110,16 +88,6 @@ autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.gra
 autocmd BufWritePost ~/.local/src/dwmblocks/config.h !cd ~/.local/src/dwmblocks/; sudo make install && { killall -q dwmblocks;setsid dwmblocks & }
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
 
-" sync open file with NERDTree
-" " Check if NERDTree is open or active
-function! IsNERDTreeOpen()
-  return exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
-endfunction
-"Switch between different windows by their direction`
-no <C-j> <C-w>j| "switching to below window 
-no <C-k> <C-w>k| "switching to above window
-no <C-l> <C-w>l| "switching to right window 
-no <C-h> <C-w>h| "switching to left window
 "emmet config
 let g:user_emmet_leader_key='<c-Tab>'
 let t:is_transparent = 0                                                                        
