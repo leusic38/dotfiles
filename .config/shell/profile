@@ -53,7 +53,7 @@ if [ -z "$SSH_TTY" ] ; then                     # if not using ssh
   fi
 fi
 if [ "$(tty)" = "/dev/tty1" ] && ! pgrep -u $USER startx &>/dev/null;
-	then echo "aucune session détecté laquelle lancer? [bsp|i3|dwm|xfce]"
+	then echo "aucune session détecté laquelle lancer? [bsp|i3|dwm|dusk|xfce]"
 	read session;
 	if [ $session != "" ]; then
 		exec startx ~/.xinitrc $session 

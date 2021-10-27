@@ -1,0 +1,17 @@
+#!/bin/sh
+
+#case $BLOCK_BUTTON in
+#	1) pgrep -x dunst >/dev/null && notify-send "Mois de" "$(cal --color=always | sed "s/..7m/<b><span color=\"red\">/;s/..27m/<\/span><\/b>/")" && notify-send "Appointments" "$(calcurse -D ~/.config/calcurse -d3)" ;;
+#	2) $TERMINAL -e calcurse -D ~/.config/calcurse ;;
+#	3) pgrep -x dunst >/dev/null && notify-send "📅 Time/date module" "\- Left click to show upcoming appointments for the next three days via \`calcurse -d3\` and show the month via \`cal\`
+#- Middle click opens calcurse if installed" ;;
+#esac
+
+case $BLOCK_BUTTON in
+    1) notify-send -t 3000 "$(date '+%A')" "📅 $(date '+%B %dXX' | sed -r -e 's/(1[123])XX/\1th/;s/1XX/1st/;s/2XX/2nd/;s/3XX/3rd/;s/XX/th/;s/ 0/ /')" & ;;
+    2) st -t "Calendar" -e bash -c "cal -y; read  -n 1 -p '' ignord" & ;;
+    3) notify-send -t 9000 "$(date '+%A')" "$(cal --color=never)" & ;;
+    8) subl ~/bin/statusbar/clock ;;
+    9) subl ~/bin/statusbar/clock_click ;;
+    *) notify-send -t 2000 "clock $BLOCK_BUTTON" & ;;
+esac
