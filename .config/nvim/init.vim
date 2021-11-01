@@ -64,7 +64,6 @@ call plug#end()
 " Call the theme 
 "set colorscheme = "iceberg"
 "let g:airline_theme = 'iceberg'
-syntax on
 set t_Co=256
 set cursorline
 colorscheme codedark
@@ -85,7 +84,6 @@ endif
 " prettier command for coc
 let g:prettier#autoformat = 0
 autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html PrettierAsync
-autocmd BufWritePost ~/.local/src/dwmblocks/config.h !cd ~/.local/src/dwmblocks/; sudo make install && { killall -q dwmblocks;setsid dwmblocks & }
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
 
 "emmet config
