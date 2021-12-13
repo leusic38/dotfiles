@@ -2,45 +2,45 @@
 FullScreen=false
 
 [MainWindow]
+HDMI-1 HDMI-3 Height 1920x1080=1042
+HDMI-1 HDMI-3 Width 1920x1080=1908
+HDMI-1 HDMI-3 XPosition 1920x1080=1923
+HDMI-1 HDMI-3 YPosition 1920x1080=29
 Height 1024=999
 Height 1080=1055
-State=AAAA/wAAAAD9AAAAAAAAAnUAAAOhAAAABAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAIAAAAWAG0AYQBpAG4AVABvAG8AbABCAGEAcgEAAAAA/////wAAAAAAAAAAAAAAIgBhAG4AbgBvAHQAYQB0AGkAbwBuAFQAbwBvAGwAQgBhAHIAAAAAAP////8AAAAAAAAAAA==
+State=AAAA/wAAAAD9AAAAAAAAB3QAAAPZAAAABAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAIAAAAWAG0AYQBpAG4AVABvAG8AbABCAGEAcgEAAAAA/////wAAAAAAAAAAAAAAIgBhAG4AbgBvAHQAYQB0AGkAbwBuAFQAbwBvAGwAQgBhAHIAAAAAAP////8AAAAAAAAAAA==
 ToolBarsMovable=Disabled
 VGA-1 HDMI-1 Height 1024=999
 VGA-1 HDMI-1 Height 1080=1055
 VGA-1 HDMI-1 Height 1280x1024=986
-VGA-1 HDMI-1 Height 1920x1080=1028
+VGA-1 HDMI-1 Height 1920x1080=1042
 VGA-1 HDMI-1 Width 1280=898
 VGA-1 HDMI-1 Width 1280x1024=629
 VGA-1 HDMI-1 Width 1920=1914
-VGA-1 HDMI-1 Width 1920x1080=942
+VGA-1 HDMI-1 Width 1920x1080=949
 VGA-1 HDMI-1 XPosition=1281
 VGA-1 HDMI-1 XPosition 1280x1024=644
-VGA-1 HDMI-1 XPosition 1920x1080=2248
+VGA-1 HDMI-1 XPosition 1920x1080=2244
 VGA-1 HDMI-1 YPosition=20
 VGA-1 HDMI-1 YPosition 1280x1024=32
-VGA-1 HDMI-1 YPosition 1920x1080=42
+VGA-1 HDMI-1 YPosition 1920x1080=32
 Width 1280=898
 Width 1920=1351
 
 [Recent Files]
-File1[$e]=/hdd/Documents/Mode_d_emploi/WW6500K_DC68-03649J-13_FR.pdf
-File10[$e]=/run/media/manu/4770-F8C6/EPSCAN/001/EPSON001.PDF
-File2[$e]=/hdd/Documents/Mode_d_emploi/SM-G97X_UM_Open_RR_Fre_Rev.1.1_210209.pdf
-File3[$e]=/hdd/Documents/Mode_d_emploi/Notice Version 2.pdf
-File4[$e]=$HOME/Documents/Facture-echeancier/facture_8142855.pdf
-File5[$e]=$HOME/Documents/Facture-echeancier/facture_8213247.pdf
-File6[$e]=/hdd/Downloads/tour-de-cou-ergonomique-sans-couture-reversible-boldo-air-design-boldo-v2.pdf
-File7[$e]=/hdd/Golf/TARIFS-ABONNEMENT-2021-web-fin.pdf
-File8[$e]=/hdd/Documents/guide-des-tailles.pdf
-File9[$e]=/hdd/distrib/Catalogue-Evnroll-2021.pdf
-Name1[$e]=WW6500K_DC68-03649J-13_FR.pdf
-Name10[$e]=EPSON001.PDF
-Name2[$e]=SM-G97X_UM_Open_RR_Fre_Rev.1.1_210209.pdf
-Name3[$e]=Notice Version 2.pdf
-Name4[$e]=facture_8142855.pdf
-Name5[$e]=facture_8213247.pdf
-Name6[$e]=tour-de-cou-ergonomique-sans-couture-reversible-boldo-air-design-boldo-v2.pdf
-Name7[$e]=TARIFS-ABONNEMENT-2021-web-fin.pdf
-Name8[$e]=guide-des-tailles.pdf
-Name9[$e]=Catalogue-Evnroll-2021.pdf
+File1[$e]=$HOME/Documents/Bad/EPSON003.pdf
+File2[$e]=/hdd/CNED/5EME/math/4-MA51-TE-WB-61-21-C01.pdf
+File3[$e]=/hdd/CNED/5EME/math/Corriges-cours/4-MA51-TE-WB-61-21-C03.pdf
+File4[$e]=/hdd/Documents/theia/salaire_2021_04.pdf
+File5[$e]=/run/media/manu/D167-3AB8/EPSCAN/001/EPSON037.PDF
+File6[$e]=/run/media/manu/D167-3AB8/EPSCAN/001/EPSON036.PDF
+File7[$e]=/hdd/Documents/theia/EPSON037.PDF
+File8[$e]=/hdd/Documents/theia/Entretien annuel EF 2021.docx.pdf
+Name1[$e]=EPSON003.pdf
+Name2[$e]=4-MA51-TE-WB-61-21-C01.pdf
+Name3[$e]=4-MA51-TE-WB-61-21-C03.pdf
+Name4[$e]=salaire_2021_04.pdf
+Name5[$e]=EPSON037.PDF
+Name6[$e]=EPSON036.PDF
+Name7[$e]=EPSON037.PDF
+Name8[$e]=Entretien annuel EF 2021.docx.pdf

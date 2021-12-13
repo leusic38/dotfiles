@@ -72,8 +72,8 @@ let g:airline_theme='codedark'
 
 let g:coloresque_extra_filetypes = ['h']
 
-source ~/.config/nvim/plugin-config/nerd.vim
-source ~/.config/nvim/plugin-config/signify.vim
+source ~/.config/nvim/config/plugin-config/nerd.vim
+source ~/.config/nvim/config/plugin-config/signify.vim
 
 " air-line
 let g:airline_powerline_fonts = 1
@@ -111,4 +111,6 @@ set ruler
 set mouse=a
 set showcmd
 syntax on
+set exrc
+set secure
 

@@ -1,14 +1,14 @@
 #!/bin/sh
 
-[ -f ~/.xprofile ] && . ~/.xprofile
-xrdb -I$HOME ~/.config/Xresources
+[[ -f ~/.xprofile ]] && . ~/.xprofile
+[[ -f ~/.Xresources ]] && xrdb -merge -I$HOME ~/.Xresources
 setxkbmap -layout frqw
 eval `$(ssh-agent) -s`
 export _JAVA_AWT_WM_NONREPARENTING=1
 export AWT_TOOLKIT=MToolkit
 #exec wmnam LG3
 
-session=${1:dwm}
+session=${1:dusk}
 
 case $session in
 	#i3|i3wm		) exec dbus-launch ssh-agent i3;;

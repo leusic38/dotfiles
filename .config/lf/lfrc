@@ -7,7 +7,7 @@ set hidden true
 set drawbox true
 set icons true
 set ignorecase true
-
+set info size
 # Custom Functions
 cmd open ${{
     case $(file --mime-type "$f" -bL) in

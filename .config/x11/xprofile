@@ -7,6 +7,6 @@ dbus-launch &
 numlocks &
 dunst &
 udiskie &
-bgconf &
+screen &
 #exec startx
 

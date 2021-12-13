@@ -33,8 +33,8 @@ gb() { cd ~/.local/bin/"$@"; }
 cd../() { cd ../"$@"; }
 alias pl='cd /hdd/playlist/ && rm ./*.m3u && unzip ./s_iptv.zip && unzip ./fr_iptv.zip'
 alias dc='docker-compose up -d'
-alias r='lf'
-alias sr='sudo lf'
+alias r='ranger'
+alias sr='sudo ranger'
 alias ei3='nvim ~/.config/i3/config'
 alias ebs='nvim ~/.config/bspwm/bspwmrc'
 alias esx='nvim ~/.config/sxhkd/sxhkdrc'

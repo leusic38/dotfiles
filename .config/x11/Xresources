@@ -3,9 +3,9 @@
 ! ===================
 URxvt.perl-ext-common:            default,matcher,resize-font,clipboard
 URxvt*scrollBar:	    false
-URxvt*letterSpace:  	0
+URxvt*letterSpace: 0 
 URxvt.internalBorder: 8
-URxvt*font: 		      xft:JetBrainsMono Nerd Font:regular:size=9
+URxvt*font: 		      xft:JetBrainsMono Nerd Font Mono:regular:size=10,xft:NotoSansMono Nerd Font Mono:regular:size=3
 URxvt*boldFont:		    xft:JetBrainsMono Nerd Font:bold:size=9
 URxvt*cursorBlink:    true
 URxvt.iso14755:		    false
@@ -23,8 +23,8 @@ URxvt*background: rgba:1111/1111/1111/dddd
 ! =================
 !      st
 ! =================
-*.font: JetBrains Mono Medium:pixelsize=12:antialias=true:autohint=true;
-
+!!*.font: JetBrains Mono Medium:pixelsize=12:antialias=true:autohint=true;
+!*.alpha: 0.9;
 
 ! =================
 !       Xft
@@ -68,11 +68,3 @@ Xft.hintstyle:		  hintslight
 ! white
 *color7:     #F8F8F0
 *color15:    #B3B3AD
-
-! dwmcolor
-dwm.normbgcolor:	#222222
-dwm.normbordercolor:	#222222
-dwm.normfgcolor:	#1d890c
-dwm.selbgcolor:		#1d890c
-dwm.selbordercolor:	#1d890c
-dwm.selfgcolor:		#f8f8f1

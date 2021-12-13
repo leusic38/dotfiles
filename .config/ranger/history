@@ -1,11 +1,9 @@
 rename A-Dossiers préinstallésg
-x
 shell mkdir scripts
 shell find --name "mirror*"
  
 search x11
 search kbd
-
 grep -r -il 'SUDO_ASKPASS'
 [M W3[M#W3
 search doc
@@ -19,3 +17,8 @@ cd /development/Project/
 search X11
 q
 search xconfig
+delete golf-national-albatros-trou-*.jpg
+delete
+x
+unzip
+

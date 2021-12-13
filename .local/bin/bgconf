@@ -13,10 +13,4 @@
 [ -d "$1" ] && cp "$(find "$1" -name "*.jpg" -o -name "*.jpeg" -o -name "*.png" -type f | shuf -n 1)" ~/.config/x11/wall.png && notify-send -i "$HOME/.config/x11/wallpaper.png" "Random Wallpaper chosen."
 
 # If pywal is installed, use it.
-type wal >/dev/null 2>&1 && { wal -c
-	wal -s -i ~/.config/x11/wallpaper.png -o ~/.config/wal/postrun
-	xsetroot -name "fsignal:xrdb"
-	killall dwmblocks
-	setsid dwmblocks >/dev/null & } >/dev/null 2>&1
-
-xwallpaper --output VGA-1 --zoom /hdd/Images/wallpapers/golf-national-ryder-cup-ecperience-03.jpg --output HDMI-1 --zoom /hdd/Images/wallpapers/2126_Le_Golf_National_PMillereau_1.jpg
+xwallpaper --output HDMI-3 --zoom /hdd/Images/wallpapers/golf-national-ryder-cup-ecperience-03.jpg --output HDMI-1 --zoom /hdd/Images/wallpapers/2126_Le_Golf_National_PMillereau_1.jpg

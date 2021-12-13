@@ -1,7 +1,3 @@
 #!/bin/sh
-xset dpms 300 &
-xss-lock -- slock &
-dbus-launch &
-ssh-agent &
-statusbar_launch &
+#statusbar_launch &
 exec dusk
