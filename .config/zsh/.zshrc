@@ -151,7 +151,7 @@ vcs_info_wrapper() {
   fi
 }
 #RPROMPT=$'$(vcs_info_wrapper)'
-PROMPT=$'%F{022}%n%f@%F{088}%m%f %F{027}%2/%f $(vcs_info_wrapper)\n %# '
+PROMPT=$'%F{149}%n%f@%F{088}%m%f %F{074}%2/%f $(vcs_info_wrapper)\n %# '
 #RPROMPT='$(git_super_status)'
 #zstyle ':vcs_info:git:*' formats 
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null

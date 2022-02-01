@@ -25,7 +25,7 @@ local options = {
   splitbelow = true,                       -- force all horizontal splits to go below current window
   splitright = true,                       -- force all vertical splits to go to the right of current window
   swapfile = false,                        -- creates a swapfile
-  -- termguicolors = true,                    -- set term gui colors (most terminals support this)
+  termguicolors = true,                    -- set term gui colors (most terminals support this)
   timeoutlen = 1000,                        -- time to wait for a mapped sequence to complete (in milliseconds)
   undofile = true,                         -- enable persistent undo
   updatetime = 300,                        -- faster completion (4000ms default)
@@ -35,13 +35,13 @@ local options = {
   tabstop = 2,                             -- insert 2 spaces for a tab
   cursorline = true,                       -- highlight the current line
   number = true,                           -- set numbered lines
-  relativenumber = false,                  -- set relative numbered lines
+  relativenumber = true,                  -- set relative numbered lines
   numberwidth = 4,                         -- set number column width to 2 {default 4}
   signcolumn = "yes",                      -- always show the sign column, otherwise it would shift the text each time
-  wrap = false,                            -- display lines as one long line
+  wrap = true,                            -- display lines as one long line
   scrolloff = 8,                           -- is one of my fav
   sidescrolloff = 8,
-  guifont = "monospace:h17",               -- the font used in graphical neovim applicationsi
+  guifont = "jetbrainsMono:h17",               -- the font used in graphical neovim applicationsi
 }
 function M.setup()
   cmd [[filetype plugin indent on]]
@@ -49,8 +49,7 @@ function M.setup()
 
   vim.api.nvim_set_keymap("", "<Space>", "<Nop>", { noremap = true, silent = true })
   g.mapleader = " "
-  g.maplocalleader = ","
-  opt.shortmess:append "c"
+  g.maplocalleader = " "
   
   for k, v in pairs(options) do
     opt[k] = v

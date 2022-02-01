@@ -23,6 +23,7 @@ alias sn='shutdown now'
 alias rn='sudo reboot now'
 mkcd() { mkdir -p "$@" && cd "$_"; }
 gpj() { cd /development/Projects/"$@"; }
+gt() { cd /development/theia/"$@"; }
 mkpj() { cd /development/Projects/ && mkcd "$@"; }
 gdd() { cd /hdd/"$@"; }
 gi() { cd /hdd/Images/"$@"; }

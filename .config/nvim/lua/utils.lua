@@ -3,7 +3,7 @@ local cmd = vim.cmd
 
 local opts = { noremap = true, silent = false }
 local generic_opts = {
-  insert_mode = opts,
+  insert_mode = { noremap = true, silent = true },
   normal_mode = opts,
   visual_mode = opts,
   visual_block_mode = opts,
@@ -37,55 +37,27 @@ function M.add_rtp(path)
   local rtp = vim.o.rtp
   rtp = rtp .. ',' .. path
 end
-
 function M.set_keymaps(mode, key, val)
-  local opt = generic_opts[mode] and generic_opts[mode] or opts
-  if type(val) == "table" then
-    opt = val[2]
-    val = val[1]
+  local isCmd= val[4]
+  local buf= val[3]
+  local options = #val >=2 and val[2] or generic_opts[mode]
+  local action = val[1]
+  mode = mode_adapters[mode] and mode_adapters[mode] or mode
+  if isCmd then
+    action = "<cmd>"..action.."<cr>"  
   end
-  vim.api.nvim_set_keymap(mode, key, val, opt)
+  if buf then
+    vim.api.nvim_buf_set_keymap(buf, mode, key, action, options)
+  else
+    vim.api.nvim_set_keymap(mode, key, action, options)
+  end
 end
 
 function M.map(mode, keymaps)
-  mode = mode_adapters[mode] and mode_adapters[mode] or mode
   for k, v in pairs(keymaps) do
     M.set_keymaps(mode, k, v)
   end
 end
--- Map a key with optional options
-function M.keymap(mode, keys, action, options)
-  if options == nil then
-    options = {}
-  end
-  vim.api.nvim_set_keymap(mode, keys, action, options)
-end
-
--- Map a key to a lua callback
-function M.keymap_lua(mode, keys, action, options)
-  if options == nil then
-    options = {}
-  end
-  vim.api.nvim_set_keymap(mode, keys, "<cmd>lua " .. action .. "<cr>", options)
-end
-
--- Buffer local keymappings
-function M.keymap_buf(mode, keys, action, options, buf_nr)
-  if options == nil then
-    options = {}
-  end
-  local buf = buf_nr or 0
-  vim.api.nvim_buf_set_keymap(buf, mode, keys, action, options)
-end
-
-function M.keymap_lua_buf(mode, keys, action, options, buf_nr)
-  if options == nil then
-    options = {}
-  end
-  local buf = buf_nr or 0
-  vim.api.nvim_buf_set_keymap(buf, mode, keys, "<cmd>lua " .. action .. "<cr>", options)
-end
-
 -- We want to be able to access utils in all our configuration files
 -- so we add the module to the _G global variable.
 _G.utils = M

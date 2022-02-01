@@ -39,9 +39,9 @@ local function packer_init()
 	-- Have packer use a popup window
 	
 	-- Load plugins lua path
-	  local lua_path = function(name)
-	    return string.format("require'plugins.%s'", name)
-	  end
+--	  local lua_path = function(name)
+--	    return string.format("require'manu.pluginsConfig.%s'", name)
+--	  end
 	packer_init()
 
 function M.setup()
@@ -58,14 +58,24 @@ function M.setup()
 	-- Install your plugins here
 	  -- My plugins here
 	  use "wbthomason/packer.nvim" -- Have packer manage itself
-	  use "nvim-lua/popup.nvim" -- An implementation of the Popup API from vim in Neovim
-	  use "nvim-lua/plenary.nvim" -- Useful lua functions used ny lots of plugins
-	  use "windwp/nvim-autopairs" -- Autopairs, integrates with both cmp and treesitter
-	  use "numToStr/Comment.nvim" -- Easily comment stuff
+	  use {"windwp/nvim-autopairs",
+      run = "make",
+      config = function()
+        require("manu.pluginsConfig.autopairs").setup()
+      end,
+    }
+	  use "numToStr/Comment.nvim"-- Easily comment stuff
+    use "norcalli/nvim-colorizer.lua" --colorized color expression
 	  use "kyazdani42/nvim-web-devicons"
-	  use {"kyazdani42/nvim-tree.lua", config = lua_path"nvim-tree"}
+	  use {"kyazdani42/nvim-tree.lua", config = function()
+         require("manu.pluginsConfig.nvim-tree").setup()
+       end,
+    }
 	  use "goolord/alpha-nvim"
-	  use {"sainnhe/everforest", config = lua_path"everforest"}
+	  use {"sainnhe/everforest", config =function()
+         require("manu.pluginsConfig.everforest").setup()
+       end,
+    }
 	  use {
 	      "iamcco/markdown-preview.nvim",
 	      run = function()
@@ -81,24 +91,78 @@ function M.setup()
 	  use "hrsh7th/cmp-cmdline" -- cmdline completions
 	  use "saadparwaiz1/cmp_luasnip" -- snippet completions
 	  use "hrsh7th/cmp-nvim-lsp"
+    use {'tzachar/cmp-tabnine', run='./install.sh'}
 	
 	  -- snippets
 	  use "L3MON4D3/LuaSnip" --snippet engine
 	  use "rafamadriz/friendly-snippets" -- a bunch of snippets to use
 	
 	  -- LSP
-	  use "neovim/nvim-lspconfig" -- enable LSP
-	  use "williamboman/nvim-lsp-installer" -- simple to use language server installer
-	  use "tamago324/nlsp-settings.nvim" -- language server settings defined in json for
-	  use "jose-elias-alvarez/null-ls.nvim" -- for formatters and linters
+	  use {
+      "neovim/nvim-lspconfig",
+       opt = true,
+      event = "BufReadPre",
+      wants = { "nvim-lsp-installer" },
+      config = function()
+        require("pluginsConfig.lsp").setup()
+      end,
+      requires = {
+       "williamboman/nvim-lsp-installer",
+      },
+    }-- enable LSP
+--	  use "williamboman/nvim-lsp-installer" -- simple to use language server installer
+--	  use "tamago324/nlsp-settings.nvim" -- language server settings defined in json for
+--	  use "jose-elias-alvarez/null-ls.nvim" -- for formatters and linters
 	
 	  -- Telescope
+    use {
+      "stevearc/gkeep.nvim",
+      run = ":UpdateRemotePlugins",
+    }
+    use {
+      "AckslD/nvim-neoclip.lua",
+      config = function()
+        require("neoclip").setup()
+      end,
+    }
+	  use "nvim-lua/popup.nvim" -- An implementation of the Popup API from vim in Neovim
+	  use "nvim-lua/plenary.nvim" -- Useful lua functions used ny lots of plugins
 	  use {
 	    "nvim-telescope/telescope.nvim",
-	      requires = {
-	        "nvim-telescope/telescope-media-files.nvim",
-	      },
-	      config = lua_path"telescope"
+	     requires = {
+        "nvim-telescope/telescope-project.nvim",
+        "nvim-telescope/telescope-symbols.nvim",
+        "nvim-telescope/telescope-media-files.nvim",
+        "nvim-telescope/telescope-github.nvim",
+        "fhill2/telescope-ultisnips.nvim",
+        "cljoly/telescope-repo.nvim",
+        "jvgrootveld/telescope-zoxide",
+        {
+          "dhruvmanila/telescope-bookmarks.nvim",
+          requires = { "tami5/sqlite.lua" },
+        },
+        -- 'nvim-telescope/telescope-hop.nvim'
+        {
+          "nvim-telescope/telescope-fzf-native.nvim",
+          run = "make"
+        },
+        {
+          "nvim-telescope/telescope-arecibo.nvim",
+          rocks = { "openssl", "lua-http-parser" },
+        },
+        {
+          "nvim-telescope/telescope-frecency.nvim",
+          requires = { "tami5/sql.nvim" },
+        },
+        {
+          "nvim-telescope/telescope-vimspector.nvim",
+          event = "BufWinEnter",
+        },
+        { "nvim-telescope/telescope-dap.nvim" },
+      },
+      config = function()
+         require("manu.pluginsConfig.telescope").setup()
+       end
 	  }
 	  -- Treesitter
 	  use {
@@ -109,7 +173,9 @@ function M.setup()
 	  use {
 	    "ThePrimeagen/refactoring.nvim",
 	    event = "VimEnter",
-	    config = lua_path"refactoring"
+	    config = function() 
+        require("manu.pluginsConfig.refactoring")setup()
+      end
 	  }
 	  -- Git
 	  use "lewis6991/gitsigns.nvim"
@@ -117,8 +183,8 @@ function M.setup()
 	     "TimUntersberger/neogit",
 	   cmd = "Neogit",
 	   requires = "nvim-lua/plenary.nvim",
-	     config = function()
-	       require("config.neogit").setup()
+	   config = function()
+	       require("manu.pluginsConfig.neogit").setup()
 	   end,
 	  }
 	
@@ -126,7 +192,6 @@ function M.setup()
 	    require("packer").sync()
 	  end
 	end
-	
   pcall(require, "impatient")
   pcall(require, "packer_compiled")
   require("packer").init(conf)

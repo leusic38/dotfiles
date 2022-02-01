@@ -21,5 +21,6 @@ delete golf-national-albatros-trou-*.jpg
 delete
 x
 unzip
-
 cd  
+:q
+
