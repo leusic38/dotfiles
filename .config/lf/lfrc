@@ -1,6 +1,8 @@
+set ratios 1:2:3
 # Basic Settings
 set preview true
-#set previewer ~/scripts/lf/preview
+set previewer ~/.config/lf/preview
+set cleaner ~/.config/lf/cleaner
 #set previewer pistol
 set hidden true
 #set color256 true

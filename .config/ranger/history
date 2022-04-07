@@ -18,9 +18,12 @@ search X11
 q
 search xconfig
 delete golf-national-albatros-trou-*.jpg
-delete
 x
 unzip
 cd  
 :q
 
+delete
+shell chmod 644 manuel_station_meteo.pdf
+search zsh
+rename powerlevel10k.zsh-theme
