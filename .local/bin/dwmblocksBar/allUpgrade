@@ -1,0 +1,9 @@
+#!/bin/sh
+
+printf "Beginning all upgrade.\\n"
+
+yay -Syu
+pkill -RTMIN+8 "${STATUSBAR:-dwmblocks}"
+duskc run_command setstatus 4 "$(~/.local/bin/statusbar/sysupdatemod/sysupdate)" &
+printf "\\nUpgrade complete.\\nPress <Enter> to exit window.\\n\\n"
+read -r
