@@ -8,7 +8,6 @@ grep -r -il 'SUDO_ASKPASS'
 [M W3[M#W3
 search doc
 open_with okular
-find 
 open_with 1
 open_with 
 open_with intellij-idea-ultimate-edition
@@ -27,3 +26,8 @@ delete
 shell chmod 644 manuel_station_meteo.pdf
 search zsh
 rename powerlevel10k.zsh-theme
+rename facture_bridge.pdf
+rename etudiant1-numa-1-manu18-test-kfp.pdf
+shell 
+open_with%space
+find 

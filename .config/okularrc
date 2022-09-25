@@ -3,13 +3,12 @@ FullScreen=false
 
 [MainWindow]
 HDMI-1 HDMI-3 Height 1920x1080=1042
-HDMI-1 HDMI-3 Width 1920x1080=949
-HDMI-1 HDMI-3 XPosition 1920x1080=964
+HDMI-1 HDMI-3 Width 1920x1080=1908
+HDMI-1 HDMI-3 XPosition 1920x1080=1926
 HDMI-1 HDMI-3 YPosition 1920x1080=32
 Height 1024=999
 Height 1080=1055
-RestorePositionForNextInstance=false
-State=AAAA/wAAAAD9AAAAAAAAA7UAAAPZAAAABAAAAAQAAAAIAAAACPwAAAACAAAAAQAAAAEAAAAsAHEAdQBpAGMAawBBAG4AbgBvAHQAYQB0AGkAbwBuAFQAbwBvAGwAQgBhAHICAAAAAP////8AAAAAAAAAAAAAAAIAAAACAAAAFgBtAGEAaQBuAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAAAAAAAAAACIAYQBuAG4AbwB0AGEAdABpAG8AbgBUAG8AbwBsAEIAYQByAAAAAAD/////AAAAAAAAAAA=
+State=AAAA/wAAAAD9AAAAAAAAB3QAAAO/AAAABAAAAAQAAAAIAAAACPwAAAACAAAAAQAAAAEAAAAsAHEAdQBpAGMAawBBAG4AbgBvAHQAYQB0AGkAbwBuAFQAbwBvAGwAQgBhAHICAAAAAP////8AAAAAAAAAAAAAAAIAAAACAAAAFgBtAGEAaQBuAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAAAAAAAAAACIAYQBuAG4AbwB0AGEAdABpAG8AbgBUAG8AbwBsAEIAYQByAAAAAAD/////AAAAAAAAAAA=
 ToolBarsMovable=Disabled
 VGA-1 HDMI-1 Height 1024=999
 VGA-1 HDMI-1 Height 1080=1055
@@ -29,23 +28,23 @@ Width 1280=898
 Width 1920=1351
 
 [Recent Files]
-File1[$e]=$HOME/Documents/Bad/EPSON003.pdf
-File10[$e]=/hdd/Documents/Mode_d_emploi/manuel_station_meteo.pdf
-File2[$e]=/hdd/CNED/5EME/math/4-MA51-TE-WB-61-21-C01.pdf
-File3[$e]=/hdd/CNED/5EME/math/Corriges-cours/4-MA51-TE-WB-61-21-C03.pdf
-File4[$e]=/hdd/Documents/theia/salaire_2021_04.pdf
-File5[$e]=/hdd/Documents/theia/EPSON037.PDF
-File6[$e]=/hdd/Documents/theia/Entretien annuel EF 2021.docx.pdf
+File1[$e]=/hdd/Documents/fh-t40-2021-2022-v2.pdf
+File10[$e]=/hdd/development/theia/plan de test.pdf
+File2[$e]=/hdd/Documents/lLVO_ogg.pdf
+File3[$e]=/hdd/Documents/Mode_d_emploi/Bedienungsanleitung_T-r_Klimmzugstange.pdf
+File4[$e]=$HOME/Documents/Impots/Avis_impots_2022_revenu_3021.pdf
+File5[$e]=$HOME/Documents/Impots/Avis_de_taxes_foncieres_2021.pdf
+File6[$e]=/hdd/Documents/Impots/PXL_GT_CI_07_2022.pdf
 File7[$e]=/windowshdp/Documents/banques/ribcic1.pdf
-File8[$e]=/development/theia/lama/web/uploads/docimo_appendix_assets/d6c2365c7d1559713f66e3028accdca9f2f720b8.pdf
-File9[$e]=/windowshdp/Mes téléchargements/manuel_station_meteo.pdf
-Name1[$e]=EPSON003.pdf
-Name10[$e]=manuel_station_meteo.pdf
-Name2[$e]=4-MA51-TE-WB-61-21-C01.pdf
-Name3[$e]=4-MA51-TE-WB-61-21-C03.pdf
-Name4[$e]=salaire_2021_04.pdf
-Name5[$e]=EPSON037.PDF
-Name6[$e]=Entretien annuel EF 2021.docx.pdf
+File8[$e]=/hdd/Documents/Bad/FZ FORZA_WorkBook_2022_2023.pdf
+File9[$e]=$HOME/Documents/Papier/iban_M_OU_MME_EMMANUEL_FARCIS_00062341704.pdf
+Name1[$e]=fh-t40-2021-2022-v2.pdf
+Name10[$e]=plan de test.pdf
+Name2[$e]=lLVO_ogg.pdf
+Name3[$e]=Bedienungsanleitung_T-r_Klimmzugstange.pdf
+Name4[$e]=Avis_impots_2022_revenu_3021.pdf
+Name5[$e]=Avis_de_taxes_foncieres_2021.pdf
+Name6[$e]=PXL_GT_CI_07_2022.pdf
 Name7[$e]=ribcic1.pdf
-Name8[$e]=d6c2365c7d1559713f66e3028accdca9f2f720b8.pdf
-Name9[$e]=manuel_station_meteo.pdf
+Name8[$e]=FZ FORZA_WorkBook_2022_2023.pdf
+Name9[$e]=iban_M_OU_MME_EMMANUEL_FARCIS_00062341704.pdf
