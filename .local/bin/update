@@ -1,9 +1,0 @@
-#!/bin/sh
-#mise a jour des depots
-yay -Syy
-sudo pacman -Syu
-
-default="Y"
-read -e -p 'update systeme [Y/n]' yes
-yes="{$yes:-$default}"
-[ $yes != "n" ]	&& yay -Sua

@@ -1,6 +1,0 @@
-#!/bin/sh
-
-pacCount=$(sudo pacman -Qu | grep -Fcv "[ignored]")
-aurCount=$(yay -Qua | grep -Fcv "[ignored]")
-[ $pacCount>0 ] || [ $aurCount>0 ] && printf "📦$pacCount-$aurCount"
-

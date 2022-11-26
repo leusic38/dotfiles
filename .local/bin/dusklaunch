@@ -1,3 +1,0 @@
-#!/bin/sh
-#statusbar_launch &
-exec dusk

@@ -1,9 +1,0 @@
-#!/bin/sh
-
-##open calc
-
-case $BLOCK_BUTTON in
-				1) qalculate-gtk ;;
-esac
-
-echo "🧮"
