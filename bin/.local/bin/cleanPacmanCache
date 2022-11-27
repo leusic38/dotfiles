@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# remove old pacman package cache
+
+sudo paccache -rk 1
+yay -Sca
