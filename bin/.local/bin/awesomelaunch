@@ -1,0 +1,3 @@
+#!/bin/sh
+#statusbar_launch &
+exec awesome

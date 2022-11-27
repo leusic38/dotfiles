@@ -16,6 +16,7 @@ case $session in
 	#bsp|bspwm	) exec dbus-launch ssh-agent bspwm;;
 	dwm		) dwmlaunch;;
 	dusk	) dusklaunch;;
+  awesome ) awesomelaunch ;;
 	*		) exec $session;;
 esac
 
