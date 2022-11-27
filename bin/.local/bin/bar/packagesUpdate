@@ -1,0 +1,41 @@
+#!/bin/sh
+
+# Displays number of upgradeable packages.
+# For this to work, have a `pacman -Sy` command run in the background as a
+# cronjob every so often as root. This script will then read those packages.
+# When clicked, it will run an upgrade via pacman.
+#
+# Add the following text as a file in /usr/share/libalpm/hooks/statusbar.hook:
+#
+# [Trigger]
+# Operation = Upgrade
+# Type = Package
+# Target = *
+#
+# [Action]
+# Description = Updating statusbar...
+# When = PostTransaction
+# Exec = /usr/bin/pkill -RTMIN+8 dwmblocks # Or i3blocks if using i3.
+
+#notify-send "update mirror list"
+#sudo reflector --country 'France' --country 'Germany' --age 12 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+
+
+case $BLOCK_BUTTON in
+	1) notify-send "🎁 Upgrade module" "📦: number of upgradable packages
+- center click to upgrade all packages
+- right side front click to upgrade pacman packages
+- center right click to upgrade aur packages
+- right  click to show upgradable packages
+- right side rear click to upgrade AUR packages" ;;
+	2) setsid -f "$TERMINAL" -e allUpgrade ;;
+	3) notify-send "$(/usr/bin/pacman -Qu)
+	------------------------
+		$(/usr/bin/yay -Qua)" ;;
+	9) setsid -f "$TERMINAL" -e pacUpgrade ;;
+	8) setsid -f "$TERMINAL" -e popAurUpgrade ;;
+esac
+pacCount=$(sudo pacman -Qu | grep -Fcv "[ignored]")
+aurCount=$(yay -Qua | grep -Fcv "[ignored]")
+[ $pacCount>0 ] || [ $aurCount>0 ] && printf "📦$pacCount-$aurCount"
+#sed "s/^/📦/;s/^📦0$pac_count-$aur_count//g"

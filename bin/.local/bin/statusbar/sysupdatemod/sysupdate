@@ -1,0 +1,6 @@
+#!/bin/sh
+countlinux=$(sudo pacman -Qu | grep -c "linux ")
+[ $countlinux -gt 0 ] && haslinux='🐧' || haslinux=''
+pacCount=$(sudo pacman -Qu | grep -Fcv "[ignored]")
+aurCount=$(yay -Qua | grep -Fcv "[ignored]")
+[ $pacCount>0 ] || [ $aurCount>0 ] && printf "$haslinux$pacCount📦$aurCount"

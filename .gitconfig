@@ -1,0 +1,5 @@
+[user]
+	name = Manu Farcis
+	email = emmanuel@farcis.fr
+[alias]
+	lg = log --oneline --decorate --graph --all

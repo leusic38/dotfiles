@@ -1,0 +1,4 @@
+#!/bin/sh
+#mise a jour des mirroirs avec reflector
+sudo reflector --country 'France' --country 'Germany' --age 12 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+

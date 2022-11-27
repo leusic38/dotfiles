@@ -7,3 +7,14 @@
 [submodule "ranger/.config/ranger/plugins/ranger_devicons"]
 	path = ranger/.config/ranger/plugins/ranger_devicons
 	url = git@github.com:alexanderjeurissen/ranger_devicons.git
+[submodule "zsh/.config/zsh/plugins/zsh-git-prompt"]
+	path = zsh/.config/zsh/plugins/zsh-git-prompt
+	url = git@github.com:olivierverdier/zsh-git-prompt.git
+[submodule "zsh/.config/zsh/plugins/zsh-syntax-highlighting"]
+	path = zsh/.config/zsh/plugins/zsh-syntax-highlighting
+	url = git@github.com:leusic38/zsh-syntax-highlighting.git
+[submodule "./zsh/.config/zsh/plugins/zsh-git-prompt"]
+	url = git@github.com:leusic38/zsh-git-promt.git
+[submodule "zsh/.config/zsh/plugins/zsh-autocomplete"]
+	path = zsh/.config/zsh/plugins/zsh-autocomplete
+	url = git@github.com:leusic38/zsh-autocomplete.git

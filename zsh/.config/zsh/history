@@ -1,0 +1,1654 @@
+ssh manuftheia
+ssh manuftheia
+ssh manuftheia
+ssh manuftheia
+ssh manuftheia
+ssh manuftheia
+sudo nvim /etc/hosts
+cd /development/theia/lama
+clear
+docker-compose exec lama_single_container bash
+ssh manuftheia
+ssh manuftheia
+ssh manuftheia
+ssh manuftheia
+ssh manuftheia
+ssh manuftheia
+ssh manuftheia
+ssh manuftheia
+ssh manuftheia
+ssh manuftheia
+sudo nvim /etc/hosts
+cd /development/theia/lama
+clear
+docker-compose exec lama_single_container bash
+cp -r /hdd/development/theia /development/theia
+sudo cp -r /hdd/development/theia /development/theia
+cd /development/theia
+cd theia
+cd ..
+rm -rf theia
+sudo rm -rf theia
+cd lama
+git status
+touch docker-compose.yml
+ls ..
+docker login registry.gitlab.com
+docker-compose up -d
+docker-compose up
+cd /development/theia/lama
+docker-compose exec lama_single_container bash
+docker-compose exec lama_single_container bash
+cd /development/theia/lama
+docker-compose exec lama_single_container bash
+gc nvim
+v init.lua
+v init.lua
+v init.lua
+cd /development/theia/lama
+docker-compose up
+gsk dusk
+v config.def.h
+rm config.h
+make
+sudo make clean install
+exit
+exit
+sudo pacman -S kitty
+kitty
+cd kitty
+v kitty.conf
+make dcb
+gt lama
+make dcb
+exit
+kitty
+cd /hdd/repos
+v kitty.conf
+kitty list-fonts s
+gsk dusk
+v config.def.h
+rm config.h
+make
+sudo make clean install
+gt lama
+make dcb
+make dcb
+gc nvim
+v init.lua
+ranger
+ranger
+kitty
+kitty
+gt lama
+docker-compose up
+gc nvim
+v init.lua
+ðƒ¿ƒ°¨
+gc kitty
+v kitty.conf
+exit
+gt lama
+make dcb
+cd testTheia
+unzip copietestautoevalnoteettraces1401202213h23m231.zip
+gt lama
+make dcb
+gc nvim
+gt lama
+make dcu
+make dci
+make dci
+make dci
+make dci
+cd .
+cd ..
+mv lama_db data_db
+mv lama_media media
+mv data_db db_data
+gc nvim
+v init.lua
+gc kitty
+v kitty.conf
+gc zsh
+mkcd theme
+v .zsh-theme-everforest-dark
+gc nvim
+v init.lua
+gc nvim
+v init.lua
+v init.lua
+cd .cache/nvim/
+rm -rf ./
+rm -rf ./*
+gc kitty
+v kitty.conf
+gc nvim
+v init.lua
+v init.lua
+v init.lua
+gc zsh
+cd theme
+v powerlevel10k.zsh-theme
+cd zsh
+cd ..
+cd theme
+cd ..
+v .zshrc
+gc nvim
+echo $TERM
+gc zsh
+v .zshrc
+gc nvim
+v init.lua
+gt lama
+make dcb
+gt lama
+make dcb
+make dcb
+yay -S phpstorm-url-handler
+gt lama
+make dcu
+make dci
+make dci
+touch ctc
+ls -la
+chmod +x ctc
+v ctc
+v ctc
+gt lama
+make dcb
+gt lama
+make dcb
+ssh manuftheia
+ssh manuftheia
+gc nvim
+v init.lua
+gt lama
+make dcb
+gc ranger
+cd plugins
+git clone https://github.com/maximtrp/ranger-archives.git
+cd ..
+v rc.conf
+v rc.conf
+chmod -R 777 ./media
+chmod -R 777 ./db_data
+sudo chmod -R 777 ./db_data
+amixer
+amixer sset Headphone unmute
+amixer sset Master unmute
+alsamixer
+pulsemixer
+ssh manuftheia
+ssh manuftheia
+ssh manuftheia
+ssh manuftheia
+pavucontrol
+ranger
+ssh theia-dev@jenkins
+ssh theia-dev@172.168.12.101
+alsamixer
+alalsamixer
+alsamixer
+alsamixer
+ssh manuftheia
+exit
+amixer sset Master unmute
+arecord -vvv -f dat /dev/null
+amixer
+sudo nvim /etc/hosts
+sudo nvim /etc/hosts
+v rc.conf
+cd ranger
+v rc.conf
+ranger
+ssh jenkins
+amixer sset Master unmute
+pavucontrol
+gt lama
+make dcb
+htop
+ranger
+ssh manuftheia
+gb status_bar
+cd statusbar
+cd volumemod
+v volume_click
+v volume_click
+cd ..
+cd sysupdatemod
+v sysupdate_click
+gsk dusk
+v config.def.h
+cd ..
+cd /development/theia/lama
+make dcb
+make migration
+make dcb
+make dci
+cd /development/theia/
+git clone git@gitlab.com:theia-tech/elffe-ansible.git
+./prepareDatabase.sh
+./prepareDatabase.sh prod
+./prepareDatabase.sh prod
+./prepareDatabase.sh prod
+cd lama-elffe-aws
+ansible-vault decrypt --ask-vault-pass 
+ansible-vault decrypt --ask-vault-pass 
+ansible-vault decrypt vault.yml  --ask-vault-pass 
+ansible-vault decrypT  --ask-vault-pass 
+ansible-vault decrypt --ask-vault-pass 
+ansible-vault decrypt --ask-vault-pass vault.yml
+ansible-vault decrypt --ask-vault-pass vault.yml
+ansible-vault decrypt --ask-vault-pass vault.yml
+ansible-vault encrypt vault.yml
+gt lama
+make dcb
+gt lama
+make dcb
+cd elffe-ansible
+cd ..
+ranger
+ranger
+sudo olocalectl list-keymapsP
+localectl list-keymaps
+dumpkeys -l
+sudo dumpkeys -l
+xset button
+xset
+localectl status
+htop
+ssh manuftheia
+ssh manuftheia
+exit
+ssh manuftheia
+sudo killall openvpn
+cd .ssh
+v config
+ssh elffe-elk
+ssh elffe-elk
+ssh elffe-elk
+htop
+gt lama
+make dci
+ssh jenkins
+ssh jenkins
+cd /development/theia/lama
+git reset --hard staging-to-reset
+git reset --hard master
+git status
+cd /development/theia/lama
+make dci
+cd /development/theia/lama
+make dcb
+cd /development/theia/lama
+make dci
+gsk dusk
+v config.def.h
+timedatectl
+sudo timedatectl set-ntp true
+timedatectl
+gsk dusk
+v config.def.h
+v config.def.h
+cd /development/theia/lama
+make dcm
+make dcb
+cd /home/manu/
+cd /home/manu/.config/transmission/torrents
+cd /TRA
+cd ..
+cd resume
+ls -la
+cd ../../..
+v .cache
+du -ah | sort -h 
+rm -rf ~/.cache/*
+cd .cache
+sudo rm -rf vim
+sudo rm -rf google-chrome
+cd ..
+gt lama
+make dcb
+gt lama
+make dcb
+gt lama
+make dci
+history
+gC.SH
+cd shell
+v aliasesrc
+gc nvim
+v init.lua
+v init.lua
+ssh manuftheia
+scp manuftheia:/home/manuf/.local/bin/connectDb ~/.local/bin/
+v connectDb
+connectDb
+cd /etc/udev/rules.d
+sudo nvim 99-udisks2.rules
+sudo nvim /etc/tmpfiles.d/media.conf
+gt lama
+make dci
+docker-compose up -d
+make dcb
+docker-compose stop
+make dci
+v .ssh/config
+connectDb
+git status
+v .gitignore
+cd nvim
+cd lua
+cd manu
+git status
+git add .
+git status
+cd ~
+git add .
+git rm --cached .config/ranger/plugins/ranger-archives
+git submodule add https://github.com/maximtrp/ranger-archives.git .config/ranger/plugins/ranger-archives
+git rm --cached .config/ranger/plugins/ranger-archives -f
+git submodule add https://github.com/maximtrp/ranger-archives.git .config/ranger/plugins/ranger-archives
+git rm --cached .config/nvim/lua/packer_compiled.luA -f
+git rm --cached .config/nvim/lua/packer_compiled.lua -f
+git status
+cd .config
+v .gitignore
+cd nvim
+touch .gitignore
+echo '/lua/packer_compiled.lua' > .gitignore
+v .gitignore
+git status
+git commit -m "update config"
+ssh-add ~/.ssh/id_rsa_pgh
+git push origin master 
+cd nvim
+v init.lua
+cd /usr/share/X11/xkb/symbols/
+v us
+v fr
+gsk dusk
+v config.def.h
+cd /hdd/my_keyboard_layout
+v fr_qw
+v fr_qw
+git branch
+git status
+v us-acentos.map
+gsk dusk
+gt lama
+make dci
+make dcb
+make dcr
+docker-compose ls
+list
+docker-compose list
+docker ls
+docker image ls
+docker rm 4de68494cd0d
+docker image rm 4de68494cd0d
+docker rm container 01e8f65cfad6
+docker rm 01e8f65cfad6
+make dcs
+docker rm 01e8f65cfad6
+docker stop 01e8f65cfad6
+docker rm 01e8f65cfad6
+docker image rm 4de68494cd0d
+docker rm c952f259be3c 
+docker image rm 4de68494cd0d
+make dci
+make dcb
+make dci dcb
+make dcr
+make dcr
+make dcr
+telnet localhost 1025
+connectDb
+clear
+gt lama
+killall telnet
+gsk dusk
+git status
+v config.def.h
+git pull upstream master
+git commit -am "update config"
+git pull upstream master
+ssh-add ~/.ssh/id_rsa_pgh
+git pull upstream master
+v config.def.h
+rm config.h
+make
+sudo make clean install
+gt lama
+connectDb
+gt lama
+make dcgo
+ssh manuftheia
+exit
+gt lama
+make dcgo
+gt lama
+make dcb
+gsk dusk
+v config.def.h
+connectDb
+connectDb
+ssh manuftheia
+gsk dusk
+v config.def.h
+ssh jenkins
+echo $BROWSER_3
+connectDb iel
+cd .ssh
+v config
+connectDb iel
+v config
+connectDb iel
+ssh lama-recette-php1
+ssh jenkins
+connectDb ielt
+make dcgo
+gt lama
+cd /hdd/development/theia/lama
+cd ..
+cd testTheia
+scp manuftheia:/home/manuf/.ssh/config ./
+gc nvim
+v init.lua
+v init.lua
+v init.lua
+exit
+pacman -Rs st-luke-git
+sudo pacman -Rs st-luke-git
+sudo pacman -Rs scratux
+sudo nvim /etc/hosts
+ssh jenkins
+gt lama
+make dcgo
+make dcs
+sudo pacman -S fd
+ssh manuftheia
+exit
+ssh manuftheia
+scp manuftheia:/hdd/Documents/wiki-branche-theia.md /hdd/development/theia
+ssh manuftheia
+st ssh manuftheia
+st ssh manuftheia &
+st && ssh manuftheia
+sudo pacman -Rs bitwarden
+st ssh manuftheia &
+connectDb ielt
+connectDb ielt
+sudo pacman -Rs teams
+gt lama
+make dcgo
+connectDb ielt
+connectDb iel
+gt lama
+make dcgo
+ssh jenkins
+st ssh jenkins
+st ssh jenkins
+connect iul
+connectDb iul
+connectDb iel
+ssh jenkins
+st ssh manuftheia
+yay -S bitwarden-dmenu bitwarden bitwarden-cli
+cd ../jenkins-ci
+ssh -F ssh.config jenkins-ci
+ansible-playbook playbook-ci-update-pgbackrest-script.yml
+ansible-playbook -i ssh.config  playbook-ci-update-pgbackrest-script.yml
+ansible-playbook -i jenkins-ci  playbook-ci-update-pgbackrest-script.yml
+ansible-playbook -F ssh.config  playbook-ci-update-pgbackrest-script.yml
+ansible-playbook -i jenkins-ci,  playbook-ci-update-pgbackrest-script.yml
+ansible-playbook -i jenkins-ci, -K playbook-ci-update-pgbackrest-script.yml
+scp manuftheia:/hdd/dev/lama_project/lama/web/tmp/* /hdd/development/theia
+scp manuftheia:/hdd/dev/lama_project/lama/web/tmp/pe-fgl-groupe-thematique-chimie-organique-effets-electroniques-f-spirau-18-02-2022-08h34m.zip /hdd/development/theia
+scp manuftheia:/hdd/dev/lama_project/lama/web/tmp/xlsx5f55eeced07f42.39666006 /hdd/development/theia
+scp -r manuftheia:/hdd/dev/lama_project/lama/web/tmp /hdd/development/theia
+cd /hdd/development/theia
+cd tmp
+cd ..
+scp -r manuftheia:/hdd/dev/lama_project/lama/web/data /hdd/development/theia
+scp -r manuftheia:/hdd/dev/lama_project/lama/web/uploads /hdd/development/theia
+connecDb
+connectDb
+connectDb iel
+connectDb ielt
+gt lama
+make dcg
+make dcgo
+docker-compose up -d --remove-orphans
+docker-compose stop
+make dcgo
+v connectDb
+v ~/.ssh/config
+v connectDb
+v connectDb
+v connectDb
+v connectDb
+cd ~/.ssh
+v config
+ssh jenkins
+connectDb iel
+connectDb iul
+gt lama
+make dcgo
+connectDb iult
+ssh -NL 15432:127.0.0.1:5432 manuftheia
+ssh -NLf 15432:127.0.0.1:5432 manuftheia
+ssh -NL 15432:127.0.0.1:5432 manuftheia
+ssh -NL 172.17.0.1:15432:127.0.0.1:5432 manuftheia
+cat /etc/hosts
+gb  & v connectDb
+v connectDb
+connectDb ielt
+v connectDb
+gc lf
+v lfrc
+gsk dusk
+git pull upstream master
+ssh-add ~/.ssh/id_rsa_pgh
+git pull upstream master
+v .gitignore
+git add .gitignore
+git commit -m "resolve gitignore conflict"
+git status
+git rebase --continue
+v config.def.h
+git add .gitignore
+v .gitignore
+git add .gitignore
+git rebase --continue
+v config.def.h
+git add config.def.h
+git commit -m "resolve config.def.h upstream"
+git rebase --continue
+v config.def.h
+git add config.def.h
+git commit -m "resolve config.def.h upstream"
+git rebase --continue
+v config.def.h
+git add config.def.h
+git commit -m "resolve config.def.h upstream"
+git rebase --continue
+v config.def.h
+gc nvim
+v init.lua
+gc nvim
+v init.lua
+v init.lua
+connectDb
+cd x11
+v xinitrc
+v xprofile
+cd ../shell
+v profile
+st ssh manuftheia
+mkdir theia
+mv connectDb ./theia
+mv ctc ./theia
+cd theia
+cp connectDb connectProd
+v connectProd
+connectProd
+v connectProd
+v  config.def.h
+gsk st
+v config.def.h
+make
+sudo make clean install
+connectProd e elffe-elk
+connectProd u univ-elk
+connectProd u univ-elk
+connectProd u univ-elk
+connectProd u univ-elk
+connectProd u univ-elk
+connectProd u 172.32.101.185
+connectProd u 172.32.101.185
+connectProd u 172.32.101.185
+connectProd u 172.32.101.185
+connectProd u 172.32.101.185
+connectProd u 172.32.101.217
+connectProd u 172.32.101.185
+gc nvim
+v init.lua
+gb theia
+v connectProd
+v connectProd
+v connectDb
+st ssh manuftheia
+connectDb iul
+connectDb iul
+htop
+connectDb iult
+gc nvim
+cd plugin
+v keymappings.lua
+connectProd univ 172.32.101.185
+connectProd univ 172.32.101.185
+connectProd u 172.32.101.185
+st connectProd u 172.32.101.185
+exit
+exit
+exit
+cd st-flexipatch
+v config.mk
+gt lama
+make dcr
+gt lama
+make dcg
+make dcgo
+exit
+cat config.h
+exit
+v config.h
+git clone git@github.com:bakkeby/st-flexipatch.git
+ssh-add ~/.ssh/id_rsa_pgh
+git clone git@github.com:bakkeby/st-flexipatch.git
+cd st-flexipatch
+v config.def.h
+make
+v patches.h
+sudo make clean install
+v patches.h
+sudo make clean install
+make
+v config.h
+make
+v patches.h
+rm patches.h
+make
+sudo make clean install
+v patches.h
+sudo make clean install
+gc nvim
+v init.lua
+mv manu/* ./
+mv  -r manu/* ./
+mv  lua/manu/* ./lua/
+cd  lua
+rm -rf manu
+cd ..
+tree
+sudo make clean install
+sudo make clean install
+make
+sudo make clean install
+sudo make clean install
+sudo make clean install
+sudo make clean install
+sudo make clean install
+sudo make clean install
+v st-flexipatch
+cd  st-flexipatch
+sudo make clean install
+sudo make clean install
+sudo make clean install
+sudo make clean install
+sudo make clean install
+sudo make clean install
+sudo make clean install
+sudo make clean install
+sudo make clean install
+sudo make clean install
+sudo make clean install
+sudo make clean install
+sudo make clean install
+sudo make clean install
+sudo make clean install
+sudo make clean install
+v .Xresources
+gc nvim
+v init.lua
+v lua/plugins.lua
+v lua/plugins.lua
+v lua/plugins.lua
+exit
+gsk st-flexipatch
+cd ..
+mv st-flexipatch my-st
+cd my-st
+cd ..
+cd st
+git remote
+cd ..
+cd my-st
+git remote -v
+git remote add upstream git@github.com:bakkeby/st-flexipatch.git
+git remote set-url origin git@github.com:leusic38/my-st.git
+git status
+v config.h
+sudo make clean install
+exit
+gsk my-st
+v config.h
+sudo make clean install
+v config.h
+sudo make clean install
+exit
+exit
+exit
+v config.h
+exit
+exit
+exit
+gsk my-st
+v config.h
+sudo make clean install
+sudo make clean install
+v config.h
+sudo make clean install
+v config.h
+sudo make clean install
+v .Xresources
+code .Xresources
+v config.h
+gsk dusk
+v config.h
+v config.def.h
+make
+sudo make clean install
+exit
+gc nvim
+v init.lua
+echo $TERM
+echo $TERMINAL
+gc X11
+cd x11
+v Xresources
+gc zsh/theme
+v everforest-dark.zsh
+cd ..
+cd ..
+cd zsh
+v .zshrc
+gc x11
+mkcd theme
+v dusk-theme.txt
+v st-theme.txt
+gsk my-st
+v config.h
+make
+sudo make clean install
+v config.h
+make
+sudo make clean install
+gsk my-st
+git remote -v
+git push origin master 
+ssh-add ~/.ssh/id_rsa_pgh
+git push --force origin master 
+git status
+git add config.mk
+git commit -m "add my own active config option"
+git push --force origin master 
+v .gitignore
+git add config.h patches.h .gitignore
+git commit -m "add my own active config option"
+git push --force origin master 
+git pull upstream master
+git config pull.rebase false --global
+git pull upstream master
+git push --force origin master 
+cd ..
+git clone git@github.com:bakkeby/slock-flexipatch.git
+git clone git@github.com:bakkeby/dmenu-flexipatch.git
+cd dusk
+git pull upstream master
+git status
+git diff
+git commit -am "replace kitty by st"
+git pull upstream master
+git push origin master
+git push origin master --force
+gt lama
+make dcgo
+exit
+htop
+gt lama
+make dcr
+gt lama
+make dcgo
+su lama
+su lama
+exit
+gt lama
+make dcr
+kitty
+docker ps
+docker ps -a
+docker --help
+docker rm ad127a1454ad
+gt lama
+make dcgo
+su lama
+exit
+gt lama
+docker-compose exec mailhog sh
+gt lama
+make dcr
+su lama
+make stop
+make dcs
+make dcs
+docker exec -it mailhog
+docker exec -it mailhog sh
+make dcs
+make dcgo
+make dcs
+gt lama
+docker --help
+docker --help
+docker container --help
+docker rm b131524cbf1b
+docker images --help
+docker image help
+docker images --help
+docker image --help
+docker image rm e8f9f4433a74
+docker image rm e8100ab0c0ca
+make dcgo
+docker info
+docker ls
+docker ps
+docker exec -it 27b924b10970 bash
+cd /var/cache/pacman/pkg
+find docker-compose
+find "docker-compose"
+cat ./ | grep "docker-compose"
+ls | grep "docker-compose"
+sudo pacman -U file://docker-compose-2.3.3-1-x86_64.pkg.tar.zst.sig
+sudo pacman -U file://docker-compose-2.3.3-1-x86_64.pkg.tar.zst
+sudo pacman -U file://docker-compose-2.3.3-1-x86_64.pkg.tar.zst
+sudo pacman -U file://var/cache/pacman/docker-compose-2.3.3-1-x86_64.pkg.tar.zst
+systemctl stop docker.service
+sudo systemctl stop docker.service
+sudo systemctl stop docker.socket
+sudo pacman -U file://var/cache/pacman/docker-compose-2.3.3-1-x86_64.pkg.tar.zst
+gsk my-st
+v patches.h
+gt lama
+make dcs
+docker ps
+make dci
+docker exec -it lama_single_container bash
+docker ps
+docker exec -it lama-lama_single_container-1 bash
+v connectDb
+cd theia
+v connectProd
+connectDb pelt 172.31.102.229
+v connectDb
+sudo pacman -U file://var/cache/pacman/docker-compose-2.3.3-1-x86_64.pkg.tar.zst
+gt lama\\
+make dcgo
+sudo nvim /etc/pacman.conf
+ssh manuftheia
+ssh jenkins
+connectDb iul
+connectDb iult
+xfconf-query -c xsettings -p /Net/ThemeName
+gt lama
+make dcgo
+make dcr
+fc-list
+fc-list
+MODE_ALTSCREENMODE_ALTSCREENMODE_ALTSCREEN
+fc-list
+gsk dusk
+v config.h
+v config.def.h
+cd ../my-st
+v patches.h
+v patches.h
+make
+rm patches.def.h
+cp patches.h patches.def.h
+rm config.def.h
+cp config.h config.def.h
+make
+sudo make clean install
+v config.def.h
+make
+sudo make clean install
+fc-list
+gt lama
+gt lama
+make dce
+make dcb
+make dcb
+make dcb
+v connectDb
+cd theia
+v connectDb
+connectDb pelt 172.31.102.229
+connectDb ma
+v connectDb
+connectDb mab
+gt lama
+git status
+cd .config
+rm -rf nvim-old
+mv nvim nvim-old
+git submodule add git@github.com:leusic38/nvim-config.git nvim
+git rm --cached nvim
+git rm -r --cached nvim
+git submodule add git@github.com:leusic38/nvim-config.git nvim
+ssh-add ~/.ssh/id_rsa_pgh
+git submodule add git@github.com:leusic38/nvim-config.git nvim
+cd nvim
+cd ..
+mv nvim-old/* nvim/
+git status
+git status
+gsk my-st
+v patches.h
+sudo make clean install
+make
+sudo make clean install
+git status
+cat .gitmodules
+git status
+cd ./.config/ranger/plugins
+git submodule add git@github.com:alexanderjeurissen/ranger_devicons.git
+ssh-add ~/.ssh/id_rsa_pgh
+git submodule add git@github.com:alexanderjeurissen/ranger_devicons.git
+git submodule add git@github.com:maximtrp/ranger-archives.git
+git rm -r --cached ranger-archives
+git submodule add git@github.com:maximtrp/ranger-archives.git
+git diff
+cd .config
+v .gitignore
+cd lf
+v cleaner
+v lfrc
+git submodule add git@github.com:cirala/lfimg.git
+cd lfimg
+make install
+cd .config/lf
+v lfrc
+cd ../shell
+v aliasesrc
+yay -S ffmpegthumbnailer imagemagick poppler epub-thumbnailer-git wkhtmltopdf bat unzip 7z unrar catdoc docx2txt odt2txt gnumeric exiftool iso-info transmission mcomix
+yay -S 7-zip isoviewer ueberzug
+connectDb mab
+gt lama
+make dcgo
+sudo pacman -S python-pynvim
+gc nvim
+v init.lua
+git status
+git commit -am "replace nvim config by nvim config submodule"
+git push origin master --force
+ssh-add ~/.ssh/id_rsa_pgh
+git push origin master --force
+ssh elffe-elk
+gc nvim
+git status
+v .gitignore
+git add .
+git status
+connectDb mab
+make dcgo
+gc nvim
+v init.lua
+v init.lua
+sudo nvim /etc/pacman.conf
+yay -Rs kitty
+cd ../shell
+cd shell
+v profile
+xfce4-terminal
+clear
+make dcgo
+gt lama
+make dcgo
+connectDb mab
+ssh manuftheia
+localectl list-keymaps
+clear
+localectl status
+localectl list-keymaps
+localectl list-keymaps | grep 'us'
+ghdd
+cd /hdd/testkeyboard
+cp /usr/share/kbd/keymaps/i386/qwerty/is-latin1-us.map.gz ./
+setxkbmap
+dumpkeys -l
+gt lama
+make dcgo
+gt lama
+make dcb
+gt lama
+git commit -am "Gitlab#660 - update webpack.config.js"
+cd /usr/share/applications
+sudo nvim google-chrome.desktop
+connectDb pelt 172.31.102.229
+gsk dusk
+ssh-add ~/.ssh/id_rsa_pgh
+git pull upstream master
+git status
+git commit -am "modification config.def.h"
+git pull upstream master
+v config.h
+v config.def.h
+make
+sudo make clean install
+cd statusbar
+cd sysupdatemod
+v sysupdate
+cd ..
+v statusbar_click
+ssh jenkins
+gt lama
+docker -ps
+docker ps
+docker ps --all
+docker-compose rm 27b924b10970
+docker rmi 27b924b10970
+docker rm 27b924b10970
+cd ..
+docker ps --format "table {{.ID}}\t{{.Status}}\t{{.Names}}"
+docker network ls
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' 037e696c63de
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' a6f321f93556
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' 211edf244dec
+docker login registry.gitlab.com
+scp -r manuftheia:/hdd/dev/lama_project/lama/app/config/parameters.yml /hdd/development/theia
+git config user.name "Emmanuel Farcis"
+git config user.email "emmanuel.farcis@theia.fr"
+git connfig 
+git config --list --show-origin
+git config user.name "Emmanuel Farcis"
+git config user.email "emmanuel.farcis@theia.fr"
+shutdown now
+sudo pacman -Qu
+yay -Qua
+make dci
+docker rm e3fe10a084bb5a61392d759b8f14e859f1d3a48e7a579a5f9edad5baac2705f9
+docker-compose rm e3fe10a084bb5a61392d759b8f14e859f1d3a48e7a579a5f9edad5baac2705f9
+docker-compose rm e3fe10a084bb5a61392d759b8f14e859f1d3a48e7a579a5f9edad5baac2705f9 -s
+docker-compose rm -s e3fe10a084bb5a61392d759b8f14e859f1d3a48e7a579a5f9edad5baac2705f9 -s
+docker-compose ps
+docker-compose rm lama_single_container
+docker ps
+docker-compose ps
+ssh jenkins
+connectProd u 172.32.101.183
+connectProd e 172.31.101.183
+connectDb pelt 172.31.102.229
+systemctl status bluetooth.service
+history
+scp /hdd/development/theia/testTheia/import_useraus_2.xls manuftheia:/hdd/dev/lama/
+scp /hdd/development/theia/testTheia/import_useraus_2.xls manuftheia:/hdd/dev/lama_project/
+ssh manuftheia
+htop
+ssh jenkins
+connectDb iult
+connectDb iul
+ssh elffe-elk
+cd .ssh/
+v config
+ssh univ-elk
+ssh univ-elk
+connectProd u 172.32.50.29
+connectProd e 172.31.50.14
+connectProd u univ-elk
+cd .local/bin
+cd theia
+v connectProd
+gsk dusk
+ssh-add ~/.ssh/id_rsa_pgh
+git status
+git pull upstream master
+connectDb mab
+connectDb mab
+ su - postgres -c "initdb --locale en_US.UTF-8 -D '/var/lib/postgres/data'"
+ su - postgres -c "initdb --locale en_US.UTF-8 -D '/var/lib/postgres/data'"
+ su - postgres -c "initdb --locale en_US.UTF-8 -D '/var/lib/postgres/data'"
+ su - postgres -c "initdb --locale en_US.UTF-8 -D '/var/lib/postgres/data'"
+cd /opt
+sudo chmod -r 755 android-sdk
+sudo chmod -R 755 android-sdk
+ssh manuftheia
+connectDb mab
+ssh ansible
+cat .ssh/config
+ssh jenkins
+htop
+connectDb ielt
+connectDb iel
+git checkout develop
+git fetch origin
+git reset --hard origin/develop
+shutdown now
+connectDb iult
+connectDb iel
+cd theia
+v connectDb
+connectDb mab
+connectDb iul
+connectDb ielt
+ssh manuftheia
+shutdown now
+git reset --hard origin/812-demande-de-fusion-rapatriement-donnees-banques-locales-up-reims-dijon
+php bin/console theia:bank:fusion 3 -l1/1 -l2/2
+php bin/console theia:bank:fusion 3 -l1/1 -l2/2
+connectDb mab
+gsk dusk
+v config.h
+ssh manuftheia
+connectDb mab
+php bin/console theia:bank:fusion 3 -l1/1 -l2/2
+ssh diskstation
+cd .ssh
+ v config
+ssh dsk
+ls /
+mv mountDisk mountdiskstation
+mountdiskstation
+docker compose ps
+gt lama
+docker compose ps
+docker compose stop
+gsk dusk
+git pull upstream master
+ssh-add ~/.ssh/id_rsa_pgh
+git pull upstream master
+v config.def.h
+git add config.def.h
+git rebase --continue
+v config.def.h
+git add config.def.h
+git rebase --continue
+make
+xrdb ~/.Xresources && duskc run_command xrdb
+sudo make clean install
+cd .config/
+cd x11
+v Xresources
+cd .config
+mkdir dusk
+git clone git@github.com:bakkeby/dusk.resources.git
+cd dusk.resources
+cd scripts
+cd ../themes
+cp *.txt ~/.config/dusk/
+cd .config/dusk
+v dusk.xresources.nord_theme.txt
+ssh manuftheia
+connectDb iul
+connectDb iel
+connectDb iult
+gsk dusk
+v config.def.h
+make
+v config.h
+rm config.h
+make
+sudo make clean install
+connectDb ielt
+connectDb mab
+connectDb r
+connectDb rec
+connectDb
+yay -S lyx
+connectDb
+connectDb iult
+ssh manuftheia
+connectDb mab
+connectDb mab
+connectDb iul
+git reset --hard origin/812-demande-de-fusion-rapatriement-donnees-banques-locales-up-reims-dijon
+cd .ssh
+v config
+ssh lama-recette-php1
+cd .local/bin
+v theia/connectDb
+cd cron
+v checkUpdate
+cd ,,
+cd ..
+cp -r cron statusbar/
+rm ./cron/checkUpdate
+cd statusbar/cron
+v checkUpdate
+sudo nvim /etc/cron.d/0hourly
+sudo nvim /etc/cron.d/0hourly
+sudo nvim /etc/pacman.conf
+sudo nvim /etc/pacman.conf
+connectDb mab
+ssh manuftheia
+rm -rf node_modules
+cd node_modules
+cd ..
+rm -rf node_modules
+ll node_modules/canvas/build/Release/
+sudo rm -rf ./node_modules
+rm -rf ./web/build
+sudo rm -rf ./web/build
+sudo rm -rf ./web/build-offline
+sudo nvim /etc/pacman.conf
+cd /hdd/package
+git clone https://aur.archlinux.org/google-drive-ocamlfuse.git
+rm *.git
+cd google-drive-ocamlfuse
+v PKGBUILD
+make pkg
+makepkg
+yay -S dune ocaml-ounit
+ssh manuftheia
+ssh manuftheia
+connectDb mab
+git branch --merged | egrep -v "(^\*|master|main|dev)" | xargs git branch -d
+connectDb mab
+htop
+sudo systemctl stop nxserver.service
+connectDb ielt
+connectDb iel
+cd theia
+v connectDb
+connectDb
+connectDb mab
+connectDb mab
+connectDb mab
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}'
+v dip
+cd /var/lib
+cd pacman
+rm db.lck
+sudo rm db.lck
+ssh manuftheia
+ssh manuftheia
+gb theia
+v connectDb
+connectDb
+connectDb mab
+connectDb mab
+ssh -F /development/theia/elffe-ansible/lama-elffe-aws/ssh.config 172.31.101.235
+ssh manuftheia
+connectDb pel 172.31.102.99
+connectDb mab
+gb theia
+cat connectDb
+v connectProd
+gb theia
+cat connectProd
+connectProd e 172.31.50.14
+cat connectDb
+connectDb pelt 172.31.102.229
+ssh manuftheia
+git checkout 769-integration-saml-mapping-group
+docker ps
+gt lama
+docker compose stop
+date -h
+man date
+pacman -S meld
+yay -S meld
+ssh manuftheia
+ssh manuftheia
+cd /hdd/development/theia
+scp manuftheia:/hdd/dev/lama_project/lama/769-bck.tar.gz /hdd/development/theia
+diff --help
+diff -qr 769-bck 769-bru/
+diff -qru 769-bck 769-bru/
+diff -qru 769-bck 769-bru/ > 769.patch
+v 769.patch
+diff -ru 769-bck 769-bru > 769.patch
+v 769.patch
+diff -ruy 769-bck 769-bru > 769.patch
+diff -ry 769-bck 769-bru
+diff -ry 769-bck 769-bru
+diff -ry 769-bck 769-bru
+v 769.patch
+diff -ru 769-bck 769-bru > 769.patch
+v 769.patch
+htop
+gdw
+ssh manuftheia
+ssh manuftheia
+connectDb mab
+ctc
+cd .cache
+ls
+cd JetBrains
+ls
+cd IntelliJIdea2022.2
+ls
+cd log
+ls
+la
+tail -n 50 idea.log
+sudo pacman -S xdotool
+ssh jenkins
+connectDb pel 172.31.102.99
+connectDb iel
+git rebase --edit-todo
+ssh jenkins
+ctc
+cd /development/theia/
+git clone git@gitlab.com:theia-tech/theia-docker.git
+cd theia-docker
+ls
+gdv
+ls
+cd  project
+cd Projects
+ls
+cd lepleindegolf
+ls
+la
+cd /etc
+v hosts
+shutdown now
+pacman -Qtdq | pacman -Rns -
+sudo pacman -Qtdq | pacman -Rns -
+su root
+htop
+dfc
+cd
+cd /
+la
+sudo ls /var/cache/pacman/pkg/ | wc -l
+du -sh /var/cache/pacman/pkg/
+sudo paccache -r
+dfc
+sudo ls /var/cache/pacman/pkg/ | wc -l
+sudo paccache -rk 1
+du -sh /var/cache/pacman/pkg/
+dfc
+cleanPacmanCache
+gb
+v cleanPacmanCache
+chmod +x cleanPacmanCache
+ls
+\:q
+cd statusbar
+ls
+cd sysupdatemod
+ls
+v sysupdate
+v sysupdate_click
+sudo pacman -S stow
+mountdiskstation
+gb
+ls
+v mountdiskstation
+yay -S onedriver
+cd /hdd
+ls
+mkdir onedrive
+la
+sudo pacman -S networkmanager
+htop
+yay -Rs onedriver
+yay -S onedrive-abraunegg
+htop
+ctc
+gt lama
+docker compose stop
+connectDb mab
+gc nvim
+ls
+ssh manuftheia
+connectDb mab
+gsk dusk
+v config.h
+ctc
+v /etc/hosts
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}'
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' lama-php-1
+docker ps
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' lama-nginx-1
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' lama-nginx-1
+ctc
+connectDb mab
+connectDb mab
+ctc
+cat /etc/hosts
+ssh manuftheia
+gsk dusk
+git pull upstream master
+git status
+git diff
+git commit -am "modif slack dsicord keypress"
+git pull upstream master
+ssh-add ~/.ssh/id_rsa_pgh
+git pull upstream master
+make
+sudo make clean install
+v config.h
+v config.h
+gdv
+cd theia/lama
+clear
+make dcr
+make dcs
+ctc
+htop
+connectDb rec
+connectDb iel
+gb
+ls
+v mirrors
+v update
+ssh manuftheia
+ssh manuftheia
+connectDb rec
+connectDb rec
+connectDb
+gt lama
+gt lama
+gt lama
+make dcc ctn=yarn
+gt lama
+make dcb
+pacman -Qu linux
+yay -Qua nerd-fonts-complete
+yay -Su nerd-fonts-complete
+yay -Syu
+yay -Rs nomachine
+yay -Syu
+cd dotfiles
+ls
+la
+mkcd dusk/.config
+mv /home/manu/dotfiles/.config/dusk ./
+ls
+cd ../..
+mkdir lf/.config
+mkdir ./lf/.config
+mkdir -p lf/.config
+mv ./.config/lf ./lf/.config/
+mkdir -p ranger/.config
+mv ./.config/ranger ./ranger/.config/
+stow dusk
+stow ranger
+mv ./.config/shell ./shell/.config/
+mkdir -p shell/.config
+mv ./.config/shell ./shell/.config/
+VAR=x11 mkdir -p $(VAR)/.config && mv ./.config/$(VAR) ./$(VAR)/.config
+VAR='x11' mkdir -p $VAR/.config && mv ./.config/$VAR ./$VAR/.config
+VAR='x11' mkdir -p "$VAR/.config" && mv "./.config/$VAR ./$VAR/.config"
+VAR='x11' mkdir -p "${VAR}/.config" && mv "./.config/${VAR} ./${VAR}/.config"
+VAR='x11' mkdir -p  ${VAR}/.config && mv  ./.config/${VAR} ./${VAR}/.config 
+VAR='x11' mkdir -p  "${VAR}"/.config && mv  ./.config/"${VAR}" ./"${VAR}"/.config 
+mkdir -p x11/.config
+mv .config/x11 x11/.config
+ls
+tree x11
+tree -h x11
+la x11/.config
+la x11/.config/x11
+mkdir -p bin/.local
+mv .local/bin bin/.local && stow bin
+unlink ~/.local/bin/bin
+mv ~/.local/bin bin/.local && stow bin
+rm -rf bin/.local/bin
+mv ~/.local/bin bin/.local && stow bin
+mkdir -p zsh/.config
+mv .config/zsh zsh/.config
+stow zsh
+ln -S /hdd/Images ./Images
+ln -s /hdd/Images Images
+ln -s /hdd/videos Videos
+neofetch
+ls hdd
+ls /hdd
+ranger
+cd ./dotfiles/.config
+ls
+ls
+gsk dusk
+rm config.h
+make
+sudo make clean install
+echo $ZDOTDIR
+echo $ZSH_THEME_GIT_PROMPT_PREFI
+cd dotfiles
+echo $ZSH_THEME_GIT_PROMPT_PREFIX
+cd dotfiles
+echo $ZSH_THEME_GIT_PROMPT_PREFIX
+echo $ZDOTDIR
+cd dotfiles
+echo $ZSH_THEME_GIT_PROMPT_PREFIX
+cd dotfiles
+echo $HISTSIZE
+sudo pacman -S ghc stack
+cd dotfiles
+echo $ZSH_THEME_GIT_PROMPT_PREFIX
+echo $ZSH_THEME_GIT_PROMPT_PREFI
+echo $ZSH_THEME_GIT_PROMPT_PREFIX
+echo $ZSH_THEME_GIT_PROMPT_PREFIX
+cd dotfiles
+cd dotfiles
+cd dotfiles
+cd dotfiles
+cd dotfiles
+cd dotfiles
+rm -rf .git/modules/zsh/.config/zsh/plugins/zsh-autosuggestions
+cd dotfiles
+cd dotfiles
+cd dotfiles
+git status
+gc nvim
+git init
+cd ./dotfiles/.config
+cd ..
+mv nvim ../dotfiles/nvim/.config
+la
+cd ../dotfiles
+git status
+rm -rf .config
+git status
+ls
+la
+la .local
+rm .local
+rm -fr.local
+rm -fr .local
+la
+git status
+git submodule add git@github.com:leusic38/nvim-config.git nvim/.config/
+git submodule init
+ls
+la
+v .git/config
+git submodule init
+ls
+la
+cd lf/.config/lf
+la
+rm -rf lfimg
+cd ../..
+cd ..
+git submodule init
+la
+git submodule add git@github.com:leusic38/nvim-config.git nvim/.config/
+touch .gitmodules
+git submodule add git@github.com:leusic38/nvim-config.git nvim/.config/
+v .gitignore
+git submodule add git@github.com:leusic38/nvim-config.git nvim/.config/
+git submodule add git@github.com:leusic38/nvim-config.git nvim/.config/nvim
+mv nvim/.config/nvim nvim/.config/nvim-new
+git submodule add git@github.com:leusic38/nvim-config.git nvim/.config/nvim
+ssh-add ~/.ssh/id_rsa_pgh
+git submodule add git@github.com:leusic38/nvim-config.git nvim/.config/nvim
+cd nvim/.config/nvim
+la
+mv ../nvim-new/* ./
+ls
+la
+la ../nvim-new
+v .gitignore
+rm ../nvim-new
+rm -rf ../nvim-new
+v init.lua
+v init.lua
+v init.lua
+cd .config
+ls
+gh
+cd dotfiles/
+ls
+la
+tree .git/modules
+v .gitmodules
+v .gitmodules
+rm .gitmodules
+cd .git/config
+v .git/config
+git rm -cached .config/ranger/plugins/ranger*
+git rm -cached .config/ranger/plugins/ranger-archives
+git rm --cached .config/ranger/plugins/ranger-archives
+git rm --cached .config/ranger/plugins/ranger_devicons
+git rm --cached ranger/.config/ranger/plugins/ranger_devicons
+mkdir -p nvim/.config/
+ls nvim/.config
+stow nvim
+cd nvim/.config/nvim
+la
+rm .git
+v .gitignore
+passwd
+pwd
+cd ../../../ranger/.config/ranger
+ls
+cd plugins
+ls
+rm -rf ranger-archives ranger_devicons
+ls
+git submodule add git@github.com:maximtrp/ranger-archives.git
+git submodule add git@github.com:alexanderjeurissen/ranger_devicons.git
+cd ../../..
+cd ..
+v .gitmodules
+git pull
+git remote -v
+git fetch
+git status
+git commit -am "update dotfiles for stow use"
+git status
+git add .gitignore .gitconfig alacritty/ awesome/ bin dunst dusk/ lf ranger/.config/ranger/bookmarks ranger/.config/ranger/commands.py ranger/.config/ranger/commands_full.py ranger/.config/ranger/history ranger/.config/ranger/rc.conf ranger/.config/ranger/rifle.conf shell/ x11/ zsh/
+git rm --cached zsh/.config/zsh/plugins/zsh-autosuggestions
+git rm -f --cached zsh/.config/zsh/plugins/zsh-autosuggestions
+git rm -f --cached zsh/.config/zsh/plugins/zsh-git-prompt
+git rm -f --cached zsh/.config/zsh/plugins/zsh-syntax-highlighting
+git submodule add git@github.com:zsh-users/zsh-autosuggestions.git ./zsh/.config/zsh/plugins
+rm -rf ./zsh/.config/zsh/plugins/zsh-*
+git submodule add git@github.com:zsh-users/zsh-autosuggestions.git ./zsh/.config/zsh/plugins
+git submodule add git@github.com:zsh-users/zsh-autosuggestions.git ./zsh/.config/zsh/plugins/
+git submodule add git@github.com:zsh-users/zsh-autosuggestions.git ./zsh/.config/zsh/plugins/zsh-autosuggestions
+git submodule add git@github.com:olivierverdier/zsh-git-prompt.git ./zsh/.config/zsh/plugins/zsh-git-prompt
+stow zsh
+git submodule add git@github.com:leusic38/zsh-syntax-highlighting.git ./zsh/.config/zsh/plugins/zsh-syntax-highlighting
+git submodule set-url ./zsh/.config/zsh/plugins/zsh-git-prompt git@github.com:leusic38/zsh-git-promt.git
+git submodule add git@github.com:leusic38/zsh-autocomplete.git ./zsh/.config/zsh/plugins/zsh-autocomplete
+git add .gitmodules
+git rm -f --cached zsh/.config/zsh/plugins/zsh-autosuggestions
+rm -rf zsh/.config/zsh/plugins/zsh-autosuggestions
