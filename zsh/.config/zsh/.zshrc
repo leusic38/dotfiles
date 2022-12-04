@@ -115,36 +115,29 @@ SHORTCUTS=~/.config/shell/aliasesrc
 source $SHORTCUTS
 fi
 
-#source ~/.zsh/git-prompt.sh
-#source ~/.zsh/git-completion.zsh
-
-#autoload -Uz vcs_info
-#precmd_vcs_info() {vcs_info}
-# Format the vcs_info_msg_0_ variable
-#zstyle ':vcs_info:git:*' formats 'on branch %b'
-#precmd_functions+=( precmd_vcs_info )
-#setopt PROMPT_SUSTR
 source ~/.config/zsh/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
-source ~/.config/zsh/plugins/zsh-git-prompt/zshrc.sh
 source ~/.config/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
 setopt prompt_subst
-#autoload -Uz vcs_info
-#zstyle ':vcs_info:*' actionformats \
-#    '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f '
-#zstyle ':vcs_info:*' formats       \
-#    '%F{4}[%F{2}%b%F{4}]%f '
-#zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
-#
-#zstyle ':vcs_info:*' enable git cvs svn
-#
-## or use pre_cmd, see man zshcontrib
-#vcs_info_wrapper() {
-#  vcs_info
-#  if [ -n "$vcs_info_msg_0_" ]; then
-#    echo "%{$fg[grey]%}${vcs_info_msg_0_}%{$reset_color%}$del"
-#  fi
-#}
-#RPROMPT=$'$(vcs_info_wrapper)'
-PROMPT=$'%F{149}%n%f@%F{088}%m%f %F{074}%2/%f $(git_super_status)\n %# '
-#RPROMPT='$(git_super_status)'
+autoload -Uz vcs_info
+zstyle ':vcs_info:*' enable git
+
+() {
+    local formats="${PRCH[branch]} %b%c%u"
+    local actionformats="${formats}%{${fg[blue]}%} ${PRCH[sep]} %{${fg[green]}%}%a"
+    zstyle ':vcs_info:*:*' formats           $formats
+    zstyle ':vcs_info:*:*' actionformats     $actionformats
+    zstyle ':vcs_info:*:*' stagedstr         "%{${fg[green]}%}${PRCH[circle]}"
+    zstyle ':vcs_info:*:*' unstagedstr       "%{${fg[yellow]}%}${PRCH[circle]}"
+    zstyle ':vcs_info:*:*' check-for-changes true
+}
+
+add-zsh-hook precmd vcs_info
+# or use pre_cmd, see man zshcontrib
+vcs_info_wrapper() {
+  vcs_info
+  if [ -n "$vcs_info_msg_0_" ]; then
+    echo "%{$fg[grey]%}${vcs_info_msg_0_}%{$reset_color%}$del"
+  fi
+}
+PROMPT=$'%F{149}%n%f@%F{088}%m%f %F{074}%2/%f $(vcs_info_wrapper)\n %# '
 #zstyle ':vcs_info:git:*' formats 

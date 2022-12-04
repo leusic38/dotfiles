@@ -21,6 +21,7 @@ alias bic='bin/console'
 alias df='dfc'
 alias sn='shutdown now'
 alias rn='sudo reboot now'
+alias al='cat ${HOME}/dotfiles/shell/.config/shell/aliasesrc'
 mkcd() { mkdir -p "$@" && cd "$_"; }
 gpj() { cd /development/Projects/"$@"; }
 gt() { cd /development/theia/"$@"; }
@@ -29,10 +30,9 @@ gdd() { cd /hdd/"$@"; }
 gi() { cd /hdd/Images/"$@"; }
 gv() { cd /hdd/videos/"$@"; }
 gsk() { cd /hdd/mysuckless/"$@"; }
-gc() { cd ~/.config/"$@"; }
-gb() { cd ~/.local/bin/"$@"; }
+gc() { cd ${HOME}/dotfiles/"$@"/.config/"$@"; }
+gb() { cd ${HOME}/.local/bin/"$@"; }
 cd../() { cd ../"$@"; }
-alias pl='cd /hdd/playlist/ && rm ./*.m3u && unzip ./s_iptv.zip && unzip ./fr_iptv.zip'
 alias dc='docker-compose up -d'
 alias r='ranger'
 alias lf='lfrun'

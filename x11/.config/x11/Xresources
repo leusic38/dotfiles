@@ -1,24 +1,24 @@
 ! ===================
 !       urxvt
 ! ===================
-URxvt.perl-ext-common:            default,matcher,resize-font,clipboard
-URxvt*scrollBar:	    false
-URxvt*letterSpace: 0 
-URxvt.internalBorder: 8
-URxvt*font: 		      xft:JetBrainsMono Nerd Font Mono:regular:size=10,xft:NotoSansMono Nerd Font Mono:regular:size=3
-URxvt*boldFont:		    xft:JetBrainsMono Nerd Font:bold:size=9
-URxvt*cursorBlink:    true
-URxvt.iso14755:		    false
-URxvt*utf8:			      true
-URxvt.keysym.C-minus: resize-font:smaller
-URxvt.keysym.C-equal: resize-font:bigger
-!!clipboard
-URxvt.clipboard.autocopy: true
-URxvt.keysym.M-c: perl:clipboard:copy
-URxvt.keysym.M-v: perl:clipboard:paste
-
-URxvt.depth:      32
-URxvt*background: rgba:1111/1111/1111/dddd
+!URxvt.perl-ext-common:            default,matcher,resize-font,clipboard
+!URxvt*scrollBar:	    false
+!URxvt*letterSpace: 0 
+!URxvt.internalBorder: 8
+!URxvt*font: 		      xft:JetBrainsMono Nerd Font Mono:regular:size=10,xft:NotoSansMono Nerd Font Mono:regular:size=3
+!URxvt*boldFont:		    xft:JetBrainsMono Nerd Font:bold:size=9
+!URxvt*cursorBlink:    true
+!URxvt.iso14755:		    false
+!URxvt*utf8:			      true
+!URxvt.keysym.C-minus: resize-font:smaller
+!URxvt.keysym.C-equal: resize-font:bigger
+!!!clipboard
+!URxvt.clipboard.autocopy: true
+!URxvt.keysym.M-c: perl:clipboard:copy
+!URxvt.keysym.M-v: perl:clipboard:paste
+!
+!URxvt.depth:      32
+!URxvt*background: rgba:1111/1111/1111/dddd
 
 ! =================
 !      st
