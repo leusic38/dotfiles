@@ -16,7 +16,7 @@ alias c='composer'
 alias gdc='cd /hdd/Documents/'
 alias gdw='cd /hdd/Downloads/'
 alias gdv='cd /development'
-alias gh='cd ~'
+alias gh="cd ${HOME}"
 alias bic='bin/console'
 alias df='dfc'
 alias sn='shutdown now'
@@ -26,6 +26,8 @@ gpj() { cd /development/Projects/"$@"; }
 gt() { cd /development/theia/"$@"; }
 mkpj() { cd /development/Projects/ && mkcd "$@"; }
 gdd() { cd /hdd/"$@"; }
+gdo() { cd ${$HOME}/dotfiles/"$@"; }
+gdl() { cd /hdd/dev/lama_project/"$@"; }
 gi() { cd /hdd/Images/"$@"; }
 gv() { cd /hdd/videos/"$@"; }
 gsk() { cd /hdd/mysuckless/"$@"; }
@@ -33,7 +35,6 @@ gc() { cd ~/.config/"$@"; }
 gb() { cd ~/.local/bin/"$@"; }
 cd../() { cd ../"$@"; }
 alias pl='cd /hdd/playlist/ && rm ./*.m3u && unzip ./s_iptv.zip && unzip ./fr_iptv.zip'
-alias dc='docker-compose up -d'
 alias r='ranger'
 alias lf='lfrun'
 alias sr='sudo ranger'
@@ -51,3 +52,5 @@ alias exp='nvim ~/.xprofile'
 alias ed='nvim ~/.config/dunst/dunstrc'
 alias mbsp='man bspc'
 alias rt='connectTheia.sh'
+ga() { git add "$@" }
+gc
