@@ -22,7 +22,6 @@ unzip
 cd  
 :q
 
-delete
 shell chmod 644 manuel_station_meteo.pdf
 search zsh
 rename powerlevel10k.zsh-theme
@@ -31,3 +30,4 @@ rename etudiant1-numa-1-manu18-test-kfp.pdf
 shell 
 open_with%space
 find 
+delete
