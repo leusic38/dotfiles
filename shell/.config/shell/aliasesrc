@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-command -v nvim >/dev/null && alias vim="nvim" vi="nvim" v="nvim" vimdiff="nvim -d"
+command -v nvim >/dev/null && alias vim="nvim" vi="nvim" v="nvim" vimdiff="nvim -d" vdiff="nvim -d"
 command -v make >/dev/null && alias m="make"
 
 alias mu='mirror && update'
@@ -13,7 +13,7 @@ alias lt=''
 ltl() { tree -C -L "$@"; }
 ltd() { tree -d -L "$@"; }
 alias c='composer'
-alias gdc='cd /hdd/Documents/'
+alias gdoc='cd /hdd/Documents/'
 alias gdw='cd /hdd/Downloads/'
 alias gdv='cd /development'
 alias gh="cd ${HOME}"
@@ -32,8 +32,13 @@ gdl() { cd /hdd/dev/lama_project/"$@"; }
 gi() { cd /hdd/Images/"$@"; }
 gv() { cd /hdd/videos/"$@"; }
 gsk() { cd /hdd/mysuckless/"$@"; }
-gc() { cd ${HOME}/dotfiles/"$@"/.config/"$@"; }
+osk() { nvim /hdd/mysuckless/"$@"; }
+gc() { cd ${HOME}/.config/"$@"; }
+gdc() { cd ${HOME}/dotfiles/"$@"/.config/"$@"; }
+od() { nvim "${HOME}"/dotfiles/; }
+gdb() { cd ${HOME}/dotfiles/bin/.local/bin; }
 gb() { cd ${HOME}/.local/bin/"$@"; }
+
 cd../() { cd ../"$@"; }
 alias r='ranger'
 alias lf='lfrun'

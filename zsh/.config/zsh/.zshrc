@@ -115,29 +115,28 @@ SHORTCUTS=~/.config/shell/aliasesrc
 source $SHORTCUTS
 fi
 
-source ~/.config/zsh/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
-source ~/.config/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
-setopt prompt_subst
-autoload -Uz vcs_info
-zstyle ':vcs_info:*' enable git
-
-() {
-    local formats="${PRCH[branch]} %b%c%u"
-    local actionformats="${formats}%{${fg[blue]}%} ${PRCH[sep]} %{${fg[green]}%}%a"
-    zstyle ':vcs_info:*:*' formats           $formats
-    zstyle ':vcs_info:*:*' actionformats     $actionformats
-    zstyle ':vcs_info:*:*' stagedstr         "%{${fg[green]}%}${PRCH[circle]}"
-    zstyle ':vcs_info:*:*' unstagedstr       "%{${fg[yellow]}%}${PRCH[circle]}"
-    zstyle ':vcs_info:*:*' check-for-changes true
-}
-
-add-zsh-hook precmd vcs_info
-# or use pre_cmd, see man zshcontrib
-vcs_info_wrapper() {
-  vcs_info
-  if [ -n "$vcs_info_msg_0_" ]; then
-    echo "%{$fg[grey]%}${vcs_info_msg_0_}%{$reset_color%}$del"
-  fi
-}
-PROMPT=$'%F{149}%n%f@%F{088}%m%f %F{074}%2/%f $(vcs_info_wrapper)\n %# '
+source $ZDOTDIR/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+source $ZDOTDIR/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
+source $ZDOTDIR/plugins/zsh-git-prompt/git-prompt.zsh
+#setopt prompt_subst
+#autoload -Uz vcs_info
+#zstyle ':vcs_info:*' enable git
+#
+#    local formats="${PRCH[branch]} %b%c%u"
+#    local actionformats="${formats}%{${fg[blue]}%} ${PRCH[sep]} %{${fg[green]}%}%a"
+#    zstyle ':vcs_info:*:*' formats           $formats
+#    zstyle ':vcs_info:*:*' actionformats     $actionformats
+#    zstyle ':vcs_info:*:*' stagedstr         "%{${fg[green]}%}${PRCH[circle]}"
+#    zstyle ':vcs_info:*:*' unstagedstr       "%{${fg[yellow]}%}${PRCH[circle]}"
+#    zstyle ':vcs_info:*:*' check-for-changes true
+#
+#add-zsh-hook precmd vcs_info
+## or use pre_cmd, see man zshcontrib
+#vcs_info_wrapper() {
+#  vcs_info
+#  if [ -n "$vcs_info_msg_0_" ]; then
+#    echo "%{$fg[grey]%}${vcs_info_msg_0_}%{$reset_color%}$del"
+#  fi
+#}
+PROMPT=$'┏╸%(?..%F{red}%?%f · )%B%~%b$(gitprompt)\n┗╸%F{cyan}❯%f '
 #zstyle ':vcs_info:git:*' formats 
