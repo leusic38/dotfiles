@@ -138,5 +138,5 @@ source $ZDOTDIR/plugins/zsh-git-prompt/git-prompt.zsh
 #    echo "%{$fg[grey]%}${vcs_info_msg_0_}%{$reset_color%}$del"
 #  fi
 #}
-PROMPT=$'┏╸%(?..%F{red}%?%f · )%B%~%b$(gitprompt)\n┗╸%F{cyan}❯%f '
+PROMPT=$'┏╸%F{033}%n%f@%F{045}%m%f->%(?..%F{red}%?%f · )%F{088}%d%f$(gitprompt)\n┗╸%B%F{cyan}❯%f%b '
 #zstyle ':vcs_info:git:*' formats 
