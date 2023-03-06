@@ -1,0 +1,78 @@
+Plug '<extension-github-reference>'
+# Press jk or kj fast to exit Insert Mode
+
+
+imap jk <Esc>
+imap kj <Esc>
+
+set number
+set relativenumber
+set ideajoin
+set ignorecase
+set surround # Vim surround plugin
+
+
+set highlightedyank # Highlight what you try to copy
+let g:highlightedyank_highlight_color = "rgba(218, 192, 109, 155)"
+let g:highlightedyank_highlight_duration = 50
+
+set which-key # Which-key
+let g:WhichKey_ShowVimActions = "true"
+let g:WhichKey_DefaultDelay = 0
+
+let mapleader = " "
+
+set easymotion # Quick Navigation inside editor
+map f <Plug>(easymotion-bd-f) # find letter
+map , <Plug>(easymotion-s)    # find pattern
+
+
+set NERDTree # File Explorer
+map <C-p> :NERDTree<CR>
+let g:NERDTreeMapActivateNode='l'
+let g:NERDTreeMapJumpParent='h'
+noremap <Esc> <nop>
+nmap <S-Enter> O<Esc>
+nmap <CR> o<Esc>
+
+nnoremap <C-j> :m +1<CR>
+nnoremap <C-k> :m -2<CR>
+inoremap <C-j> <Esc>:m +1<CR>gi
+inoremap <C-k> <Esc>:m -2<CR>gi
+
+" system clipboard
+vmap <leader>y "+y
+vmap <leader>d "+d
+nmap <leader>y "+yy
+nmap <leader>p "+p
+nmap <leader>P "+P
+vmap <leader>p "+p
+vmap <leader>P "+P
+
+" scrolling
+nmap <leader>d <C-d>
+nmap <leader>u <C-u>
+vmap <leader>d <C-d>
+vmap <leader>u <C-u>
+
+" Jetbrains Actions Mappings
+
+nmap <Tab>          <action>(NextTab) # Move to next tab
+nmap <S-Tab>        <action>(PreviousTab) # Move to previous tab
+nmap <leader>a      <action>(Run) # Run current project
+nmap <leader>cc     <action>(CloseEditor) # Close current tab
+nmap <leader>co     <action>(CloseAllEditorsButActive) # Close all tabs except current one
+nmap <leader>cp     <action>(CloseProject) # Move to Home screen
+nmap <leader>cs     <action>(QuickChangeScheme) # Color scheme tools
+nmap <leader>e      <action>(ActivateProjectToolWindow) # Toggle File Explorer
+nmap <leader>g      <action>(GotoNextError)
+nmap <leader>h      <action>(HideActiveWindow)
+nmap <leader>i      <action>(Generate) # Generate code options
+nmap <leader>l      <action>(ShowErrorDescription)
+nmap <leader>m      <action>(Git.Menu)
+nmap <leader>n      <action>(NewClass)
+nmap <leader>o      <action>(OptimizeImports)
+nmap <leader>q      <action>(Stop) # Stop current project
+nmap <leader>r      <action>(ReformatCode)
+nmap <leader>s      <action>(GlobalSettings)
+nmap <leader>t      <action>(ActivateTerminalToolWindow) # Activate terminal
