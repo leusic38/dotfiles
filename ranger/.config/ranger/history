@@ -9,7 +9,6 @@ grep -r -il 'SUDO_ASKPASS'
 search doc
 open_with okular
 open_with 1
-open_with 
 open_with intellij-idea-ultimate-edition
 cd 
 cd /development/Project/
@@ -28,6 +27,12 @@ rename powerlevel10k.zsh-theme
 rename facture_bridge.pdf
 rename etudiant1-numa-1-manu18-test-kfp.pdf
 shell 
-open_with%space
-find 
 delete
+open_with 
+Q
+rename plugins
+find 
+rename utils
+shell mkcd 
+open_with%space
+shell mkdir extras

@@ -1,7 +1,7 @@
-':/home/manu/intelephense
+':/home/manu/.local/bin
 v:/hdd/development/theia
 o:/dev/usb
-k:/hdd/development/theia
+k:/home/manu/dotfiles/nvim/.config/nvim/lua/plugins
 d:/home/manu
 g:/
 c:/home/manu/.config/zsh/theme

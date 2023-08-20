@@ -1,15 +1,17 @@
 Plug '<extension-github-reference>'
+Plug 'tpope/vim-surround'
 # Press jk or kj fast to exit Insert Mode
 
 
 imap jk <Esc>
 imap kj <Esc>
 
+set showmode
 set number
 set relativenumber
 set ideajoin
 set ignorecase
-set surround # Vim surround plugin
+set surround
 
 
 set highlightedyank # Highlight what you try to copy
@@ -57,22 +59,22 @@ vmap <leader>u <C-u>
 
 " Jetbrains Actions Mappings
 
-nmap <Tab>          <action>(NextTab) # Move to next tab
-nmap <S-Tab>        <action>(PreviousTab) # Move to previous tab
-nmap <leader>a      <action>(Run) # Run current project
-nmap <leader>cc     <action>(CloseEditor) # Close current tab
-nmap <leader>co     <action>(CloseAllEditorsButActive) # Close all tabs except current one
-nmap <leader>cp     <action>(CloseProject) # Move to Home screen
-nmap <leader>cs     <action>(QuickChangeScheme) # Color scheme tools
-nmap <leader>e      <action>(ActivateProjectToolWindow) # Toggle File Explorer
+nmap <Tab>          <action>(NextTab)
+nmap <S-Tab>        <action>(PreviousTab)
+nmap <leader>a      <action>(Run)
+nmap <leader>cc     <action>(CloseEditor)
+nmap <leader>co     <action>(CloseAllEditorsButActive)
+nmap <leader>cp     <action>(CloseProject)
+nmap <leader>cs     <action>(QuickChangeScheme)
+nmap <leader>e      <action>(ActivateProjectToolWindow)
 nmap <leader>g      <action>(GotoNextError)
 nmap <leader>h      <action>(HideActiveWindow)
-nmap <leader>i      <action>(Generate) # Generate code options
+nmap <leader>i      <action>(Generate)
 nmap <leader>l      <action>(ShowErrorDescription)
 nmap <leader>m      <action>(Git.Menu)
 nmap <leader>n      <action>(NewClass)
 nmap <leader>o      <action>(OptimizeImports)
-nmap <leader>q      <action>(Stop) # Stop current project
+nmap <leader>q      <action>(Stop)
 nmap <leader>r      <action>(ReformatCode)
 nmap <leader>s      <action>(GlobalSettings)
-nmap <leader>t      <action>(ActivateTerminalToolWindow) # Activate terminal
+nmap <leader>t      <action>(ActivateTerminalToolWindow)

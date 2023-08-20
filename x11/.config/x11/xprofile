@@ -4,9 +4,10 @@ xcompmgr -c &
 xset dpms 120 &
 xss-lock -- slock &
 dbus-launch &
-numlocks &
+setxkbmap frqw &
+#numlocks &
 dunst &
 udiskie &
-screen &
+screen -v &
 #exec startx
 

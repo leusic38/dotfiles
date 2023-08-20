@@ -19,6 +19,7 @@ export ZSH_THEME_GIT_PROMPT_UNSTAGED=" %{$fg[red]%}✚ "
 export ZSH_THEME_GIT_PROMPT_UNTRACKED=" … "
 export ZSH_THEME_GIT_PROMPT_STASHED=" %{$fg[blue]%}⚑ "
 export ZSH_THEME_GIT_PROMPT_CLEAN=" %{$fg_bold[green]%}✔"
+export ZSH_THEME_GIT_PROMPT_BRANCH_MAX_LENGTH=27
 export HISTSIZE=2000
 export SAVEHIST=2000
 export HISTFILE=~/.local/share/zsh/history

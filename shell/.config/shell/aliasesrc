@@ -10,8 +10,10 @@ alias ls='exa --icons'
 alias ll='exa -lg --icons'
 alias la='exa -lag --icons'
 alias lt=''
-ltl() { tree -C -L "$@"; }
-ltd() { tree -d -L "$@"; }
+treelevel() { tree -C --filesfirst -L "$@"; }
+treelevelh() { tree -aC --filesfirst -L "$@"; }
+treedirlevel() { tree -d -L "$@"; }
+treedirlevelh() { tree -ad -L "$@"; }
 alias c='composer'
 alias gdoc='cd /hdd/Documents/'
 alias gdw='cd /hdd/Downloads/'
