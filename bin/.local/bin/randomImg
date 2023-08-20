@@ -1,0 +1,10 @@
+#!/bin/sh
+#
+#replace path with your local paths
+i=1
+path=/hdd/Images/wallpapers
+find $path/horizontal -name "*.jpg" -o -name "*.jpeg" -type f | shuf -n 2 | while read file; do
+
+cp "$file" "$path/horizontal_$((i++)).jpg";
+done
+cp "$(find $path/vertical -name "*.jpg" -o -name "*.jpeg" -type f | shuf -n 1)" "$path/vertical.jpg"
