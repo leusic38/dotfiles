@@ -22,6 +22,7 @@ while true; do
     $SETSTATUS 3 "$(~/.local/bin/statusbar/cpumod/cpu)" &
     $SETSTATUS 6 "$(~/.local/bin/statusbar/diskspacemod/disk)" &
     $SETSTATUS 7 "$(~/.local/bin/statusbar/networkmod/network)" &
+    $SETSTATUS 8 "$(~/.local/bin/statusbar/battery/battery_status)" &
 
     if [ $((secs % 60)) = 0 ]; then
 				$SETSTATUS 0 "$(~/.local/bin/statusbar/clockmod/clock)" &
