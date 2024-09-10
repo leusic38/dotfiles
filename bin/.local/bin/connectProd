@@ -1,0 +1,18 @@
+#!/usr/bin/sh
+
+#if [[ $2 =~ "^((25[0-5]|(2[0-4]|1[0-9]|[1-9]|)[0-9])(\.(?!$)|$)){4}$" ]]
+#then
+
+if [[ $1 = "pe" ]]; then
+	DIP=172.31.101.183
+	IP="${2:-$DIP}"
+	ssh -F /home/manu/Projects/elffe-ansible/lama-configuration/lama-elffe-aws/prod/ssh.config ${IP}
+elif [[ $1 = "pu" ]]; then
+	DIP=172.32.101.185
+	IP="${2:-$DIP}"
+	ssh -F /home/manu/Projects/elffe-ansible/lama-configuration/lama-univ-aws/prod/ssh.config ${IP}
+elif [[ $1 = "ppe" ]]; then
+	ssh -F /home/manu/Projects/elffe-ansible/lama-configuration/lama-elffe-aws/preprod/ssh.config $2
+elif [[ $1 = "ppu" ]]; then
+	ssh -F /home/manu/Projects/elffe-ansible/lama-configuration/lama-univ-aws/preprod/ssh.config $2
+fi

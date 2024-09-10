@@ -25,4 +25,4 @@ export SAVEHIST=2000
 export HISTFILE=~/.local/share/zsh/history
 export KEYTIMEOUT=1
 export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
-
+#export GPG_TTY=$(tty)

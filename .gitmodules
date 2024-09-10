@@ -1,6 +1,3 @@
-[submodule "nvim/.config/nvim"]
-	path = nvim/.config/nvim
-	url = git@github.com:leusic38/nvim-config.git
 [submodule "ranger/.config/ranger/plugins/ranger-archives"]
 	path = ranger/.config/ranger/plugins/ranger-archives
 	url = git@github.com:maximtrp/ranger-archives.git
@@ -16,3 +13,6 @@
 [submodule "zsh/.config/zsh/plugins/zsh-git-prompt"]
 	path = zsh/.config/zsh/plugins/zsh-git-prompt
 	url = git@github.com:leusic38/git-prompt.zsh.git
+[submodule "nvim/.config/nvim"]
+	path = nvim/.config/nvim
+	url = git@github.com:leusic38/nvim-config.git

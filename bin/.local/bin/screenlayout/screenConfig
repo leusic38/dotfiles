@@ -1,0 +1,13 @@
+#!/bin/sh
+
+if [ $(ip addr | grep 'inet 192.168.1.*' | wc -l) -gt 0 ] && [ $(xrandr -d :0 -q | grep ' connected' | wc -l) -eq 3 ]; then
+	three-screen-home.sh
+elif [ $(ip addr | grep 'inet 192.168.1.*' | wc -l) -gt 0 ] && [ $(xrandr -d :0 -q | grep ' connected' | wc -l) -eq 2 ]; then
+	two-screen-home.sh
+elif [ $(ip addr | grep 'inet 192.168.26.*' | wc -l) -gt 0 ] && [ $(xrandr -d :0 -q | grep ' connected' | wc -l) -eq 2 ]; then
+	two-screen.sh
+else
+	one-screen.sh
+fi
+
+screen.sh

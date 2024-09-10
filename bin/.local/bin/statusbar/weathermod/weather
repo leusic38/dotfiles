@@ -1,5 +1,4 @@
 #!/bin/sh
-
 getforecast() { ping -q -c 1 1.1.1.1 >/dev/null || exit 1
 curl -sf "wttr.in" > "$HOME/.local/share/weatherreport" || exit 1 ;}
 

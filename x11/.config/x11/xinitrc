@@ -2,8 +2,7 @@
 
 [[ -f ~/.xprofile ]] && . ~/.xprofile
 [[ -f ~/.Xresources ]] && xrdb -merge -I$HOME ~/.Xresources
-setxkbmap frqw
-eval `$(ssh-agent) -s`
+#setxkbmap frqw
 export _JAVA_AWT_WM_NONREPARENTING=1
 export AWT_TOOLKIT=MToolkit
 #exec wmnam LG3

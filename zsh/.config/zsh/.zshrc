@@ -115,6 +115,7 @@ SHORTCUTS=~/.config/shell/aliasesrc
 source $SHORTCUTS
 fi
 
+#gpg-connect-agent updatestartuptty /bye >/dev/null
 source $ZDOTDIR/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 source $ZDOTDIR/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
 source $ZDOTDIR/plugins/zsh-git-prompt/git-prompt.zsh
@@ -138,5 +139,5 @@ source $ZDOTDIR/plugins/zsh-git-prompt/git-prompt.zsh
 #    echo "%{$fg[grey]%}${vcs_info_msg_0_}%{$reset_color%}$del"
 #  fi
 #}
-PROMPT=$'┏╸%F{033}%n%f@%F{045}%m%f->%(?..%F{red}%?%f · )%F{088}%d%f$(gitprompt)\n┗╸%B%F{cyan}❯%f%b '
+PROMPT=$'┏╸%F{033}%n%f@%F{045}%m%f->\x1b[3m%}%(?..%F{red}%?%f · )%F{088}%d%f\x1b[0m%}$(gitprompt)\n┗╸%B%F{cyan}❯%f%b '
 #zstyle ':vcs_info:git:*' formats 

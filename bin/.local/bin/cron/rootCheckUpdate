@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Syncs repositories and downloads updates, meant to be run as a cronjob.
+
+#ping -q -c exppotentiels.fr > /dev/null || exit
+
+reflector --country 'France' --country 'Germany' --country 'Italy' --age 12 --protocol https --sort rate --save /etc/pacman.d/mirrorlist >/dev/null 2>&1
+pacman -Syyuwq --noconfirm >/dev/null 2>&1

@@ -5,11 +5,11 @@
 # highlighting an area to copy. scrotcucks on suicidewatch right now.
 
 case "$(printf "a selected area\\ncurrent window\\nfull screen\\nan annotate selected area\\na selected area (copy)\\ncurrent window (copy)\\nfull screen (copy)" | dmenu -l 7 -i -p "Screenshot which area?")" in
-	"a selected area") maim -s /hdd/Images/screenshots/pic-selected-"$(date '+%y%m%d-%H%M%S').png" ;;
-	"current window") maim -i "$(xdotool getactivewindow)" /hdd/Images/screenshots/pic-window-"$(date '+%y%m%d-%H%M%S').png" ;;
-	"full screen") maim /hdd/Images/screenshots/pic-full-"$(date '+%y%m%d-%H%M%S').png" ;;
-	"an annotate selected area") flameshot gui -p /hdd/Images/screenshots ;;
-	"a selected area (copy)") maim -s | xclip -selection clipboard -t image/png ;;
-	"current window (copy)") maim -i "$(xdotool getactivewindow)" | xclip -selection clipboard -t image/png ;;
-	"full screen (copy)") maim | xclip -selection clipboard -t image/png ;;
+"a selected area") maim -s ~/Images/screenshots/pic-selected-"$(date '+%y%m%d-%H%M%S').png" ;;
+"current window") maim -i "$(xdotool getactivewindow)" ~/Images/screenshots/pic-window-"$(date '+%y%m%d-%H%M%S').png" ;;
+"full screen") maim ~/Images/screenshots/pic-full-"$(date '+%y%m%d-%H%M%S').png" ;;
+"an annotate selected area") flameshot gui -p ~/Images/screenshots ;;
+"a selected area (copy)") maim -s | xclip -selection clipboard -t image/png ;;
+"current window (copy)") maim -i "$(xdotool getactivewindow)" | xclip -selection clipboard -t image/png ;;
+"full screen (copy)") maim | xclip -selection clipboard -t image/png ;;
 esac

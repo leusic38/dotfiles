@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Check battery status and send notify if less than 10%
+
+capacity="$(cat "/sys/class/power_supply/BAT0/capacity" 2>&1)"
+status="$(cat "/sys/class/power_supply/BAT0/status" 2>&1)"
+
+[ "$status" = "Discharging" ] && [ "$capacity" -le 15 ] && notify-send -u critical "Low battery level" "Plug in charger"

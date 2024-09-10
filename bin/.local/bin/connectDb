@@ -1,0 +1,51 @@
+#!/usr/bin/sh
+
+ANSIBLE="/home/manu/Projects/elffe-ansible/"
+
+if [[ $1 = "iel" ]]; then
+	ssh inte-elffe-lama
+elif [[ $1 = "ielt" ]]; then
+	ssh inte-elffe-lama-trace
+elif [[ $1 = "iul" ]]; then
+	ssh inte-univ-lama
+elif [[ $1 = "iult" ]]; then
+	ssh inte-univ-lama-trace
+elif [[ $1 = "pel" ]]; then
+	DIP=172.31.102.99
+	IP="${2:-$DIP}"
+	ssh -F $ANSIBLE/lama-configuration/lama-elffe-aws/prod/ssh.config $IP -L 172.17.0.1:15432:127.0.0.1:15432
+elif [[ $1 = "pelt" ]]; then
+	DIP=172.31.102.229
+	IP="${2:-$DIP}"
+	ssh -F $ANSIBLE/lama-configuration/lama-elffe-aws/prod/ssh.config $IP -L 172.17.0.1:15433:127.0.0.1:15432
+elif [[ $1 = "powaelffe" ]]; then
+	DIP=172.31.102.99
+	IP="${2:-$DIP}"
+	ssh -F $ANSIBLE/lama-configuration/lama-elffe-aws/prod/ssh.config $IP -L 127.0.0.1:20000:127.0.0.1:15432
+elif [[ $1 = "pul" ]]; then
+	DIP=172.32.102.54
+	IP="${2:-$DIP}"
+	ssh -F $ANSIBLE/lama-configuration/lama-univ-aws/prod/ssh.config $IP -L 172.17.0.1:15434:127.0.0.1:15432
+elif [[ $1 = "pult" ]]; then
+	DIP=172.32.102.58
+	IP="${2:-$DIP}"
+	ssh -F $ANSIBLE/lama-configuration/lama-univ-aws/prod/ssh.config $IP -L 172.17.0.1:15435:127.0.0.1:15432
+elif [[ $1 = "ppel" ]]; then
+	DIP=172.31.102.16
+	I
+	ssh -F $ANSIBLE/lama-configuration/lama-elffe-aws/preprod/ssh.config $IP -L 172.17.0.1:15436:127.0.0.1:15432
+elif [[ $1 = "ppelt" ]]; then
+	DIP=172.31.102.93
+	IP="${2:-$DIP}"
+	ssh -F $ANSIBLE/lama-configuration/lama-elffe-aws/preprod/ssh.config $IP -L 172.17.0.1:15437:127.0.0.1:15432
+elif [[ $1 = "ppul" ]]; then
+	DIP=172.32.102.250
+	IP="${2:-$DIP}"
+	ssh -F $ANSIBLE/lama-configuration/lama-univ-aws/preprod/ssh.config $IP -L 172.17.0.1:15438:127.0.0.1:15432
+elif [[ $1 = "ppult" ]]; then
+	DIP=172.32.102.52
+	IP="${2:-$DIP}"
+	ssh -F $ANSIBLE/lama-configuration/lama-univ-aws/preprod/ssh.config $IP -L 172.17.0.1:15439:127.0.0.1:15432
+else
+	ssh lama-recette-postgres1 -L 172.17.0.1:30000:127.0.0.1:15432
+fi

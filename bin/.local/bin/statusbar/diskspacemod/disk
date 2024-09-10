@@ -4,16 +4,12 @@
 # $1 should be drive mountpoint
 # $2 is optional icon, otherwise mountpoint will displayed
 
+for location in '/home' '/'; do
+	case "$location" in
+	"/home"*) icon="🏠" ;;
+	"/"*) icon="💾" ;;
+	*) icon="🖥" ;;
+	esac
 
-
-for location in '/home' '/hdd' '/development' '/'
-do
-case "$location" in
-	"/home"* ) icon="🏠" ;;
-	"/hdd"* ) icon="💽" ;;
-	"/development"* ) icon="💾" ;;
-	*) icon="🖥";;
-esac
-
-printf "%s:%s" "$icon" "$(df -h "$location" | awk ' /[0-9]/ {print $3 "/" $2}') "
+	printf "%s:%s" "$icon" "$(df -h "$location" | awk ' /[0-9]/ {print $3 "/" $2}') "
 done

@@ -1,38 +1,36 @@
 #!/bin/sh
-
 for pid in $(pidof -x "statusbar_launch"); do
-    if [ $pid != $$ ]; then
-        echo "$(date +"%F %T"): statusbar_launch is already running with PID $pid, killing"
-        kill $pid
-    fi
+	if [ $pid != $$ ]; then
+		echo "$(date +"%F %T"): statusbar_launch is already running with PID $pid, killing"
+		kill $pid
+	fi
 done
 
 # Add an artificial sleep to wait for the IPC handler to be ready to process requests
-sleep 0.2
+sleep 0.5
 
 SETSTATUS="duskc --ignore-reply run_command setstatus"
 
-#$SETSTATUS 4 "$(~/.local/bin/statusbar/sysupdatemod/sysupdate)" &
 
 secs=0
 while true; do
 
-    $SETSTATUS 1 "$(~/.local/bin/statusbar/volumemod/volume)" &
-    $SETSTATUS 2 "$(~/.local/bin/statusbar/memorymod/mem)" &
-    $SETSTATUS 3 "$(~/.local/bin/statusbar/cpumod/cpu)" &
-    $SETSTATUS 6 "$(~/.local/bin/statusbar/diskspacemod/disk)" &
-    $SETSTATUS 7 "$(~/.local/bin/statusbar/networkmod/network)" &
-    $SETSTATUS 8 "$(~/.local/bin/statusbar/battery/battery_status)" &
+	$SETSTATUS 1 "$(~/.local/bin/statusbar/volumemod/volume)" &
+	$SETSTATUS 2 "$(~/.local/bin/statusbar/memorymod/mem)" &
+	$SETSTATUS 3 "$(~/.local/bin/statusbar/cpumod/cpu)" &
+	$SETSTATUS 6 "$(~/.local/bin/statusbar/diskspacemod/disk)" &
+	$SETSTATUS 7 "$(~/.local/bin/statusbar/networkmod/network)" &
+	$SETSTATUS 8 "$(~/.local/bin/statusbar/batterymod/battery_status)" &
 
-    if [ $((secs % 60)) = 0 ]; then
-				$SETSTATUS 0 "$(~/.local/bin/statusbar/clockmod/clock)" &
-    fi
+	if [ $((secs % 30)) -eq 0 ]; then
+		$SETSTATUS 0 "$(~/.local/bin/statusbar/clockmod/clock)" &
+	fi
 
-    if [ $((secs % 3600)) = 1 ]; then
-        $SETSTATUS 4 "$(~/.local/bin/statusbar/sysupdatemod/sysupdate)" &
-        $SETSTATUS 5 "$(~/.local/bin/statusbar/weathermod/weather)" &
-    fi
+	if [ $((secs % 3600)) -eq 1 ]; then
+		$SETSTATUS 4 "$(~/.local/bin/statusbar/sysupdatemod/sysupdate)" &
+		$SETSTATUS 5 "$(~/.local/bin/statusbar/weathermod/weather)" &
+	fi
 
-    ((secs+=1))
-    sleep 1
+	((secs+=1))
+	sleep 1
 done

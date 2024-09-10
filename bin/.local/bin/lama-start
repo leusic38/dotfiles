@@ -1,0 +1,2 @@
+#!/bin/sh
+st /home/manu/Projects/lama & make dcsc1 ct="nginx yarn" &

@@ -1,0 +1,14 @@
+#!/usr/bin/sh
+
+#if [[ $2 =~ "^((25[0-5]|(2[0-4]|1[0-9]|[1-9]|)[0-9])(\.(?!$)|$)){4}$" ]]
+#then
+
+				if [[ $1 = "elffe" ]]
+				then
+					
+					ssh -F /hdd/dev/elffe-ansible/lama-configuration/lama-elffe-aws/prod/ssh.config $2 -L 172.17.0.1:19000:$2:15432
+				elif [[$1 = "univ"]]
+				then
+								ssh -F /hdd/dev/elffe-ansible/lama-configuration/lama-univ-aws/prod/ssh.config $2 -L 172.17.0.1:19000:$2:15432
+				fi
+#fi
