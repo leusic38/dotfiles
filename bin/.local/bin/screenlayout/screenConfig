@@ -1,13 +1,111 @@
-#!/bin/sh
+#!/bin/bash
 
-if [ $(ip addr | grep 'inet 192.168.1.*' | wc -l) -gt 0 ] && [ $(xrandr -d :0 -q | grep ' connected' | wc -l) -eq 3 ]; then
-	three-screen-home.sh
-elif [ $(ip addr | grep 'inet 192.168.1.*' | wc -l) -gt 0 ] && [ $(xrandr -d :0 -q | grep ' connected' | wc -l) -eq 2 ]; then
-	two-screen-home.sh
-elif [ $(ip addr | grep 'inet 192.168.26.*' | wc -l) -gt 0 ] && [ $(xrandr -d :0 -q | grep ' connected' | wc -l) -eq 2 ]; then
-	two-screen.sh
+# Retrieve the option passed (--pos)
+POSITION=""
+if [ "$1" == "--pos" ] && [ -n "$2" ]; then
+  POSITION="$2"
+fi
+
+# Check if the position is valid if specified
+if [[ -n "$POSITION" && "$POSITION" != "left" && "$POSITION" != "right" && "$POSITION" != "top" ]]; then
+  notify-send "Error: Invalid position. Use '--pos left', '--pos right', '--pos top' or leave it empty for mirror mode."
+  exit 1
+fi
+
+# Get the connected screens info along with their resolutions
+screens=$(xrandr --query | grep " connected" | awk '{print $1}')
+secondary_screens=$(echo "$screens" | grep -v "eDP-1" | awk '{print $1}')
+eDP1_info=$(echo "$screens" | grep "eDP-1")
+eDP1_resolution="1920x1200"
+secondary_resolution="1920x1080" # Default secondary resolution
+
+# Set the size of external screens dynamically
+declare -A screen_resolutions
+
+# Parse screen resolutions and store in an associative array
+while IFS= read -r line; do
+  screen_name=$(echo "$line" | awk '{print $1}')
+  resolution=$(echo "$line" | awk '{print $2}' | sed 's/[^0-9x]//g')
+  screen_resolutions["$screen_name"]=$resolution
+done <<<"$(xrandr --listmonitors | awk 'NR>1 {print $4 " " $5}')"
+
+# Count the number of additional screens
+screen_count=$(echo "$secondary_screens" | wc -l)
+
+# Function to reset screen configuration to default
+reset_screen_config() {
+  # Turn off all screens and activate eDP-1
+  for screen in $secondary_screens; do
+    xrandr --output "$screen" --off
+  done
+  notify-send "Configuration reset."
+}
+
+# If no additional screens are connected, configure only eDP-1
+if [ "$screen_count" -eq 0 ] || [ -z "$POSITION" ]; then
+  reset_screen_config && xrandr --output eDP-1 --primary --mode 1920x1200 --pos 0x0 --rotate normal
+  notify-send "Applied configuration: Only eDP-1."
+
 else
-	one-screen.sh
+  # Exit mirror mode and manage the positions of secondary screens
+  if [ "$screen_count" -eq 1 ]; then
+    secondary_screen=$(echo "$secondary_screens" | head -n 1)
+
+    # Reset the configuration before placing the screens
+    reset_screen_config
+
+    if [ "$POSITION" == "mirror" ]; then
+      # Get the common resolution for the mirror mode (1920x1080 should work for most screens)
+      resolution_to_use="$secondary_resolution"
+
+      # Now, check for valid resolution for each screen and switch them
+      for screen in $secondary_screens; do
+        if ! xrandr --output "$screen" --mode "$resolution_to_use" >/dev/null 2>&1; then
+          notify-send "Warning: Resolution $resolution_to_use is not available for screen $screen. Using fallback."
+          resolution_to_use="1920x1080" # Fallback mode
+        fi
+        # Apply mirror mode using same resolution
+        xrandr --output eDP-1 --primary --mode "$resolution_to_use" --pos 0x0 --rotate normal \
+          --output "$screen" --mode "$resolution_to_use" --same-as eDP-1
+      done
+      notify-send "Applied configuration: Mirror mode activated, eDP-1 mirrors to external screens."
+    elif [ "$POSITION" == "right" ]; then
+      xrandr --output eDP-1 --primary --mode "$eDP1_resolution" --pos 0x0 --rotate normal \
+        --output "$secondary_screen" --mode "$secondary_resolution" --pos 1920x0 --rotate normal
+    elif [ "$POSITION" == "left" ]; then
+      xrandr --output "$secondary_screen" --mode "$secondary_resolution" --pos 0x0 --rotate normal \
+        --output eDP-1 --primary --mode "$eDP1_resolution" --pos 1920x0 --rotate normal
+    else # POSITION == top
+      xrandr --output "$secondary_screen" --mode "$secondary_resolution" --pos 0x-1080 --rotate normal \
+        --output eDP-1 --primary --mode "$eDP1_resolution" --pos 0x0 --rotate normal
+    fi
+    notify-send "Applied configuration: $secondary_screen is positioned $POSITION relative to eDP-1."
+
+  elif [ "$screen_count" -eq 2 ]; then
+    secondary_screen_1=$(echo "$secondary_screens" | head -n 1)
+    secondary_screen_2=$(echo "$secondary_screens" | tail -n 1)
+
+    # Reset the configuration before placing the screens
+    reset_screen_config
+
+    if [ "$POSITION" == "right" ]; then
+      xrandr --output eDP-1 --primary --mode "$eDP1_resolution" --pos 0x0 --rotate normal \
+        --output "$secondary_screen_1" --mode "$secondary_resolution" --pos 1920x0 --rotate normal \
+        --output "$secondary_screen_2" --mode "$secondary_resolution" --pos 3840x0 --rotate normal
+    elif [ "$POSITION" == "left" ]; then
+      xrandr --output eDP-1 --primary --mode "$eDP1_resolution" --pos 0x0 --rotate normal \
+        --output "$secondary_screen_1" --mode "$secondary_resolution" --pos -1920x0 --rotate normal \
+        --output "$secondary_screen_2" --mode "$secondary_resolution" --pos -3000x-410 --rotate left
+    else # POSITION == top
+      xrandr --output "$secondary_screen_1" --mode "$secondary_resolution" --pos 0x-1080 --rotate normal \
+        --output eDP-1 --primary --mode "$eDP1_resolution" --pos 0x0 --rotate normal \
+        --output "$secondary_screen_2" --mode "$secondary_resolution" --pos 1920x-1080 --rotate normal
+    fi
+    notify-send "Applied configuration: $secondary_screen_1 and $secondary_screen_2 are positioned $POSITION relative to eDP-1."
+  else
+    # More than 2 additional screens is not supported
+    notify-send "Error: More than 2 additional screens are not supported."
+  fi
 fi
 
 screen.sh

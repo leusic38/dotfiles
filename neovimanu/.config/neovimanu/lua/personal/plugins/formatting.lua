@@ -22,6 +22,7 @@ return {
 				liquid = { "prettier" },
 				lua = { "stylua" },
 				sql = { "sql_formatter" },
+				shell = { "shfmt" },
 			},
 			format_on_save = {
 				lsp_fallback = true,
