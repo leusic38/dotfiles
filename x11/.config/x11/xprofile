@@ -2,7 +2,7 @@
 #xProfile Profile file run on login
 xcompmgr -c &
 xset dpms 30 600 1200 &
-xss-lock -- slock &
+XSECURELOCK_SAVER="$HOME/.local/bin/lock-saver" xss-lock -- xsecurelock &
 dbus-launch &
 setxkbmap frqw &
 #numlocks &

@@ -1,0 +1,4 @@
+#!/bin/sh
+XSECURELOCK_LIST_VIDEOS_COMMAND="find $HOME/Images/wallpapers -type f \( -name '*.jpg' -o -name '*.png' \)" \
+XSECURELOCK_IMAGE_DURATION_SECONDS=30 \
+exec /usr/lib/xsecurelock/saver_mpv
