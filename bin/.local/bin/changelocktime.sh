@@ -1,7 +1,9 @@
 #!/bin/sh
 
 if [ $(xset -q | grep 'Standby: 30 ' | wc -l) -gt 0 ]; then
+	xset s 595 595
 	xset dpms 600
 else
+	xset s 25 25
 	xset dpms 30
 fi
