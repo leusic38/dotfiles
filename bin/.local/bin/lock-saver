@@ -1,4 +1,22 @@
 #!/bin/sh
-XSECURELOCK_LIST_VIDEOS_COMMAND="find $HOME/Images/wallpapers -type f \( -name '*.jpg' -o -name '*.png' \)" \
+WALLDIR="$HOME/Images/wallpapers"
+
+# Check if any vertical monitor connected
+has_vertical=false
+while read -r line; do
+    geom=$(echo "$line" | grep -oP '\d+/\d+x\d+/\d+')
+    [ -z "$geom" ] && continue
+    mw=$(echo "$geom" | grep -oP '^\d+')
+    mh=$(echo "$geom" | grep -oP '(?<=x)\d+')
+    [ "$mh" -gt "$mw" ] && has_vertical=true && break
+done < <(xrandr --listmonitors | tail -n +2)
+
+if $has_vertical; then
+    LIST_CMD="find $WALLDIR -type f \( -name '*.jpg' -o -name '*.png' \)"
+else
+    LIST_CMD="find $WALLDIR/horizontal -type f \( -name '*.jpg' -o -name '*.png' \)"
+fi
+
+XSECURELOCK_LIST_VIDEOS_COMMAND="$LIST_CMD" \
 XSECURELOCK_IMAGE_DURATION_SECONDS=30 \
 exec /usr/lib/xsecurelock/saver_mpv

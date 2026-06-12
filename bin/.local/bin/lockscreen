@@ -1,0 +1,4 @@
+#!/bin/sh
+pkill xcompmgr || true
+XSECURELOCK_SAVER="$HOME/.local/bin/lock-saver" xsecurelock
+xcompmgr -c &
