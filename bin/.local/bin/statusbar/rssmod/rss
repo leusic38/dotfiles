@@ -1,0 +1,5 @@
+#!/bin/sh
+db="${XDG_DATA_HOME:-$HOME/.local/share}/newsboat/cache.db"
+[ -f "$db" ] || exit 0
+count=$(sqlite3 "$db" "SELECT COUNT(*) FROM rss_item WHERE unread=1 AND deleted=0;" 2>/dev/null)
+[ -n "$count" ] && [ "$count" -gt 0 ] && printf "📰%s" "$count"

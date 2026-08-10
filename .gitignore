@@ -1,1 +1,33 @@
 ranger/.config/ranger/plugins/__pycache__/
+
+# --- Infra interne Theia : ce depot est PUBLIC, ces scripts ne doivent pas
+# --- en sortir (comptes AWS, ID de bastions, endpoints RDS de production).
+bin/.local/bin/connectAWS_DB
+bin/.local/bin/connectAWS_PHP
+bin/.local/bin/connectWeblate
+bin/.local/bin/exec-commandAWS
+bin/.local/bin/launchSymfonyCommand
+bin/.local/bin/ipad-wifi-dns-change
+
+# --- Sauvegarde de config nvim contenant son propre .git : l'ajouter
+# --- creerait un gitlink casse (contenu absent de tout clone).
+nvim/.config/nvim.back/
+
+# --- Fichiers generes / historiques, sans interet a etre versionnes.
+zsh/.config/zsh/.zsh_history
+zsh/.config/zsh/.zcompdump*
+
+# --- awesome-copycats : code tiers avec ses propres sous-modules.
+# --- A reprendre proprement en sous-module git plus tard.
+awesome/.config/awesome/.github/
+awesome/.config/awesome/.gitignore
+awesome/.config/awesome/.gitmodules
+awesome/.config/awesome/ISSUE_TEMPLATE.md
+awesome/.config/awesome/README.rst
+awesome/.config/awesome/freedesktop/
+awesome/.config/awesome/lain/
+awesome/.config/awesome/rc.lua.template
+awesome/.config/awesome/rc_copicats.lua
+awesome/.config/awesome/theme.lua
+awesome/.config/awesome/themes/
+awesome/.config/awesome/xrandr.lua

@@ -7,10 +7,10 @@ case $BLOCK_BUTTON in
 - center right click to upgrade aur packages
 - right  click to show upgradable packages
 - right side rear click to upgrade AUR packages $TERMINAL" ;;
-2) setsid -f "$TERMINAL2" -t "upgrade all" -e allUpgrade ;;
-3) notify-send "$(/usr/bin/pacman -Qu)
+2) setsid -f "$TERMINAL" -e allUpgrade ;;
+3) notify-send "$(checkupdates)
 	------------------------
 		$(/usr/bin/yay -Qua)" ;;
-9) setsid -f "$TERMINAL2" -t "PAC upgrade" -e pacUpgrade ;;
-8) setsid -f "$TERMINAL2" -t "AUR upgrade" -e popAurUpgrade ;;
+9) setsid -f "$TERMINAL" -e pacUpgrade ;;
+8) setsid -f "$TERMINAL" -e popAurUpgrade ;;
 esac

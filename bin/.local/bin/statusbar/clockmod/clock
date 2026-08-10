@@ -1,3 +1,17 @@
-#!/bin/sh
+#!/bin/bash
 
-date '+%Y %b %d (s: %V) %H:%M'
+REFERENCE_TZ="Europe/Paris"
+REFERENCE_ICON="🗼"
+LOCAL_ICON="📍"
+
+# Get current timezone
+CURRENT_TZ=$(timedatectl | grep 'Time zone' | awk '{print $3}')
+LOCAL_TIME=$(date '+%Y-%m-%d %H:%M (%V)')
+
+if [ "$CURRENT_TZ" != "$REFERENCE_TZ" ]; then
+  PARIS_TIME=$(TZ=$REFERENCE_TZ date '+%Y-%m-%d %H:%M')
+
+  echo "$LOCAL_ICON $LOCAL_TIME $REFERENCE_ICON $PARIS_TIME"
+else
+  echo "$REFERENCE_ICON $LOCAL_TIME"
+fi

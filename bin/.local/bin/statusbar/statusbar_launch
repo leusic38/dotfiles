@@ -31,6 +31,22 @@ while true; do
 		$SETSTATUS 5 "$(~/.local/bin/statusbar/weathermod/weather)" &
 	fi
 
+	if [ $((secs % 1800)) -eq 30 ]; then
+		~/.local/bin/statusbar/rssmod/rss_reload &
+	fi
+
+	if [ $((secs % 300)) -eq 5 ]; then
+		$SETSTATUS 9 "$(~/.local/bin/statusbar/rssmod/rss)" &
+	fi
+
+	if [ $((secs % 7200)) -eq 60 ]; then
+		~/.local/bin/statusbar/composeraudit/audit_refresh &
+	fi
+
+	if [ $((secs % 600)) -eq 10 ]; then
+		$SETSTATUS 10 "$(~/.local/bin/statusbar/composeraudit/audit)" &
+	fi
+
 	((secs+=1))
 	sleep 1
 done

@@ -23,11 +23,6 @@ let g:WhichKey_DefaultDelay = 0
 
 let mapleader = " "
 
-set easymotion # Quick Navigation inside editor
-map f <Plug>(easymotion-bd-f) # find letter
-map , <Plug>(easymotion-s)    # find pattern
-
-
 set NERDTree # File Explorer
 map <C-p> :NERDTree<CR>
 let g:NERDTreeMapActivateNode='l'

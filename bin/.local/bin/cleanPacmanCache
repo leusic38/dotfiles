@@ -4,3 +4,4 @@
 
 sudo paccache -rk 1
 yay -Sca
+paru -Sca

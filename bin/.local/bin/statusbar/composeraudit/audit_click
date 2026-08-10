@@ -1,0 +1,48 @@
+#!/bin/sh
+mod="$HOME/.local/bin/statusbar/composeraudit"
+cache="${XDG_CACHE_HOME:-$HOME/.cache}/statusbar/composer_audit.json"
+projects_root="${COMPOSER_AUDIT_ROOT:-$HOME/Projects}"
+
+case $BLOCK_BUTTON in
+1) notify-send "🔒 Composer audit" "🔒: vulnérabilités dans tes projets ~/Projects
+- clic gauche : aide
+- clic milieu : terminal dans le projet le plus impacté (composer audit)
+- clic droit : détail par projet et package
+- molette haut : relancer l'audit
+- molette bas : ouvrir tous les liens d'advisories" ;;
+2)
+	top=$(jq -r 'first(.projects | to_entries[] | select(.value.count>0) | .key) // ""' "$cache" 2>/dev/null)
+	if [ -n "$top" ]; then
+		setsid -f "$TERMINAL" -e sh -c "cd \"$projects_root/$top\" && composer audit; exec \$SHELL"
+	else
+		notify-send -t 2000 "🔒 Composer audit" "Aucun projet vulnérable."
+	fi
+	;;
+3)
+	if [ ! -f "$cache" ]; then
+		notify-send "🔒 Composer audit" "Aucun cache. Lance audit_refresh d'abord."
+		exit 0
+	fi
+	body=$(jq -r '
+		.projects
+		| to_entries[]
+		| select(.value.count > 0)
+		| "📁 \(.key) — \(.value.count) advisor\(if .value.count > 1 then "ies" else "y" end)\n" +
+		  ([.value.advisories | to_entries[] |
+		    "  • \(.key) (\(.value | length))"] | join("\n"))
+	' "$cache" 2>/dev/null)
+	[ -z "$body" ] && body="✅ Aucune vulnérabilité connue."
+	ts=$(jq -r '.timestamp // 0' "$cache" 2>/dev/null)
+	[ "$ts" -gt 0 ] && when=$(date -d "@$ts" "+%d/%m %H:%M") || when="?"
+	notify-send "🔒 Composer audit (maj: $when)" "$body"
+	;;
+4) notify-send -t 2000 "🔒 Composer audit" "Audit en cours…" ; "$mod/audit_refresh" & ;;
+5)
+	urls=$(jq -r '.projects[].advisories[]?[]?.link // empty' "$cache" 2>/dev/null | sort -u)
+	if [ -z "$urls" ]; then
+		notify-send -t 2000 "🔒 Composer audit" "Aucun lien d'advisory."
+		exit 0
+	fi
+	echo "$urls" | while IFS= read -r u; do xdg-open "$u" >/dev/null 2>&1 & done
+	;;
+esac

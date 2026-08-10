@@ -1,0 +1,4 @@
+#!/bin/sh
+# Fetch feeds in background without blocking the statusbar
+pgrep -x newsboat >/dev/null && exit 0
+flock -n /tmp/newsboat-reload.lock newsboat -x reload >/dev/null 2>&1

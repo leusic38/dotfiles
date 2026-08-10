@@ -2,7 +2,7 @@
 command -v nvim >/dev/null && alias vim="nvim" vi="nvim" v="nvim" vimdiff="nvim -d" vdiff="nvim -d"
 command -v make >/dev/null && alias m="make"
 
-alias mnv='NVIM_APPNAME=neovimanu nvim' nvm='NVIM_APPNAME=neovimanu nvim'
+alias mnv='NVIM_APPNAME=neovimanu nvim'
 
 alias mu='mirror && update'
 alias u='sudo pacman -Syu'
@@ -27,16 +27,12 @@ alias sn='shutdown now'
 alias rn='sudo reboot now'
 alias al='cat ${HOME}/dotfiles/shell/.config/shell/aliasesrc'
 mkcd() { mkdir -p "$@" && cd "$_"; }
-gpj() { cd /development/Projects/"$@"; }
-mkpj() { cd /development/Projects/ && mkcd "$@"; }
+gpj() { cd ~/Projects/"$@"; }
+mkpj() { cd ~/Projects/ && mkcd "$@"; }
 gdd() { cd /hdd/"$@"; }
 gdo() { cd ${$HOME}/dotfiles/"$@"; }
 gpl() { [[ $1 ]] && cd ${HOME}/Projects/"$1" || cd ${HOME}/Projects/lama }
 gi() { cd ${HOME}/Images/"$@"; }
-gv() { cd /hdd/videos/"$@"; }
-gsk() { cd /hdd/mysuckless/"$@"; }
-osk() { nvim /hdd/mysuckless/"$@"; }
-gc() { cd ${HOME}/.config/"$@"; }
 gdc() { cd ${HOME}/dotfiles/"$@"/.config/"$@"; }
 od() { nvim "${HOME}"/dotfiles/; }
 gdb() { cd ${HOME}/dotfiles/bin/.local/bin; }
@@ -48,4 +44,20 @@ alias sr='sudo ranger'
 alias mbsp='man bspc'
 alias rt='connectTheia.sh'
 ga() { git add "$@" }
+# Forcer sudo nvim à utiliser sudoedit + config perso
 
+sudo() {
+    if [ "$1" = "nvim" ]; then
+        shift
+        command sudoedit "$@"
+    else
+        command sudo "$@"
+    fi
+}
+
+# Firewall management
+alias fw-init='fw-init.sh'
+alias fw-allow='fw-allow.sh'
+alias fw-remove='fw-remove.sh'
+alias fw-status='fw-status.sh'
+alias fw-stop='fw-stop.sh'

@@ -1,12 +1,11 @@
 #!/bin/sh
 
 case $BLOCK_BUTTON in
-	1) setsid "$TERMINAL" -e pulsemixer ;;
-	2) pamixer -t ;;
-	4) pamixer --allow-boost -i 1 ;;
-	5) pamixer --allow-boost -d 1 ;;
-	3) notify-send "📢 Volume module" "\- Shows volume 🔊, 🔇 if muted.
-  9) pavucontrol ;;
-- Middle click to mute.
-- Scroll to change."
+1) setsid "$TERMINAL" -e pulsemixer ;;
+2) pamixer -t ;;
+4) pamixer --allow-boost -i 1 ;;
+5) pamixer --allow-boost -d 1 ;;
+3) audio_status ;;
+9) pavucontrol ;;
+
 esac

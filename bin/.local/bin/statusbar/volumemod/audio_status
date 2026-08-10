@@ -1,0 +1,70 @@
+
+#!/bin/bash
+
+# Icons
+ICON_OUT="🔊"
+ICON_IN="🎤"
+ICON_OK="✅"
+ICON_NO="❌"
+
+# Function to detect connection type
+detect_connection_type() {
+    local name="$1"
+    if [[ "$name" =~ bluez_ ]]; then
+        echo "Bluetooth"
+    elif [[ "$name" =~ usb ]]; then
+        echo "USB"
+    elif [[ "$name" =~ hdmi ]]; then
+        echo "HDMI"
+    elif [[ "$name" =~ analog ]]; then
+        echo "Analog"
+    else
+        echo "Unknown"
+    fi
+}
+
+# Get default sink (output) and source (input)
+DEFAULT_SINK=$(pactl get-default-sink)
+DEFAULT_SOURCE=$(pactl get-default-source)
+
+# Output device info
+SINK_INFO=$(pactl list sinks)
+SINK_DESC=$(echo "$SINK_INFO" | awk -v dev="$DEFAULT_SINK" '
+  $0 ~ "Name: "dev {f=1}
+  f && /Description:/ {print substr($0, index($0,$2)); f=0}
+')
+SINK_PORT=$(echo "$SINK_INFO" | awk -v dev="$DEFAULT_SINK" '
+  $0 ~ "Name: "dev {f=1}
+  f && /Active Port:/ {print $3; f=0}
+')
+SINK_PORT_STATE=$(echo "$SINK_INFO" | awk -v port="$SINK_PORT" '
+  $0 ~ "Port: "port {f=1}
+  f && /Availability:/ {print $2; f=0}
+')
+TYPE_OUT=$(detect_connection_type "$DEFAULT_SINK")
+STATUS_OUT=$( [[ $SINK_PORT_STATE == "yes" ]] && echo "$ICON_OK" || echo "$ICON_NO" )
+
+# Input device info
+SOURCE_INFO=$(pactl list sources)
+SOURCE_DESC=$(echo "$SOURCE_INFO" | awk -v dev="$DEFAULT_SOURCE" '
+  $0 ~ "Name: "dev {f=1}
+  f && /Description:/ {print substr($0, index($0,$2)); f=0}
+')
+SOURCE_PORT=$(echo "$SOURCE_INFO" | awk -v dev="$DEFAULT_SOURCE" '
+  $0 ~ "Name: "dev {f=1}
+  f && /Active Port:/ {print $3; f=0}
+')
+SOURCE_PORT_STATE=$(echo "$SOURCE_INFO" | awk -v port="$SOURCE_PORT" '
+  $0 ~ "Port: "port {f=1}
+  f && /Availability:/ {print $2; f=0}
+')
+TYPE_IN=$(detect_connection_type "$DEFAULT_SOURCE")
+STATUS_IN=$( [[ $SOURCE_PORT_STATE == "yes" ]] && echo "$ICON_OK" || echo "$ICON_NO" )
+TITLE="📢 Volume module"
+HELPER_DESC="\- Shows volume 🔊, 🔇 if muted.\n- Middle click to mute.\n- Scroll to change."
+
+# Assemble message
+SUB_TITLE="________________\n\n🎧 Audio Devices Status"
+BODY="$SUB_TITLE\n🔊 Output: $SINK_DESC\nType: $TYPE_OUT, Port: $SINK_PORT $STATUS_OUT\n🎤 Input: $SOURCE_DESC\nType: $TYPE_IN, Port: $SOURCE_PORT $STATUS_IN \n _______ \n\n$HELPER_DESC"
+# Send notification
+notify-send "$TITLE" "$BODY" --icon=audio-card --urgency=normal

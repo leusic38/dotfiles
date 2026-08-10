@@ -1,6 +1,7 @@
 #!/bin/sh
-countlinux=$(pacman -Qu | grep -c "linux ")
+updates=$(checkupdates 2>/dev/null)
+countlinux=$(printf '%s' "$updates" | grep -c "linux ")
 [ $countlinux -gt 0 ] && haslinux='🐧' || haslinux=''
-pacCount=$(pacman -Qu | grep -Fcv "[ignored]")
+pacCount=$(printf '%s' "$updates" | grep -Fcv "[ignored]")
 aurCount=$(yay -Qua | grep -Fcv "[ignored]")
 [ $pacCount ] >0 || [ $aurCount ] >0 && printf "$haslinux$pacCount📦$aurCount"

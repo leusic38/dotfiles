@@ -1,0 +1,244 @@
+#!/bin/sh
+#
+# toggle-theme - Toggle between dark and light mode across all applications
+#
+# State file: ~/.config/theme-mode (contains "dark" or "light")
+#
+
+STATE_FILE="$HOME/.config/theme-mode"
+
+# Read current mode (default to dark)
+if [ -f "$STATE_FILE" ]; then
+    CURRENT=$(cat "$STATE_FILE")
+else
+    CURRENT="dark"
+fi
+
+# Toggle
+if [ "$CURRENT" = "dark" ]; then
+    NEW="light"
+else
+    NEW="dark"
+fi
+
+# Save new state
+echo "$NEW" > "$STATE_FILE"
+
+echo "Switching to $NEW mode..."
+
+# ─── Catppuccin color definitions ───
+
+if [ "$NEW" = "dark" ]; then
+    # Catppuccin Mocha
+    CTX_BG="#1E1E2E"
+    CTX_FG="#CDD6F4"
+    CTX_SECONDARY="#6C7086"
+    CTX_ACTIVE="#A6E3A1"
+    CTX_BGACTIVE="#1E1E2E"
+    CTX_ALERT="#F38BA8"
+    CTX_WARNING="#F9E2AF"
+    CTX_COLOR0="#45475A"
+    CTX_COLOR8="#585B70"
+    CTX_COLOR1="#F38BA8"
+    CTX_COLOR9="#F38BA8"
+    CTX_COLOR2="#A6E3A1"
+    CTX_COLOR10="#A6E3A1"
+    CTX_COLOR3="#F9E2AF"
+    CTX_COLOR11="#F9E2AF"
+    CTX_COLOR4="#89B4FA"
+    CTX_COLOR12="#89B4FA"
+    CTX_COLOR5="#F5C2E7"
+    CTX_COLOR13="#F5C2E7"
+    CTX_COLOR6="#94E2D5"
+    CTX_COLOR14="#94E2D5"
+    CTX_COLOR7="#BAC2DE"
+    CTX_COLOR15="#A6ADC8"
+    # GTK
+    GTK_THEME="Adwaita-dark"
+    GTK_DARK="true"
+    # Dunst
+    DUNST_BG="#1E1E2E"
+    DUNST_FG="#CDD6F4"
+    DUNST_FRAME="#89B4FA"
+    DUNST_CRIT_BG="#F38BA8"
+    DUNST_CRIT_FG="#1E1E2E"
+    DUNST_CRIT_FRAME="#F38BA8"
+    # Kitty
+    KITTY_THEME="catppuccin-mocha.conf"
+    # Helix
+    HELIX_THEME="catppuccin_mocha"
+    # Ranger
+    RANGER_COLORSCHEME="default"
+else
+    # Catppuccin Latte
+    CTX_BG="#EFF1F5"
+    CTX_FG="#4C4F69"
+    CTX_SECONDARY="#9CA0B0"
+    CTX_ACTIVE="#40A02B"
+    CTX_BGACTIVE="#EFF1F5"
+    CTX_ALERT="#D20F39"
+    CTX_WARNING="#DF8E1D"
+    CTX_COLOR0="#5C5F77"
+    CTX_COLOR8="#6C6F85"
+    CTX_COLOR1="#D20F39"
+    CTX_COLOR9="#D20F39"
+    CTX_COLOR2="#40A02B"
+    CTX_COLOR10="#40A02B"
+    CTX_COLOR3="#DF8E1D"
+    CTX_COLOR11="#DF8E1D"
+    CTX_COLOR4="#1E66F5"
+    CTX_COLOR12="#1E66F5"
+    CTX_COLOR5="#EA76CB"
+    CTX_COLOR13="#EA76CB"
+    CTX_COLOR6="#179299"
+    CTX_COLOR14="#179299"
+    CTX_COLOR7="#ACB0BE"
+    CTX_COLOR15="#BCC0CC"
+    # GTK
+    GTK_THEME="Adwaita"
+    GTK_DARK="false"
+    # Dunst
+    DUNST_BG="#EFF1F5"
+    DUNST_FG="#4C4F69"
+    DUNST_FRAME="#1E66F5"
+    DUNST_CRIT_BG="#D20F39"
+    DUNST_CRIT_FG="#EFF1F5"
+    DUNST_CRIT_FRAME="#D20F39"
+    # Kitty
+    KITTY_THEME="catppuccin-latte.conf"
+    # Helix
+    HELIX_THEME="catppuccin_latte"
+    # Ranger
+    RANGER_COLORSCHEME="snow"
+fi
+
+# ─── 1. GTK 3 & 4 ───
+
+apply_gtk() {
+    for settings_file in "$HOME/.config/gtk-3.0/settings.ini" "$HOME/.config/gtk-4.0/settings.ini"; do
+        if [ -f "$settings_file" ]; then
+            sed -i "s/^gtk-theme-name = .*/gtk-theme-name = $GTK_THEME/" "$settings_file"
+            sed -i "s/^gtk-application-prefer-dark-theme = .*/gtk-application-prefer-dark-theme = $GTK_DARK/" "$settings_file"
+            echo "  GTK: $settings_file updated"
+        fi
+    done
+}
+
+# ─── 2. Xresources ───
+
+apply_xresources() {
+    XRESOURCES="$HOME/.config/x11/Xresources"
+    if [ -f "$XRESOURCES" ]; then
+        sed -i \
+            -e "s/^\*background:.*/*background: $CTX_BG/" \
+            -e "s/^\*foreground:.*/*foreground: $CTX_FG/" \
+            -e "s/^\*secondary:.*/*secondary:  $CTX_SECONDARY/" \
+            -e "s/^\*active:.*/*active:     $CTX_ACTIVE/" \
+            -e "s/^\*bgactive:.*/*bgactive:   $CTX_BGACTIVE/" \
+            -e "s/^\*alert:.*/*alert:      $CTX_ALERT/" \
+            -e "s/^\*warning:.*/*warning:    $CTX_WARNING/" \
+            -e "s/^\*color0:.*/*color0:     $CTX_COLOR0/" \
+            -e "s/^\*color8:.*/*color8:     $CTX_COLOR8/" \
+            -e "s/^\*color1:.*/*color1:     $CTX_COLOR1/" \
+            -e "s/^\*color9:.*/*color9:     $CTX_COLOR9/" \
+            -e "s/^\*color2:.*/*color2:     $CTX_COLOR2/" \
+            -e "s/^\*color10:.*/*color10:    $CTX_COLOR10/" \
+            -e "s/^\*color3:.*/*color3:     $CTX_COLOR3/" \
+            -e "s/^\*color11:.*/*color11:    $CTX_COLOR11/" \
+            -e "s/^\*color4:.*/*color4:     $CTX_COLOR4/" \
+            -e "s/^\*color12:.*/*color12:    $CTX_COLOR12/" \
+            -e "s/^\*color5:.*/*color5:     $CTX_COLOR5/" \
+            -e "s/^\*color13:.*/*color13:    $CTX_COLOR13/" \
+            -e "s/^\*color6:.*/*color6:     $CTX_COLOR6/" \
+            -e "s/^\*color14:.*/*color14:    $CTX_COLOR14/" \
+            -e "s/^\*color7:.*/*color7:     $CTX_COLOR7/" \
+            -e "s/^\*color15:.*/*color15:    $CTX_COLOR15/" \
+            "$XRESOURCES"
+        xrdb -merge "$XRESOURCES" 2>/dev/null
+        echo "  Xresources: updated and merged"
+    fi
+}
+
+# ─── 3. Dunst ───
+
+apply_dunst() {
+    DUNSTRC="$HOME/.config/dunst/dunstrc"
+    if [ -f "$DUNSTRC" ]; then
+        sed -i \
+            -e '/^\[urgency_low\]/,/^\[/ { s/background = .*/background = "'"$DUNST_BG"'"/; s/foreground = .*/foreground = "'"$DUNST_FG"'"/; }' \
+            -e '/^\[urgency_normal\]/,/^\[/ { s/background = .*/background = "'"$DUNST_BG"'"/; s/foreground = .*/foreground = "'"$DUNST_FG"'"/; }' \
+            -e '/^\[urgency_critical\]/,/^\[/ { s/background = .*/background = "'"$DUNST_CRIT_BG"'"/; s/foreground = .*/foreground = "'"$DUNST_CRIT_FG"'"/; s/frame_color = .*/frame_color = "'"$DUNST_CRIT_FRAME"'"/; }' \
+            "$DUNSTRC"
+        # Update global frame_color
+        sed -i 's/^    frame_color = .*/    frame_color = "'"$DUNST_FRAME"'"/' "$DUNSTRC"
+        killall dunst 2>/dev/null
+        echo "  Dunst: updated and restarted"
+    fi
+}
+
+# ─── 4. Kitty ───
+
+apply_kitty() {
+    KITTY_DIR="$HOME/.config/kitty"
+    if [ -d "$KITTY_DIR" ]; then
+        if [ ! -f "$KITTY_DIR/$KITTY_THEME" ]; then
+            echo "  Kitty: ERROR source theme missing: $KITTY_DIR/$KITTY_THEME (run 'stow kitty')" >&2
+            return 1
+        fi
+        cp "$KITTY_DIR/$KITTY_THEME" "$KITTY_DIR/current-theme.conf"
+        # Reload all running kitty instances
+        if pgrep -x kitty > /dev/null; then
+            kill -SIGUSR1 $(pgrep -x kitty) 2>/dev/null
+        fi
+        echo "  Kitty: theme switched to $KITTY_THEME"
+    fi
+}
+
+# ─── 5. Helix ───
+
+apply_helix() {
+    HELIX_CONF="$HOME/.config/helix/config.toml"
+    if [ -f "$HELIX_CONF" ]; then
+        sed -i "s/^theme = .*/theme = \"$HELIX_THEME\"/" "$HELIX_CONF"
+        echo "  Helix: theme set to $HELIX_THEME"
+    fi
+}
+
+# ─── 6. Neovim ───
+# Neovim reads ~/.config/theme-mode at startup via colorscheme.lua
+# Already handled by writing the state file above.
+# Running instances won't change until restarted.
+
+# ─── 7. Ranger ───
+
+apply_ranger() {
+    RANGER_CONF="$HOME/.config/ranger/rc.conf"
+    if [ -f "$RANGER_CONF" ]; then
+        sed -i "s/^set colorscheme .*/set colorscheme $RANGER_COLORSCHEME/" "$RANGER_CONF"
+        echo "  Ranger: colorscheme set to $RANGER_COLORSCHEME (restart ranger to apply)"
+    fi
+}
+
+# ─── 8. Dusk (reads from Xresources) ───
+
+apply_dusk() {
+    # Dusk reads colors from Xresources, so the xrdb merge above handles it.
+    # Send SIGHUP to reload if dusk supports it, otherwise try xdotool.
+    if pgrep -x dusk > /dev/null; then
+        kill -SIGHUP $(pgrep -x dusk) 2>/dev/null
+        echo "  Dusk: signaled to reload Xresources"
+    fi
+}
+
+# ─── Apply all ───
+
+apply_gtk
+apply_xresources
+apply_dunst
+apply_kitty
+apply_helix
+apply_ranger
+apply_dusk
+
+echo "Done! Switched to $NEW mode."
+echo "Note: Neovim and Ranger need to be restarted to pick up the new theme."

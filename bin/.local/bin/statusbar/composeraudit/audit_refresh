@@ -1,0 +1,43 @@
+#!/bin/sh
+# Run composer audit on each project under ~/Projects (depth 1) and cache results.
+# On network/composer error for a given project, preserve the previous cache entry
+# rather than overwriting it with zero counts.
+set -u
+
+projects_root="${COMPOSER_AUDIT_ROOT:-$HOME/Projects}"
+cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/statusbar"
+cache_file="$cache_dir/composer_audit.json"
+lock="$cache_dir/composer_audit.lock"
+
+mkdir -p "$cache_dir"
+
+exec 9>"$lock"
+flock -n 9 || exit 0
+
+acc=$(mktemp)
+trap 'rm -f "$acc"' EXIT
+
+if [ -f "$cache_file" ] && jq -e '.projects' "$cache_file" >/dev/null 2>&1; then
+	jq '.projects' "$cache_file" > "$acc"
+else
+	echo '{}' > "$acc"
+fi
+
+for dir in "$projects_root"/*/; do
+	[ -f "$dir/composer.json" ] || continue
+	[ -f "$dir/composer.lock" ] || continue
+	name=$(basename "$dir")
+	raw=$(cd "$dir" && composer audit --no-cache --format=json --no-interaction 2>/dev/null)
+	# Only update this project's entry if composer returned valid JSON.
+	# Empty stdout or non-JSON => network/composer error => keep previous value.
+	if [ -n "$raw" ] && echo "$raw" | jq empty >/dev/null 2>&1; then
+		count=$(echo "$raw" | jq '[.advisories[]? | length] | add // 0' 2>/dev/null)
+		[ -z "$count" ] && count=0
+		jq --arg n "$name" --argjson a "$raw" --argjson c "$count" \
+			'.[$n] = {count: $c, advisories: ($a.advisories // {})}' \
+			"$acc" > "$acc.new" && mv "$acc.new" "$acc"
+	fi
+done
+
+jq -n --argjson ts "$(date +%s)" --slurpfile p "$acc" \
+	'{timestamp: $ts, projects: $p[0]}' > "$cache_file"

@@ -1,3 +1,27 @@
 #!/bin/sh
+
+# Définir la variable DISPLAY si elle n'existe pas
+[ -z "$DISPLAY" ] && export DISPLAY=:0
+
+# Exporter un environnement minimal pour les portails
+export XDG_CURRENT_DESKTOP=dusk
+export XDG_SESSION_TYPE=x11
+export XDG_SESSION_DESKTOP=dusk
+
+# Lancer D-Bus si ce n'est pas déjà fait
+if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
+  eval "$(dbus-launch --sh-syntax --exit-with-session)"
+fi
+
+# Lancer xdg-desktop-portal-gtk si souhaité
+/usr/lib/xdg-desktop-portal-gtk &
+
+# Lancer le service principal du portail (si installé)
+# Ce n'est pas obligatoire si systemd --user le gère, mais tu peux forcer :
+/usr/lib/xdg-desktop-portal &
+
+# Attendre un peu avant de lancer le window manager (stabilise les portails)
+sleep 1
+
 #statusbar_launch &
 exec dusk

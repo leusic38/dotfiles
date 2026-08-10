@@ -1,0 +1,5 @@
+#!/bin/sh
+cache="${XDG_CACHE_HOME:-$HOME/.cache}/statusbar/composer_audit.json"
+[ -f "$cache" ] || exit 0
+total=$(jq '[.projects[].count] | add // 0' "$cache" 2>/dev/null)
+[ -n "$total" ] && [ "$total" -gt 0 ] && printf "🔒%s" "$total"

@@ -7,7 +7,7 @@ if [ "$1" == "--pos" ] && [ -n "$2" ]; then
 fi
 
 # Check if the position is valid if specified
-if [[ -n "$POSITION" && "$POSITION" != "left" && "$POSITION" != "right" && "$POSITION" != "top" ]]; then
+if [[ -n "$POSITION" && "$POSITION" != "left" && "$POSITION" != "vertLeft" && "$POSITION" != "right" && "$POSITION" != "top" ]]; then
   notify-send "Error: Invalid position. Use '--pos left', '--pos right', '--pos top' or leave it empty for mirror mode."
   exit 1
 fi
@@ -32,6 +32,24 @@ done <<<"$(xrandr --listmonitors | awk 'NR>1 {print $4 " " $5}')"
 # Count the number of additional screens
 screen_count=$(echo "$secondary_screens" | wc -l)
 
+# Get the preferred resolution for secondary screens
+if [ -n "$secondary_screens" ]; then
+  first_secondary=$(echo "$secondary_screens" | head -n 1)
+  # Get the preferred/native resolution (first mode listed by xrandr)
+  secondary_resolution=$(xrandr --query | grep -A1 "^$first_secondary connected" | tail -1 | awk '{print $1}')
+  # Fallback if no resolution found
+  if [ -z "$secondary_resolution" ]; then
+    secondary_resolution="1920x1080"
+  fi
+  notify-send "Resolution detected: $secondary_resolution"
+fi
+
+# Extract width and height from resolutions
+eDP1_width=$(echo "$eDP1_resolution" | cut -d'x' -f1)
+eDP1_height=$(echo "$eDP1_resolution" | cut -d'x' -f2)
+secondary_width=$(echo "$secondary_resolution" | cut -d'x' -f1)
+secondary_height=$(echo "$secondary_resolution" | cut -d'x' -f2)
+
 # Function to reset screen configuration to default
 reset_screen_config() {
   # Turn off all screens and activate eDP-1
@@ -51,9 +69,6 @@ else
   if [ "$screen_count" -eq 1 ]; then
     secondary_screen=$(echo "$secondary_screens" | head -n 1)
 
-    # Reset the configuration before placing the screens
-    reset_screen_config
-
     if [ "$POSITION" == "mirror" ]; then
       # Get the common resolution for the mirror mode (1920x1080 should work for most screens)
       resolution_to_use="$secondary_resolution"
@@ -71,12 +86,15 @@ else
       notify-send "Applied configuration: Mirror mode activated, eDP-1 mirrors to external screens."
     elif [ "$POSITION" == "right" ]; then
       xrandr --output eDP-1 --primary --mode "$eDP1_resolution" --pos 0x0 --rotate normal \
-        --output "$secondary_screen" --mode "$secondary_resolution" --pos 1920x0 --rotate normal
+        --output "$secondary_screen" --mode "$secondary_resolution" --pos "${eDP1_width}x0" --rotate normal
     elif [ "$POSITION" == "left" ]; then
       xrandr --output "$secondary_screen" --mode "$secondary_resolution" --pos 0x0 --rotate normal \
-        --output eDP-1 --primary --mode "$eDP1_resolution" --pos 1920x0 --rotate normal
+        --output eDP-1 --primary --mode "$eDP1_resolution" --pos "${secondary_width}x0" --rotate normal
+    elif [ "$POSITION" == "vertLeft" ]; then
+      xrandr --output "$secondary_screen" --mode "$secondary_resolution" --pos 0x0 --rotate left \
+        --output eDP-1 --primary --mode "$eDP1_resolution" --pos "${secondary_height}x0" --rotate normal
     else # POSITION == top
-      xrandr --output "$secondary_screen" --mode "$secondary_resolution" --pos 0x-1080 --rotate normal \
+      xrandr --output "$secondary_screen" --mode "$secondary_resolution" --pos "0x-${secondary_height}" --rotate normal \
         --output eDP-1 --primary --mode "$eDP1_resolution" --pos 0x0 --rotate normal
     fi
     notify-send "Applied configuration: $secondary_screen is positioned $POSITION relative to eDP-1."
@@ -85,21 +103,31 @@ else
     secondary_screen_1=$(echo "$secondary_screens" | head -n 1)
     secondary_screen_2=$(echo "$secondary_screens" | tail -n 1)
 
-    # Reset the configuration before placing the screens
-    reset_screen_config
-
     if [ "$POSITION" == "right" ]; then
+      pos2=$((eDP1_width + secondary_width))
       xrandr --output eDP-1 --primary --mode "$eDP1_resolution" --pos 0x0 --rotate normal \
-        --output "$secondary_screen_1" --mode "$secondary_resolution" --pos 1920x0 --rotate normal \
-        --output "$secondary_screen_2" --mode "$secondary_resolution" --pos 3840x0 --rotate normal
+        --output "$secondary_screen_1" --mode "$secondary_resolution" --pos "${eDP1_width}x0" --rotate normal \
+        --output "$secondary_screen_2" --mode "$secondary_resolution" --pos "${pos2}x0" --rotate normal
+    elif [ "$POSITION" == "vertRight" ]; then
+      pos2=$((eDP1_width + secondary_width))
+      vert_offset=$(( (secondary_width - eDP1_height) / 2 ))
+      xrandr --output eDP-1 --primary --mode "$eDP1_resolution" --pos 0x0 --rotate normal \
+        --output "$secondary_screen_1" --mode "$secondary_resolution" --pos "${eDP1_width}x0" --rotate normal \
+        --output "$secondary_screen_2" --mode "$secondary_resolution" --pos "${pos2}x-${vert_offset}" --rotate left
     elif [ "$POSITION" == "left" ]; then
-      xrandr --output eDP-1 --primary --mode "$eDP1_resolution" --pos 0x0 --rotate normal \
-        --output "$secondary_screen_1" --mode "$secondary_resolution" --pos -1920x0 --rotate normal \
-        --output "$secondary_screen_2" --mode "$secondary_resolution" --pos -3000x-410 --rotate left
+      pos2=$((secondary_width * 2))
+      xrandr --output eDP-1 --primary --mode "$eDP1_resolution" --pos "${pos2}x0" --rotate normal \
+        --output "$secondary_screen_1" --mode "$secondary_resolution" --pos "${secondary_width}x0" --rotate normal \
+        --output "$secondary_screen_2" --mode "$secondary_resolution" --pos 0x0 --rotate normal
+    elif [ "$POSITION" == "vertLeft" ]; then
+      vert_offset=$(( (secondary_width - eDP1_height) / 2 ))
+      xrandr --output eDP-1 --primary --mode "$eDP1_resolution" --pos "$((secondary_width + secondary_height))x0" --rotate normal \
+        --output "$secondary_screen_1" --mode "$secondary_resolution" --pos "${secondary_height}x0" --rotate normal \
+        --output "$secondary_screen_2" --mode "$secondary_resolution" --pos "0x-${vert_offset}" --rotate left
     else # POSITION == top
-      xrandr --output "$secondary_screen_1" --mode "$secondary_resolution" --pos 0x-1080 --rotate normal \
+      xrandr --output "$secondary_screen_1" --mode "$secondary_resolution" --pos "0x-${secondary_height}" --rotate normal \
         --output eDP-1 --primary --mode "$eDP1_resolution" --pos 0x0 --rotate normal \
-        --output "$secondary_screen_2" --mode "$secondary_resolution" --pos 1920x-1080 --rotate normal
+        --output "$secondary_screen_2" --mode "$secondary_resolution" --pos "${eDP1_width}x-${secondary_height}" --rotate normal
     fi
     notify-send "Applied configuration: $secondary_screen_1 and $secondary_screen_2 are positioned $POSITION relative to eDP-1."
   else

@@ -1,0 +1,30 @@
+#!/bin/sh
+db="${XDG_DATA_HOME:-$HOME/.local/share}/newsboat/cache.db"
+mod="$HOME/.local/bin/statusbar/rssmod"
+
+case $BLOCK_BUTTON in
+1) notify-send "📰 Flux RSS" "📰: nombre d'articles non lus
+- clic gauche : aide
+- clic milieu : ouvrir newsboat (lecture)
+- clic droit : flux ayant des non-lus
+- molette haut : rafraîchir les flux
+- molette bas : marquer tout comme lu" ;;
+2) setsid -f "$TERMINAL" -e newsboat ;;
+3)
+	if [ ! -f "$db" ]; then
+		notify-send "📰 Flux RSS" "Aucun cache newsboat trouvé. Lance newsboat -x reload."
+		exit 0
+	fi
+	per_feed=$(sqlite3 "$db" "SELECT REPLACE(f.title,'~',''), COUNT(*) FROM rss_item i JOIN rss_feed f ON i.feedurl = f.rssurl WHERE i.unread=1 AND i.deleted=0 GROUP BY f.title ORDER BY 2 DESC;" 2>/dev/null \
+		| awk -F'|' '{printf "• %s : %d\n", $1, $2}')
+	[ -z "$per_feed" ] && per_feed="Aucun article non lu."
+	notify-send "📰 Flux RSS — non lus" "$per_feed"
+	;;
+4) notify-send -t 2000 "📰 Rafraîchissement des flux…" ; "$mod/rss_reload" & ;;
+5)
+	if [ -f "$db" ]; then
+		sqlite3 "$db" "UPDATE rss_item SET unread=0 WHERE unread=1;" 2>/dev/null
+		notify-send -t 2000 "📰 Flux RSS" "Tous les articles marqués comme lus."
+	fi
+	;;
+esac
