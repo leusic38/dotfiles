@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=PhpStorm URL Handler
+Comment=Handle URL Scheme phpstorm://open?url=file://@file&line=@line
+Icon=phpstorm
+NoDisplay=true
+Terminal=false
+Categories=Development;
+Exec=phpstorm-url-handler.sh %u
+MimeType=x-scheme-handler/phpstorm;x-scheme-handler/pstorm;x-scheme-handler/txmt;

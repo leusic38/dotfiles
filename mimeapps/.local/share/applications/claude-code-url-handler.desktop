@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Claude Code URL Handler
+Comment=Handle URL Scheme claude-cli://
+NoDisplay=true
+Terminal=false
+Categories=Development;
+Exec=claude --handle-uri %u
+MimeType=x-scheme-handler/claude-cli;
