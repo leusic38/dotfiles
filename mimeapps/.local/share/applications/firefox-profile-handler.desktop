@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Firefox (choisir le profil)
+Comment=Demande le profil Firefox avant d'ouvrir un lien externe
+Icon=firefox
+NoDisplay=true
+Terminal=false
+Categories=Network;
+Exec=firefox-profile-handler.sh %u
+MimeType=x-scheme-handler/http;x-scheme-handler/https;text/html;application/xhtml+xml;application/x-extension-htm;application/x-extension-html;application/x-extension-shtml;application/x-extension-xhtml;application/x-extension-xht;
