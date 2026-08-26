@@ -82,6 +82,11 @@ stow -n -v -t ~ zsh
 Ne pas stower : `system` (destination `/etc`, voir §4), ni `alacritty`, `lf`,
 `bin_old` (dormants, voir §3).
 
+Bon à savoir : stow replie les dossiers entiers quand il peut. `~/.local/bin`
+est donc un **lien** vers `dotfiles/bin/.local/bin`, et non un dossier de liens
+individuels. Conséquence pratique : un nouveau script ajouté dans `bin/` est
+immédiatement sur le `PATH`, sans re-stow.
+
 ### 1.5 Les deux liens manuels de la session X
 
 **C'est l'étape qu'on oublie**, parce qu'aucun stow ne la fait. `startx` ne lit
@@ -103,14 +108,24 @@ outils ne viennent d'aucun paquet : ils sont compilés depuis quatre dépôts
 séparés et installés dans `/usr/local/bin`.
 
 ```bash
-mkdir -p ~/Repo/mySuckless && cd ~/Repo/mySuckless
-for r in dusk my-dmenu-flexipatch my-st my-slock-flexipatch; do
-    git clone "git@github.com:leusic38/$r.git"
-done
-for r in dusk my-dmenu-flexipatch my-st my-slock-flexipatch; do
-    (cd "$r" && make && sudo make install)
-done
+suckless-build
 ```
+
+Le script vient du paquet `bin`, déployé à l'étape §1.4. Il lit
+`~/.local/bin/suckless.manifest`, clone ce qui manque dans
+`~/Repo/mySuckless`, puis compile et installe chaque dépôt.
+
+```bash
+suckless-build --check   # état des dépôts, ne compile rien
+suckless-build --pin     # réépingler le manifeste après avoir poussé du travail
+```
+
+Le manifeste enregistre URL, branche et commit des quatre dépôts. Ce ne sont
+volontairement **pas** des sous-modules : ce sont des forks patchés
+activement, et un sous-module imposerait un `HEAD` détaché à chaque clone plus
+un commit du dépôt parent à chaque recompilation. Le commit du manifeste sert
+donc de référence, pas de contrainte — `suckless-build` clone la branche et
+signale l'écart s'il y en a.
 
 Ce que ça installe : `dusk` et `duskc` (le WM et son client de contrôle),
 `dmenu` / `dmenu_run` / `dmenu_path` / `stest`, `st`, et `slock`.
@@ -175,10 +190,18 @@ sudo pacman -S --needed \
   dunst libnotify udiskie gvfs gvfs-mtp \
   zsh kitty ranger neovim helix \
   i3status-rust pamixer networkmanager \
-  jq fzf exa reflector pacman-contrib \
+  jq fzf eza reflector pacman-contrib \
   android-tools android-file-transfer \
-  ttf-jetbrains-mono-nerd ttf-hack-nerd
+  ttf-jetbrains-mono-nerd ttf-hack-nerd \
+  libx11 libxft libxinerama libxrender libxext libxcursor libxrandr \
+  fontconfig freetype2 imlib2 pam libxcrypt
 ```
+
+La dernière ligne et demie, ce sont les bibliothèques nécessaires pour
+**compiler** les suckless (§1.6) — pas pour les exécuter. Elles sont dérivées
+des `-l…` de leurs quatre `config.mk` : `imlib2` pour les fonds d'écran de
+`dusk` et `slock`, `pam` et `libxcrypt` pour l'authentification de `slock`,
+`libxcursor` pour `st`.
 
 À quoi servent les moins évidents :
 
@@ -189,7 +212,7 @@ sudo pacman -S --needed \
 | `maim`, `xclip`, `xdotool` | captures d'écran et presse-papiers des scripts `bin/` |
 | `pamixer` | module volume de la barre de statut |
 | `jq` | parsing JSON dans les modules de la barre |
-| `exa` | `ls` est aliasé dessus dans `aliasesrc` |
+| `eza` | `aliasesrc` alias `ls` sur la commande `exa` ; le paquet `exa` n'existe plus, `eza` le remplace et fournit `/usr/bin/exa` en lien de compatibilité |
 | `reflector`, `pacman-contrib` | `mirrors` et le module `sysupdatemod` (`checkupdates`) |
 | `gvfs-mtp` | neutralisé pour le téléphone (§4), mais requis pour les autres appareils |
 | `android-file-transfer` | fournit `aft-mtp-mount`, utilisé par le montage MTP |
@@ -223,7 +246,7 @@ fournit.
 
 | Paquet | Contenu |
 | --- | --- |
-| `bin` | scripts personnels → `~/.local/bin` : lanceurs de WM, barre de statut, utilitaires |
+| `bin` | scripts personnels → `~/.local/bin` : lanceurs de WM, barre de statut, utilitaires, `suckless-build` et son manifeste, `phone-remount` |
 | `dusk` | thèmes Xresources du WM actif |
 | `x11` | `xinitrc`, `xprofile`, fonds d'écran |
 | `shell` | `.profile` et `aliasesrc`, partagés entre shells |
@@ -296,6 +319,12 @@ leur trouve aucun propriétaire. Leurs sources vivent dans `~/Repo/mySuckless`,
 **hors de ce dépôt**. Une réinstallation qui saute §1.6 aboutit à une machine
 sans environnement graphique.
 
+C'est `suckless-build` qui couvre ce trou, et `suckless.manifest` qui garde la
+trace des quatre dépôts. Mais le manifeste ne vaut que si les commits qu'il
+épingle **existent sur le serveur** : après avoir patché et poussé, lancer
+`suckless-build --pin` puis committer le manifeste. Un `--check` de temps en
+temps dit si les deux ont divergé.
+
 ### Les deux liens de session ne sont pas stowés
 
 `~/.xinitrc` et `~/.xprofile` sont des liens créés à la main (§1.5). Aucun
@@ -315,6 +344,14 @@ production. Ils sont à restaurer depuis une sauvegarde privée, jamais d'ici.
 Ce script appelle `rofi`, qui n'est pas installé et n'est pas dans la liste des
 paquets. Soit installer `rofi`, soit le réécrire avec `dmenu`, qui est utilisé
 partout ailleurs.
+
+### `aliasesrc` appelle `exa`, un paquet qui n'existe plus
+
+Le paquet `exa` a été retiré des dépôts Arch au profit de `eza`. Ça fonctionne
+encore uniquement parce que `eza` le remplace officiellement et installe
+`/usr/bin/exa` en lien vers `eza`. Le jour où ce lien de compatibilité
+disparaîtra, `ls`, `ll` et `la` casseront d'un coup. Corriger les trois alias
+de `shell/.config/shell/aliasesrc` pour appeler `eza` directement.
 
 ### `dwm` traîne depuis l'AUR
 

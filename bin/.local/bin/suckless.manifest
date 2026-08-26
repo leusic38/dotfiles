@@ -1,0 +1,20 @@
+# Dépôts suckless compilés à la main et installés dans /usr/local/bin.
+#
+# Ils ne sont PAS des sous-modules de dotfiles, volontairement : ce sont des
+# forks que tu patches activement, et un sous-module imposerait un HEAD détaché
+# à chaque clone, plus un commit du repo parent à chaque recompilation. Ce
+# manifeste enregistre la même information (URL, branche, commit) sans déplacer
+# les copies de travail hors de ~/Repo/mySuckless.
+#
+# Lu par « suckless-build ». Format, séparé par des espaces :
+#
+#   <nom-du-dossier>  <url>  <branche>  <commit>
+#
+# Le commit sert de référence, pas de contrainte : suckless-build clone la
+# branche et signale l'écart s'il y en a. Pour réépingler après avoir poussé
+# du travail :  suckless-build --pin
+
+dusk                 git@github.com:leusic38/dusk.git                 master  252ecb6d9a2c125a2d2c7bd9f6e3b48a85cc7c3c
+my-dmenu-flexipatch  git@github.com:leusic38/my-dmenu-flexipatch.git  master  76549d014ef6abdecb1d676e5d4de160f86ba2d9
+my-slock-flexipatch  git@github.com:leusic38/my-slock-flexipatch.git  master  c8993e14894026cfcf29d6ed541d678b69b92c5a
+my-st                git@github.com:leusic38/my-st.git                work    a294b84f3ef2a329571e3664a94c9c35139bf337

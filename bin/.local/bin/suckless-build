@@ -1,0 +1,132 @@
+#!/usr/bin/env bash
+# Clone, compile et installe les suckless listés dans suckless.manifest.
+#
+#   suckless-build           clone ce qui manque, compile et installe tout
+#   suckless-build --check   n'affiche que l'état, ne compile rien
+#   suckless-build --pin     réécrit le manifeste sur les commits actuels
+#
+# Pourquoi ce script existe : dusk, dmenu, st et slock ne viennent d'aucun
+# paquet. Ils vivent dans /usr/local/bin, compilés depuis ~/Repo/mySuckless,
+# hors du dépôt dotfiles. Sans cette étape, une machine réinstallée n'a aucun
+# environnement graphique — et rien ne le signale.
+#
+# Pourquoi pas des sous-modules : ce sont des forks patchés activement. Un
+# sous-module imposerait un HEAD détaché à chaque clone et un commit du dépôt
+# parent à chaque recompilation. Le manifeste enregistre la même information
+# sans déplacer les copies de travail.
+#
+# Le commit du manifeste est une référence, pas une contrainte : on clone la
+# branche et on signale l'écart. « --pin » remet le manifeste à jour après que
+# tu as poussé du travail.
+
+set -euo pipefail
+
+SELF=$(readlink -f "${BASH_SOURCE[0]}")
+MANIFEST=${SUCKLESS_MANIFEST:-$(dirname "$SELF")/suckless.manifest}
+SRC=${SUCKLESS_SRC:-$HOME/Repo/mySuckless}
+MODE=build
+
+case ${1-} in
+    --check) MODE=check ;;
+    --pin)   MODE=pin ;;
+    -h|--help) sed -n '2,20p' "$SELF" | sed 's/^# \?//'; exit 0 ;;
+    "")      ;;
+    *)       echo "option inconnue : $1 (voir --help)" >&2; exit 2 ;;
+esac
+
+[ -r "$MANIFEST" ] || { echo "manifeste introuvable : $MANIFEST" >&2; exit 1; }
+
+entries() { grep -vE '^\s*#|^\s*$' "$MANIFEST"; }
+
+# --- pin : réécrit la colonne commit depuis les copies de travail -----------
+if [ "$MODE" = pin ]; then
+    tmp=$(mktemp)
+    trap 'rm -f "$tmp"' EXIT
+    cp "$MANIFEST" "$tmp"
+    changed=0
+    while read -r name url branch commit; do
+        d=$SRC/$name
+        [ -d "$d/.git" ] || { echo "  ignoré   $name (pas cloné)"; continue; }
+        real=$(git -C "$d" rev-parse HEAD)
+        if [ "$real" = "$commit" ]; then
+            echo "  inchangé $name"
+        else
+            awk -v n="$name" -v f="$real" \
+                '$1==n && $0 !~ /^#/ {sub(/[0-9a-f]{40}$/, f)} {print}' \
+                "$tmp" > "$tmp.new" && mv "$tmp.new" "$tmp"
+            echo "  épinglé  $name  ${commit:0:7} -> ${real:0:7}"
+            changed=$((changed + 1))
+        fi
+    done < <(entries)
+    if [ "$changed" -gt 0 ]; then
+        mv "$tmp" "$MANIFEST"
+        trap - EXIT
+        echo
+        echo "$changed entrée(s) mise(s) à jour dans $MANIFEST"
+        echo "Penser à committer le manifeste dans dotfiles."
+    else
+        echo
+        echo "Manifeste déjà à jour."
+    fi
+    exit 0
+fi
+
+# --- check et build --------------------------------------------------------
+mkdir -p "$SRC"
+drift=0
+missing=0
+
+while read -r name url branch commit; do
+    d=$SRC/$name
+    printf '=== %s\n' "$name"
+
+    if [ ! -d "$d/.git" ]; then
+        if [ "$MODE" = check ]; then
+            echo "  absent — sera cloné depuis $url ($branch)"
+            missing=$((missing + 1))
+            continue
+        fi
+        echo "  clonage depuis $url ($branch)"
+        git clone --branch "$branch" "$url" "$d"
+    else
+        git -C "$d" fetch --quiet origin || echo "  fetch impossible (hors ligne ?)"
+    fi
+
+    head=$(git -C "$d" rev-parse HEAD)
+    cur_branch=$(git -C "$d" rev-parse --abbrev-ref HEAD)
+    dirty=$(git -C "$d" status --porcelain | wc -l)
+
+    echo "  branche $cur_branch (manifeste : $branch)"
+    [ "$cur_branch" = "$branch" ] || echo "  ATTENTION branche différente du manifeste"
+    [ "$dirty" -eq 0 ] || echo "  $dirty fichier(s) non commité(s)"
+
+    if [ "$head" = "$commit" ]; then
+        echo "  commit  ${head:0:7} — conforme au manifeste"
+    else
+        echo "  commit  ${head:0:7} — le manifeste dit ${commit:0:7}"
+        echo "          (si l'écart est voulu : suckless-build --pin)"
+        drift=$((drift + 1))
+    fi
+
+    if [ "$MODE" = build ]; then
+        echo "  compilation"
+        make -C "$d" clean >/dev/null
+        make -C "$d" >/dev/null
+        echo "  installation dans /usr/local (sudo)"
+        sudo make -C "$d" install >/dev/null
+        echo "  installé"
+    fi
+    echo
+done < <(entries)
+
+if [ "$MODE" = check ]; then
+    echo "$missing dépôt(s) absent(s), $drift écart(s) avec le manifeste."
+    exit 0
+fi
+
+echo "Terminé. Binaires installés :"
+for b in dusk duskc dmenu dmenu_run st stest slock; do
+    p=$(command -v "$b" 2>/dev/null) && printf '  %-10s %s\n' "$b" "$p"
+done
+echo
+echo "slock est setuid root (-rwsr-xr-x), c'est normal pour un verrouilleur."
