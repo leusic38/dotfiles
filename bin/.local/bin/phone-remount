@@ -1,0 +1,90 @@
+#!/usr/bin/env bash
+# Remonte le téléphone Android dans /run/media/$USER/Galaxy.
+#
+#   phone-remount            remontage simple
+#   phone-remount --reset    remontage avec reset USB (voir plus bas)
+#
+# Quand l'utiliser : quand l'accès rame atrocement, plusieurs secondes par
+# entrée de dossier. C'est la signature d'une session MTP désynchronisée — une
+# requête a expiré, sa réponse est arrivée trop tard, et depuis chaque réponse
+# est décalée d'un cran, donc tout part en timeout de 10 s. aft-mtp-mount ne
+# s'en remet jamais seul.
+#
+# --reset ajoute un reset USB, qui repart d'une session MTP vierge. À n'utiliser
+# que si le remontage simple n'a pas suffi : le reset fait redemander
+# l'autorisation d'accès sur l'écran du téléphone.
+#
+# Diagnostic : journalctl -u android-mtp-automount@Galaxy.service -b | tail
+# Signatures à chercher :
+#   « drop message » / « timeout reaping usb urb »  -> session désynchronisée
+#   « SessionNotOpen (0x2003) »                     -> téléphone verrouillé
+#   « signal=ABRT »                                 -> verrouillé ou mode recharge
+
+set -euo pipefail
+
+UNIT=android-mtp-automount@Galaxy.service
+MOUNT=/run/media/$USER/Galaxy
+RESET=
+
+[[ ${1-} == --reset ]] && RESET=1
+
+# Le téléphone est-il là ?
+found=
+for d in /sys/bus/usb/devices/*/; do
+    [ "$(cat "$d/idVendor" 2>/dev/null)" = "04e8" ] || continue
+    found=$d
+    break
+done
+if [ -z "$found" ]; then
+    echo "Téléphone non détecté sur l'USB. Branche-le d'abord." >&2
+    exit 1
+fi
+
+echo "Téléphone détecté (devnum $(cat "$found/devnum"), $(cat "$found/speed") Mbps)."
+
+if [ -n "$RESET" ]; then
+    echo "Reset USB — le téléphone va redemander l'autorisation d'accès."
+    sudo systemctl stop "$UNIT"
+    tmp=$(mktemp)
+    trap 'rm -f "$tmp"' EXIT
+    printf 'quit\n' > "$tmp"
+    timeout 30 aft-mtp-cli -R --batch -f "$tmp" >/dev/null 2>&1 || true
+    echo "Autorise l'accès sur le téléphone si la demande apparaît."
+    sudo systemctl start "$UNIT"
+else
+    echo "Redémarrage de $UNIT ..."
+    sudo systemctl restart "$UNIT"
+fi
+
+# Attendre que le montage réponde vraiment, pas seulement qu'il existe.
+# Le service réessaie toutes les 15 s tant que le téléphone est verrouillé,
+# donc on laisse largement le temps de déverrouiller.
+echo "Attente d'une réponse du téléphone (60 s max)..."
+for _ in $(seq 1 20); do
+    if timeout 4 ls "$MOUNT" 2>/dev/null | grep -q .; then
+        echo
+        echo "Monté et fonctionnel :"
+        ls "$MOUNT"
+        exit 0
+    fi
+    sleep 3
+done
+
+cat >&2 <<EOF
+
+Le montage ne répond toujours pas.
+
+À vérifier sur le téléphone, dans cet ordre :
+  1. écran DÉVERROUILLÉ (c'est la cause la plus fréquente : verrouillé,
+     Samsung ferme la session MTP et rien ne répond) ;
+  2. mode USB sur « Transfert de fichiers », pas « Recharge » ni
+     « Transfert d'images » ;
+  3. l'autorisation d'accès acceptée si elle est affichée.
+
+Le service réessaie tout seul toutes les 15 s : une fois le téléphone
+déverrouillé, le montage apparaît sans rien relancer.
+
+Si ça persiste :  phone-remount --reset
+Journal        :  journalctl -u $UNIT -b | tail -20
+EOF
+exit 1

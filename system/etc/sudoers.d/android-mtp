@@ -1,0 +1,16 @@
+# Permet à manu de remonter le téléphone sans mot de passe.
+#
+# Pourquoi : une session MTP désynchronisée ne se répare que par un remontage
+# du service, et ça peut arriver plusieurs fois par session de travail.
+#
+# Portée volontairement étroite : cette unité-là uniquement, et seulement les
+# verbes start/stop/restart. Aucun caractère générique, donc pas d'élargissement
+# possible vers un autre service.
+#
+# Installation :
+#   sudo install -m 0440 -o root -g root \
+#        ~/dotfiles/system/etc/sudoers.d/android-mtp /etc/sudoers.d/android-mtp
+
+manu ALL=(root) NOPASSWD: /usr/bin/systemctl restart android-mtp-automount@Galaxy.service, \
+                          /usr/bin/systemctl stop    android-mtp-automount@Galaxy.service, \
+                          /usr/bin/systemctl start   android-mtp-automount@Galaxy.service

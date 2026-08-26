@@ -1,0 +1,33 @@
+#!/bin/sh
+# Vérifie qu'un montage MTP répond vraiment, et pas seulement qu'il existe.
+#
+# Appelé en ExecStartPost par android-mtp-automount@.service. Un code de retour
+# non nul fait échouer l'unité, donc Restart=always réessaie.
+#
+# Pourquoi c'est nécessaire : aft-mtp-mount réussit son montage FUSE même quand
+# la session MTP ne s'est jamais ouverte — typiquement s'il se connecte à la
+# seconde où le téléphone apparaît sur l'USB, avant qu'Android ait fini
+# d'activer sa fonction MTP, ou si le téléphone est verrouillé. Le processus
+# reste alors bien vivant, systemd le croit en bonne santé, et on hérite d'un
+# montage zombie : présent, listable, mais vide, avec 10 s de timeout par
+# requête. Sans ce contrôle, rien ne le rattrape jamais.
+
+set -eu
+
+MOUNT=${1:?usage: android-mtp-ready <point-de-montage>}
+TRIES=10
+DELAY=2
+
+n=0
+while [ "$n" -lt "$TRIES" ]; do
+    # timeout, car sur une session morte le ls peut bloquer 10 s
+    if timeout 5 ls "$MOUNT" 2>/dev/null | grep -q .; then
+        exit 0
+    fi
+    n=$((n + 1))
+    sleep "$DELAY"
+done
+
+echo "session MTP inutilisable après $((TRIES * DELAY))s : $MOUNT reste vide." >&2
+echo "Téléphone verrouillé, en mode « recharge », ou autorisation non accordée ?" >&2
+exit 1

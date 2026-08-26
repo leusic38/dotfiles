@@ -1,0 +1,62 @@
+# Monte un téléphone Android (MTP) dans /run/media/<user>/<instance>,
+# c'est-à-dire au même endroit qu'une clé USB montée par udisks2/udiskie.
+#
+# udisks2 ne peut pas faire ce travail : le MTP n'est pas un périphérique bloc,
+# il n'y a aucune partition à monter. On reproduit donc son comportement avec
+# un montage FUSE (aft-mtp-mount) déclenché par udev.
+#
+# L'instance (%i) est le nom du dossier de montage, p.ex. « Galaxy ».
+# Démarré / arrêté par /etc/udev/rules.d/99-android-mtp-automount.rules
+
+[Unit]
+Description=Montage MTP du téléphone Android dans /run/media/manu/%i
+Documentation=https://github.com/whoozle/android-file-transfer-linux
+# Pas de limite de cadence de démarrage : sinon un téléphone simplement
+# verrouillé épuise le quota en une minute et le service reste « failed »
+# définitivement, point de montage supprimé — plus rien ne se réveille au
+# déverrouillage.
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=manu
+Group=users
+
+# /run est un tmpfs : l'arborescence disparaît à chaque redémarrage, on la
+# recrée à chaque montage. Le « + » exécute la ligne en root.
+# /run/media/manu appartient à manu en 0700, comme le fait udisks2.
+ExecStartPre=+/usr/bin/install -d -m 0755 -o root -g root /run/media
+ExecStartPre=+/usr/bin/install -d -m 0700 -o manu -g users /run/media/manu
+ExecStartPre=+/usr/bin/install -d -m 0755 -o manu -g users /run/media/manu/%i
+
+# -f = premier plan, pour que systemd suive réellement le processus.
+#
+# PAS de -R (reset USB) ici, même s'il répare une session MTP désynchronisée :
+# chaque reset fait redemander l'autorisation d'accès sur le téléphone. Dans la
+# boucle de redémarrage ci-dessous, ça produit une demande toutes les quelques
+# secondes, jusqu'à l'abandon de systemd. Le reset appartient au chemin de
+# réparation manuelle et délibérée : voir « phone-remount --reset ».
+ExecStart=/usr/bin/aft-mtp-mount -f /run/media/manu/%i
+
+# Contrôle de disponibilité réelle. aft-mtp-mount réussit son montage même
+# quand la session MTP ne s'est jamais ouverte (connexion trop précoce après le
+# branchement, ou téléphone verrouillé) : on hérite alors d'un montage zombie,
+# présent mais vide, avec 10 s de timeout par requête — et comme le processus
+# reste vivant, Restart=always ne le rattrape pas. Ce contrôle échoue
+# volontairement dans ce cas, ce qui déclenche une nouvelle tentative.
+ExecStartPost=/usr/local/bin/android-mtp-ready /run/media/manu/%i
+
+# Démontage propre + suppression du point de montage. « exit 0 » car le
+# démontage a souvent déjà eu lieu (débranchement à chaud).
+ExecStopPost=+/usr/bin/sh -c 'fusermount3 -uz /run/media/manu/%i 2>/dev/null; rmdir /run/media/manu/%i 2>/dev/null; exit 0'
+
+# Le téléphone n'est pas prêt tant qu'il est verrouillé ou en mode « recharge » :
+# aft-mtp-mount plante alors sur SIGABRT au lieu de sortir proprement. Et un
+# téléphone verrouillé peut le rester des heures, donc on réessaie indéfiniment,
+# sans limite de cadence : au moment où tu déverrouilles, le montage apparaît
+# tout seul dans les 15 s.
+#
+# C'est sans risque d'emballement : la règle udev arrête le service au
+# débranchement, donc cette boucle ne tourne que téléphone branché.
+Restart=always
+RestartSec=15

@@ -1,0 +1,29 @@
+# Galaxy (Samsung, 04e8:6860) en mode MTP : monté automatiquement dans
+# /run/media/manu/Galaxy, comme une clé USB.
+#
+# Le préfixe 99 est important : la règle doit passer APRÈS 69-libmtp.rules pour
+# pouvoir neutraliser ID_MTP_DEVICE. Sans ça, gvfs monte le téléphone en
+# parallèle dans /run/user/1000/gvfs et les deux sessions MTP se marchent
+# dessus (montage figé, « ls » qui ne répond plus).
+#
+# « restart » et non « start », et déclenchement aussi sur change/bind :
+# quand Android bascule de fonction USB (recharge <-> transfert de fichiers
+# <-> transfert d'images), le périphérique est ré-énuméré sans quitter son
+# chemin sysfs — devnum change, mais il n'y a ni remove ni add. Un simple
+# « start » ne ferait rien et le montage resterait accroché à un handle USB
+# mort : le dossier apparaît alors vide.
+#
+# TAG+="uaccess" garantit que manu garde l'accès au nœud /dev/bus/usb/*.
+#
+# Pour un autre appareil : relever idVendor/idProduct avec
+#   cat /sys/bus/usb/devices/*/idVendor
+# puis dupliquer les lignes avec un nom de dossier différent.
+
+ACTION=="add|change|bind", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", \
+  ATTR{idVendor}=="04e8", ATTR{idProduct}=="6860", \
+  ENV{ID_MTP_DEVICE}="0", ENV{ID_MEDIA_PLAYER}="0", TAG+="uaccess", \
+  RUN+="/usr/bin/systemctl --no-block restart android-mtp-automount@Galaxy.service"
+
+ACTION=="remove", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", \
+  ENV{ID_VENDOR_ID}=="04e8", ENV{ID_MODEL_ID}=="6860", \
+  RUN+="/usr/bin/systemctl --no-block stop android-mtp-automount@Galaxy.service"
