@@ -233,8 +233,7 @@ README, à mettre à jour dans trois endroits :
    clé GPG perso et du store `pass`, entrée `pass insert mail/perso`, premier
    `mbsync -a`, activation du timer.
 2. Le tableau des paquets stow : nouvelle ligne `mail`.
-3. La liste des paquets pacman requis : `isync`, `msmtp`, `msmtp-mta`, `aerc`,
-   `pass`, `w3m`.
+3. La liste des paquets pacman requis : `isync`, `msmtp`, `aerc`, `pass`, `w3m`.
 
 Mentionner explicitement que le slot 11 exige un `dusk` recompilé (renvoi vers §1.6
 du README) — sinon une machine réinstallée affichera tout sauf le mail, sans rien
@@ -242,8 +241,16 @@ signaler.
 
 ## 11. Paquets à installer
 
-`isync` (fournit `mbsync`), `msmtp`, `msmtp-mta`, `aerc`, `pass`, `w3m`.
+`isync` (fournit `mbsync`), `msmtp`, `aerc`, `pass`, `w3m`.
 Tous dans les dépôts officiels : aucun AUR en phase 1.
+
+Pas de `msmtp-mta`, contrairement à ce qu'un montage msmtp classique installe :
+il entre en conflit avec `dma`, déjà présent, qui possède `/usr/bin/sendmail`
+et sert de transport aux courriers de `cronie` et `e2fsprogs`. Cette pile
+n'emprunte jamais `/usr/bin/sendmail` — `aerc` appelle `msmtp -a perso`
+directement — et l'échange serait perdant : la configuration `msmtp` est
+adossée à `pass` et à l'agent GPG de l'utilisateur, inaccessibles à une tâche
+lancée par root.
 
 ## 12. Vérifications
 
