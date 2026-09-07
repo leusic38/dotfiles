@@ -65,7 +65,7 @@ plugins restent vides, sans message d'erreur. Six sous-modules :
 ```bash
 cd ~/dotfiles
 stow -t ~ awesome bin cargo dunst dusk gtk-3.0 gtk-4.0 helix i3 i3status-rust \
-          ideavim kitty mimeapps neovimanu nvim ranger shell sql_formatter \
+          ideavim kitty mail mimeapps neovimanu nvim ranger shell sql_formatter \
           systemd x11 zsh
 ```
 
@@ -171,6 +171,46 @@ login tty1
             └─ dusklaunch          D-Bus, portails XDG, exec dusk
 ```
 
+### 1.10 Courrier
+
+Le paquet `mail` ne suffit pas : il ne contient aucun secret, par construction.
+Trois choses sont à recréer à la main sur une machine neuve.
+
+Paquets nécessaires — `isync`, `msmtp`, `msmtp-mta`, `aerc`, `pass`, `w3m` : voir
+[Paquets requis](#2-paquets-requis).
+
+**La clé GPG perso**, distincte de la clé `work` :
+
+```bash
+gpg --full-generate-key    # ECC / Curve 25519 / n'expire pas
+gpg --list-secret-keys --keyid-format=long
+```
+
+**Le store de mots de passe**, qui est un dépôt git séparé, jamais un
+sous-dossier de dotfiles :
+
+```bash
+pass init <empreinte-de-la-clé-perso>
+pass insert mail/perso
+```
+
+**Le Maildir et la première synchro** :
+
+```bash
+mkdir -p ~/.local/share/mail/perso
+mbsync -a --dry-run    # controle l'authentification, n'ecrit rien
+mbsync -a              # peut prendre plusieurs minutes
+systemctl --user enable --now mbsync.timer
+```
+
+Ensuite, `aerc` lit le Maildir local — jamais l'IMAP directement. C'est ce qui
+rend le compteur de la barre cohérent avec le client, et le client utilisable
+hors ligne.
+
+Le segment `✉` de la barre exige un `dusk` recompilé avec `NUM_STATUSES 12`
+(§1.6) : sans ça, tous les autres modules s'affichent et seul le courrier
+manque, sans aucun message d'erreur.
+
 ---
 
 ## 2. Paquets requis
@@ -259,6 +299,7 @@ fournit.
 | `dunst` | notifications |
 | `i3status-rust` | barre de statut |
 | `mimeapps` | associations de types MIME, handlers d'URL Firefox / PhpStorm |
+| `mail` | `mbsyncrc`, `msmtp`, `aerc` — le compte perso, sans aucun secret (voir §1.10) |
 | `gtk-3.0`, `gtk-4.0` | thème des applications GTK |
 | `systemd` | unités utilisateur (`ssh-agent.service`) |
 | `cargo` | environnement Rust (`~/.cargo/env`) |
@@ -324,6 +365,17 @@ trace des quatre dépôts. Mais le manifeste ne vaut que si les commits qu'il
 épingle **existent sur le serveur** : après avoir patché et poussé, lancer
 `suckless-build --pin` puis committer le manifeste. Un `--check` de temps en
 temps dit si les deux ont divergé.
+
+### Le segment courrier exige un `dusk` recompilé
+
+`dusk.c` définit `NUM_STATUSES`, la taille du tableau des segments de barre.
+Le WM **ignore silencieusement** tout indice au-delà, sans rien journaliser :
+`duskc run_command setstatus 11 …` ne renvoie aucune erreur, la barre reste
+simplement vide à cet endroit.
+
+Le fork est donc épinglé sur une valeur de `12` (§1.6). Un `dusk` recompilé
+depuis une version antérieure du manifeste fera disparaître le segment `✉`
+sans le moindre signal.
 
 ### Les deux liens de session ne sont pas stowés
 
