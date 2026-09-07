@@ -47,6 +47,10 @@ while true; do
 		$SETSTATUS 10 "$(~/.local/bin/statusbar/composeraudit/audit)" &
 	fi
 
+	if [ $((secs % 60)) -eq 20 ]; then
+		$SETSTATUS 11 "$(~/.local/bin/statusbar/mailmod/mail)" &
+	fi
+
 	((secs+=1))
 	sleep 1
 done

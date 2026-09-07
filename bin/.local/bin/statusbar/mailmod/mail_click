@@ -1,0 +1,26 @@
+#!/bin/sh
+maildir="${MAIL_ROOT:-${XDG_DATA_HOME:-$HOME/.local/share}/mail}"
+
+case $BLOCK_BUTTON in
+1) notify-send "✉ Courrier" "✉ : nombre de messages non lus
+« ! » : derniere synchro reussie il y a plus de 30 min
+- clic gauche : aide
+- clic milieu : ouvrir aerc
+- clic droit : liste des non lus
+- molette haut : synchroniser maintenant" ;;
+2) setsid -f "$TERMINAL" -e aerc ;;
+3)
+	liste=$(find "$maildir"/*/INBOX/new "$maildir"/*/INBOX/cur -type f 2>/dev/null \
+		| grep -v ':2,[A-Za-z]*S' \
+		| head -20 \
+		| while read -r f; do
+			exp=$(awk '/^$/{exit} /^[Ff]rom:/{sub(/^[^:]*:[ \t]*/,""); print; exit}' "$f")
+			suj=$(awk '/^$/{exit} /^[Ss]ubject:/{sub(/^[^:]*:[ \t]*/,""); print; exit}' "$f")
+			printf '• %s — %s\n' "${exp:-?}" "${suj:-(sans sujet)}"
+		done \
+		| perl -MEncode -CS -pe '$_ = Encode::decode("MIME-Header", $_)' 2>/dev/null)
+	[ -z "$liste" ] && liste="Aucun message non lu."
+	notify-send "✉ Courrier — non lus" "$liste"
+	;;
+4) notify-send -t 2000 "✉ Synchronisation…" ; "$HOME/.local/bin/mail-sync" & ;;
+esac

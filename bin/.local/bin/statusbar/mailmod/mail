@@ -1,0 +1,36 @@
+#!/bin/sh
+# Nombre de messages non lus, tous comptes confondus. Aucun acces reseau :
+# on ne fait que compter des fichiers deja sur le disque, ce qui rend le
+# module utilisable dans une boucle de barre a la seconde.
+#
+# Non lu, au sens Maildir : tout fichier de INBOX/new, plus tout fichier de
+# INBOX/cur dont les drapeaux (apres « :2, ») ne contiennent pas « S » (Seen).
+# Seule INBOX est comptee — ni le spam, ni les archives.
+#
+# Le suffixe « ! » signale que la derniere synchro reussie remonte a plus de
+# 30 minutes : un compteur perime doit se distinguer d'une boite vide. C'est
+# aussi pour ca qu'on affiche « ✉! » quand le total est nul mais la synchro
+# en retard, alors qu'un zero a jour n'affiche rien du tout.
+
+maildir="${MAIL_ROOT:-${XDG_DATA_HOME:-$HOME/.local/share}/mail}"
+stamp="${XDG_CACHE_HOME:-$HOME/.cache}/statusbar/mail_sync"
+
+[ -d "$maildir" ] || exit 0
+
+neufs=$(find "$maildir"/*/INBOX/new -type f 2>/dev/null | wc -l)
+lus_partiels=$(find "$maildir"/*/INBOX/cur -type f 2>/dev/null | grep -cv ':2,[A-Za-z]*S' || true)
+total=$((neufs + lus_partiels))
+
+perime=""
+if [ -r "$stamp" ]; then
+    age=$(( $(date +%s) - $(cat "$stamp") ))
+    [ "$age" -gt 1800 ] && perime="!"
+else
+    perime="!"
+fi
+
+if [ "$total" -gt 0 ]; then
+    printf "✉%s%s" "$total" "$perime"
+elif [ -n "$perime" ]; then
+    printf "✉!"
+fi

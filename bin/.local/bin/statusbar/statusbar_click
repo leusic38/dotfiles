@@ -6,11 +6,12 @@ case $BLOCK_STATUS in
     3) ~/.local/bin/statusbar/cpumod/cpu_click ;;
     4) ~/.local/bin/statusbar/sysupdatemod/sysupdate_click ;;
     5) ~/.local/bin/statusbar/weathermod/weather_click ;;
-    6) ~/.local/bin/statusbar/weathermod/disk_click ;;
+    6) ~/.local/bin/statusbar/diskspacemod/disk_click ;;
     7) ~/.local/bin/statusbar/networkmod/network_click ;;
     #8) ~/.local/bin/statusbar/statusbutton_click ;;
     9) ~/.local/bin/statusbar/rssmod/rss_click ;;
     10) ~/.local/bin/statusbar/composeraudit/audit_click ;;
+    11) ~/.local/bin/statusbar/mailmod/mail_click ;;
     *) notify-send -t 2000 "Unknown status $BLOCK_STATUS clicked $BLOCK_BUTTON" & ;;
 esac
 
