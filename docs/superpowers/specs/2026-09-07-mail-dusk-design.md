@@ -19,7 +19,7 @@ yahoo) sont hors périmètre et traitées en §13.
 | --- | --- |
 | `dusk.c:59` définit `NUM_STATUSES 11`, et les slots 0 à 10 sont tous pris | Aucun slot libre : il faut recompiler `dusk` (§2) |
 | La barre est une boucle `sh` d'une seconde (`statusbar_launch`) | Le module ne doit faire aucun accès réseau : il lit un Maildir local |
-| Le dépôt dotfiles est destiné à être publiable | Aucun secret dans le dépôt : `pass` + `PassCmd` (§4) |
+| Le dépôt dotfiles est destiné à être publiable | Aucun secret dans le dépôt : `rbw` + `PassCmd` (§4) |
 | Les suckless sont suivis par manifeste, pas en sous-modules | Une recompilation de `dusk` se solde par `suckless-build --pin` + commit du manifeste |
 | Le README sert de runbook de réinstallation | Toute brique nouvelle y est documentée (§10) |
 
@@ -99,17 +99,41 @@ que montre le client, et le tout utilisable hors ligne.
 
 ## 4. Secrets
 
-`pass` (à installer) adossé à une clé GPG **personnelle**, distincte de la clé
-*work* `8BB7991E` déjà présente dans le trousseau.
+Les mots de passe d'Emmanuel sont déjà dans **Bitwarden**. On s'y adosse plutôt
+que d'ouvrir un second coffre : `rbw` (dépôt `extra`), le client Bitwarden en
+Rust, dont l'agent garde le coffre déverrouillé et dont `rbw get` écrit le mot
+de passe sur la sortie standard — exactement la forme attendue par `mbsync` et
+`msmtp`.
 
 Les configurations ne contiennent jamais de mot de passe, seulement :
 
 ```
-PassCmd "pass show mail/perso"
+PassCmd "rbw get mail-perso"
 ```
 
-Le store `~/.password-store` est un dépôt git séparé, jamais un sous-dossier de
-dotfiles. Conséquence voulue : le paquet `mail` est publiable tel quel.
+Écarté : `bitwarden-cli`, le client officiel. Il fonctionne par jeton de
+session (`bw unlock` exporte `BW_SESSION`), et une unité systemd n'a pas de
+session — il faudrait stocker ce jeton quelque part, c'est-à-dire construire un
+coffre pour protéger l'accès au coffre.
+
+Écarté aussi : `pass` adossé à une clé GPG dédiée. C'est la solution canonique
+et elle marche, mais elle impose un second magasin de secrets à sauvegarder et
+à synchroniser en parallèle de Bitwarden.
+
+**Le coffre se verrouille**, et c'est la contrepartie assumée : `lock_timeout`
+vaut 3600 s (une heure). Coffre verrouillé, `mbsync` échoue, donc plus de
+notifications — mais le marqueur `!` de la barre (§6) le dit au bout de 30
+minutes, au lieu de laisser croire à une boîte calme. Le téléphone d'Emmanuel
+notifie en parallèle, ce qui rend ce trou acceptable. Le délai se change à tout
+moment, sans rien toucher d'autre :
+
+```bash
+rbw config set lock_timeout 28800   # 8 h
+rbw stop-agent
+```
+
+Le fichier `~/.config/rbw/config.json` n'est **pas** stowé : `rbw` le réécrit
+lui-même. Les deux commandes ci-dessus sont documentées dans le runbook (§10).
 
 ## 5. Synchro et notification — `bin/.local/bin/mail-sync`
 
@@ -230,10 +254,10 @@ x-scheme-handler/mailto=aerc.desktop
 README, à mettre à jour dans trois endroits :
 
 1. Une section de runbook « Courrier » : installation des paquets, création de la
-   clé GPG perso et du store `pass`, entrée `pass insert mail/perso`, premier
-   `mbsync -a`, activation du timer.
+   compte `rbw` (`rbw login`, `rbw unlock`), entrée `mail-perso` dans Bitwarden,
+   premier `mbsync -a`, activation du timer, et comment changer `lock_timeout`.
 2. Le tableau des paquets stow : nouvelle ligne `mail`.
-3. La liste des paquets pacman requis : `isync`, `msmtp`, `aerc`, `pass`, `w3m`.
+3. La liste des paquets pacman requis : `isync`, `msmtp`, `aerc`, `rbw`, `w3m`.
 
 Mentionner explicitement que le slot 11 exige un `dusk` recompilé (renvoi vers §1.6
 du README) — sinon une machine réinstallée affichera tout sauf le mail, sans rien
@@ -241,7 +265,7 @@ signaler.
 
 ## 11. Paquets à installer
 
-`isync` (fournit `mbsync`), `msmtp`, `aerc`, `pass`, `w3m`.
+`isync` (fournit `mbsync`), `msmtp`, `aerc`, `rbw`, `w3m`.
 Tous dans les dépôts officiels : aucun AUR en phase 1.
 
 Pas de `msmtp-mta`, contrairement à ce qu'un montage msmtp classique installe :
@@ -249,7 +273,7 @@ il entre en conflit avec `dma`, déjà présent, qui possède `/usr/bin/sendmail
 et sert de transport aux courriers de `cronie` et `e2fsprogs`. Cette pile
 n'emprunte jamais `/usr/bin/sendmail` — `aerc` appelle `msmtp -a perso`
 directement — et l'échange serait perdant : la configuration `msmtp` est
-adossée à `pass` et à l'agent GPG de l'utilisateur, inaccessibles à une tâche
+adossée à `rbw` et à l'agent de l'utilisateur, inaccessibles à une tâche
 lancée par root.
 
 ## 12. Vérifications
@@ -260,7 +284,7 @@ Aucun framework de test dans ce dépôt : la validation est une liste de command
 | Étape | Commande | Attendu |
 | --- | --- | --- |
 | Déploiement stow | `stow -n -v mail` | aucun conflit |
-| Secret | `pass show mail/perso` | le mot de passe, sans invite d'erreur |
+| Secret | `rbw get mail-perso` | le mot de passe, coffre déjà déverrouillé |
 | Connexion | `mbsync -a --dry-run` | liste des dossiers, aucune erreur d'auth |
 | Première synchro | `mbsync -a` puis `find ~/.local/share/mail/perso -type f \| wc -l` | > 0 |
 | Compteur | `~/.local/bin/statusbar/mailmod/mail` | `✉N` cohérent avec le webmail |
@@ -279,7 +303,7 @@ Aucun framework de test dans ce dépôt : la validation est une liste de command
 ## 13. Suites, hors périmètre
 
 - **Phase 2** — gmail, gmx, yahoo par mots de passe d'application : une strophe
-  `mbsyncrc`, une entrée `pass` et un compte `aerc` par boîte. Le module de barre
+  `mbsyncrc`, une entrée Bitwarden et un compte `aerc` par boîte. Le module de barre
   agrège déjà plusieurs comptes sans modification.
 - **Phase 3** — hotmail par OAuth2 via `oama` (AUR), Microsoft ayant supprimé
   l'authentification par mot de passe.
