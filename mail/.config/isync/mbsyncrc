@@ -1,0 +1,32 @@
+# Synchro IMAP -> Maildir local pour le courrier personnel.
+#
+# Le mot de passe n'est jamais ici : PassCmd le tire de Bitwarden via rbw.
+# Ce fichier est donc publiable tel quel.
+#
+# Lu par mbsync, appele par ~/.local/bin/mail-sync (timer mbsync.timer).
+# Ajouter un compte = ajouter un bloc IMAPAccount / IMAPStore /
+# MaildirStore / Channel, rien d'autre a toucher.
+
+IMAPAccount perso
+Host mail-fr.securemail.pro
+Port 993
+User emmanuel@farcis.fr
+PassCmd "rbw get mail-perso"
+TLSType IMAPS
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+IMAPStore perso-distant
+Account perso
+
+MaildirStore perso-local
+Path ~/.local/share/mail/perso/
+Inbox ~/.local/share/mail/perso/INBOX
+SubFolders Verbatim
+
+Channel perso
+Far :perso-distant:
+Near :perso-local:
+Patterns *
+Create Both
+Expunge Both
+SyncState *
