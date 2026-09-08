@@ -1,0 +1,104 @@
+#!/bin/sh
+# Synchronise le courrier et signale les nouveaux messages.
+#
+#   mail-sync          synchronise, notifie, rafraichit la barre
+#   mail-sync --quiet  synchronise sans notifier (premiere synchro, cron)
+#
+# Appele par mbsync.timer toutes les 3 minutes, et a la molette haut sur le
+# segment courrier de la barre.
+#
+# Comment le neuf est detecte : on liste les fichiers de */INBOX/new avant et
+# apres mbsync ; les noms apparus sont les nouveaux messages. Pas de base, pas
+# d'etat a maintenir — le Maildir est deja la source de verite.
+#
+# En cas d'echec de mbsync : aucune notification (un reseau coupe n'est pas un
+# evenement digne d'un popup toutes les 3 minutes) et l'horodatage n'est pas
+# mis a jour, ce qui fait apparaitre le suffixe « ! » dans la barre au bout de
+# 30 minutes. Le detail est dans journald : systemctl --user status mbsync
+#
+# Surchargeables pour les tests :
+#   MAIL_ROOT     racine du Maildir
+#   MBSYNC_CMD    commande tenant lieu de mbsync
+#   NOTIFY_CMD    commande tenant lieu de notify-send
+
+set -u
+
+maildir="${MAIL_ROOT:-${XDG_DATA_HOME:-$HOME/.local/share}/mail}"
+cache="${XDG_CACHE_HOME:-$HOME/.cache}/statusbar"
+stamp="$cache/mail_sync"
+lock="$cache/mail_sync.lock"
+# Surchargeables pour les tests, comme firefox-profile-handler.sh et mdview le
+# font deja : sans ca, verifier la detection du neuf imposerait de s'envoyer de
+# vrais messages et d'attendre, ou de couper le reseau.
+MBSYNC_CMD="${MBSYNC_CMD:-mbsync}"
+NOTIFY_CMD="${NOTIFY_CMD:-notify-send}"
+quiet=0
+
+case ${1-} in
+    --quiet)   quiet=1 ;;
+    -h|--help) sed -n '2,20p' "$0" | sed 's/^# \?//'; exit 0 ;;
+    "")        ;;
+    *)         echo "option inconnue : $1 (voir --help)" >&2; exit 2 ;;
+esac
+
+mkdir -p "$cache"
+
+# Le timer et la molette de la barre peuvent tomber en meme temps : le second
+# arrivant repart sans rien faire plutot que de lancer un mbsync concurrent.
+exec 9>"$lock"
+flock -n 9 || exit 0
+
+tmp=$(mktemp -d)
+trap 'rm -rf "$tmp"' EXIT
+
+inventaire() {
+    find "$maildir"/*/INBOX/new -type f 2>/dev/null | sort
+}
+
+inventaire > "$tmp/avant"
+
+if ! $MBSYNC_CMD -a >"$tmp/log" 2>&1; then
+    sed 's/^/mbsync: /' "$tmp/log" >&2
+    exit 1
+fi
+
+inventaire > "$tmp/apres"
+comm -13 "$tmp/avant" "$tmp/apres" > "$tmp/nouveaux"
+
+date +%s > "$stamp"
+
+# Rafraichir la barre sans attendre le prochain tour de sa boucle.
+compteur="$HOME/.local/bin/statusbar/mailmod/mail"
+[ -x "$compteur" ] && duskc --ignore-reply run_command setstatus 11 "$("$compteur")" 2>/dev/null
+
+[ "$quiet" -eq 1 ] && exit 0
+
+n=$(wc -l < "$tmp/nouveaux")
+[ "$n" -eq 0 ] && exit 0
+
+# Les en-tetes encodes (=?UTF-8?B?...?=) sont illisibles bruts dans dunst.
+decoder() {
+    perl -MEncode -CS -pe '$_ = Encode::decode("MIME-Header", $_)' 2>/dev/null \
+        || cat
+}
+
+entete() {
+    # $1 = fichier, $2 = nom de l'en-tete. S'arrete au corps du message et
+    # recolle les lignes de continuation (RFC 5322 « folding »).
+    awk -v h="^$2:" '
+        /^$/ { exit }
+        tolower($0) ~ tolower(h) { found = 1; sub(/^[^:]*:[ \t]*/, ""); print; next }
+        found && /^[ \t]/ { sub(/^[ \t]+/, " "); print; next }
+        found { exit }
+    ' "$1" | tr -d '\n' | decoder
+}
+
+# Au-dela de 3, un popup par message noierait dunst.
+if [ "$n" -gt 3 ]; then
+    $NOTIFY_CMD "✉ Courrier" "$n nouveaux messages."
+else
+    while read -r f; do
+        [ -f "$f" ] || continue
+        $NOTIFY_CMD "✉ $(entete "$f" From)" "$(entete "$f" Subject)"
+    done < "$tmp/nouveaux"
+fi
