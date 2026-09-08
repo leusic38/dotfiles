@@ -82,7 +82,7 @@ clic ambigu et gonflerait un module qui a déjà cinq boutons.
 ## 3. Nouveau paquet stow `mail`
 
 ```
-mail/.config/isync/mbsyncrc
+mail/.config/isyncrc
 mail/.config/msmtp/config
 mail/.config/aerc/aerc.conf
 mail/.config/aerc/accounts.conf
