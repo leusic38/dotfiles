@@ -1,0 +1,22 @@
+# Envoi SMTP. Appele par aerc (voir accounts.conf).
+#
+# Comme pour mbsync, aucun mot de passe ici : passwordeval interroge rbw.
+# C'est aussi ce qui evite l'avertissement de msmtp sur les permissions du
+# fichier — il ne refuse que les fichiers lisibles par autrui *contenant*
+# un mot de passe.
+
+defaults
+auth           on
+tls            on
+tls_trust_file /etc/ssl/certs/ca-certificates.crt
+logfile        ~/.cache/msmtp.log
+
+account        perso
+host           smtp-fr.securemail.pro
+port           465
+tls_starttls   off
+from           emmanuel@farcis.fr
+user           emmanuel@farcis.fr
+passwordeval   "rbw get mail-perso"
+
+account default : perso
