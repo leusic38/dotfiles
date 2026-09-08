@@ -27,6 +27,10 @@ Channel perso
 Far :perso-distant:
 Near :perso-local:
 Patterns *
+# Create Both cree les dossiers manquants des deux cotes (serveur et Maildir).
+# Expunge Both est un choix delibere, pas un defaut d'isync : supprimer un
+# message dans aerc le supprime aussi chez l'hebergeur, ce n'est pas un cache
+# local sans consequence. Alternative prudente : "Expunge Near" (local seul).
 Create Both
 Expunge Both
 SyncState *
