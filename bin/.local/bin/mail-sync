@@ -48,7 +48,7 @@ mkdir -p "$cache"
 exec 9>"$lock"
 flock -n 9 || exit 0
 
-tmp=$(mktemp -d)
+tmp=$(mktemp -d) || exit 1
 trap 'rm -rf "$tmp"' EXIT
 
 inventaire() {
@@ -85,7 +85,13 @@ decoder() {
 entete() {
     # $1 = fichier, $2 = nom de l'en-tete. S'arrete au corps du message et
     # recolle les lignes de continuation (RFC 5322 « folding »).
+    # La premiere regle retire un \r de fin de ligne eventuel : sous CRLF, la
+    # ligne vide separant en-tetes et corps vaut "\r" et non "", donc /^$/ ne
+    # la reconnaitrait pas sans cette normalisation — le balayage deborderait
+    # alors dans le corps du message. Meme regle, elle evite au passage un \r
+    # residuel dans les valeurs d'en-tete recopiees par print.
     awk -v h="^$2:" '
+        { sub(/\r$/, "") }
         /^$/ { exit }
         tolower($0) ~ tolower(h) { found = 1; sub(/^[^:]*:[ \t]*/, ""); print; next }
         found && /^[ \t]/ { sub(/^[ \t]+/, " "); print; next }
