@@ -1,0 +1,10 @@
+[Unit]
+Description=Synchroniser le courrier toutes les 3 minutes
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=3min
+Persistent=true
+
+[Install]
+WantedBy=timers.target
