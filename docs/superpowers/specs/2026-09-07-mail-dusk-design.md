@@ -86,8 +86,10 @@ mail/.config/isyncrc
 mail/.config/msmtp/config
 mail/.config/aerc/aerc.conf
 mail/.config/aerc/accounts.conf
-mail/.config/aerc/binds.conf
 ```
+
+Pas de `binds.conf` livré : `aerc` retombe alors sur `/usr/share/aerc/binds.conf`,
+qui convient tel quel tant qu'aucun raccourci n'est modifié.
 
 Le Maildir vit dans `~/.local/share/mail/<compte>/` : ce sont des données, jamais
 versionnées. Le découpage par compte est délibéré — ajouter une boîte en phase 2
@@ -289,7 +291,7 @@ Aucun framework de test dans ce dépôt : la validation est une liste de command
 | Première synchro | `mbsync -a` puis `find ~/.local/share/mail/perso -type f \| wc -l` | > 0 |
 | Compteur | `~/.local/bin/statusbar/mailmod/mail` | `✉N` cohérent avec le webmail |
 | Compteur à zéro | tout marquer lu dans aerc, relancer | sortie vide |
-| Slot 12 | `duskc --ignore-reply run_command setstatus 11 "✉test"` | `✉test` visible dans la barre |
+| Slot 11 | `duskc --ignore-reply run_command setstatus 11 "✉test"` | `✉test` visible dans la barre |
 | Notification | s'auto-envoyer un message, puis `mail-sync` | popup dunst avec expéditeur et sujet |
 | Groupement | s'envoyer 4 messages, puis `mail-sync` | un seul popup groupé |
 | Marqueur de péremption | reculer l'horodatage du cache de 40 min, relancer `mail` | `✉N!` |
