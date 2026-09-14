@@ -174,25 +174,42 @@ login tty1
 ### 1.10 Courrier
 
 Le paquet `mail` ne suffit pas : il ne contient aucun secret, par construction.
-Trois choses sont à recréer à la main sur une machine neuve.
+Deux choses sont à recréer à la main sur une machine neuve.
 
-Paquets nécessaires — `isync`, `msmtp`, `msmtp-mta`, `aerc`, `pass`, `w3m` : voir
+Paquets nécessaires — `isync`, `msmtp`, `aerc`, `rbw`, `w3m` : voir
 [Paquets requis](#2-paquets-requis).
 
-**La clé GPG perso**, distincte de la clé `work` :
+**Le raccordement à Bitwarden**, où le mot de passe vit déjà :
 
 ```bash
-gpg --full-generate-key    # ECC / Curve 25519 / n'expire pas
-gpg --list-secret-keys --keyid-format=long
+rbw config set email <adresse-du-compte-bitwarden>
+rbw register    # obligatoire sur bitwarden.com, voir ci-dessous
+rbw login
+rbw config set lock_timeout 3600
 ```
 
-**Le store de mots de passe**, qui est un dépôt git séparé, jamais un
-sous-dossier de dotfiles :
+`rbw register` n'est pas une politesse : le serveur officiel refuse un login par
+mot de passe seul, avec un laconique `api request returned error: 400`. Il faut
+enregistrer l'appareil avec la clé d'API personnelle du compte (coffre web →
+Paramètres du compte → Sécurité → onglet Clés → Afficher la clé d'API).
+
+L'entrée doit s'appeler exactement `mail-perso` — c'est ce nom que `mbsyncrc`
+et `msmtp` vont chercher. Vérifier qu'elle se relit sans invite :
 
 ```bash
-pass init <empreinte-de-la-clé-perso>
-pass insert mail/perso
+rbw unlock && rbw get mail-perso
 ```
+
+Le coffre se verrouille au bout d'une heure. Verrouillé, la synchro échoue en
+silence et la barre passe à `✉N!` au bout de trente minutes — c'est le signal
+qu'il faut ressaisir le mot de passe maître. Pour allonger le délai :
+
+```bash
+rbw config set lock_timeout 28800   # 8 h
+rbw stop-agent
+```
+
+`~/.config/rbw/config.json` n'est pas stowé : `rbw` le réécrit lui-même.
 
 **Le Maildir et la première synchro** :
 
@@ -231,6 +248,7 @@ sudo pacman -S --needed \
   zsh kitty ranger neovim helix \
   i3status-rust pamixer networkmanager \
   jq fzf eza reflector pacman-contrib \
+  isync msmtp aerc rbw w3m \
   android-tools android-file-transfer \
   ttf-jetbrains-mono-nerd ttf-hack-nerd \
   libx11 libxft libxinerama libxrender libxext libxcursor libxrandr \
@@ -254,6 +272,8 @@ des `-l…` de leurs quatre `config.mk` : `imlib2` pour les fonds d'écran de
 | `jq` | parsing JSON dans les modules de la barre |
 | `eza` | `aliasesrc` alias `ls` sur la commande `exa` ; le paquet `exa` n'existe plus, `eza` le remplace et fournit `/usr/bin/exa` en lien de compatibilité |
 | `reflector`, `pacman-contrib` | `mirrors` et le module `sysupdatemod` (`checkupdates`) |
+| `isync` | fournit `mbsync`, la synchro IMAP → Maildir du courrier |
+| `w3m` | rendu des messages HTML dans `aerc` |
 | `gvfs-mtp` | neutralisé pour le téléphone (§4), mais requis pour les autres appareils |
 | `android-file-transfer` | fournit `aft-mtp-mount`, utilisé par le montage MTP |
 | `ttf-jetbrains-mono-nerd` | police de `kitty` (`JetBrainsMono NF`) |
