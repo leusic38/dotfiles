@@ -1,6 +1,6 @@
 [Unit]
 Description=Synchroniser le courrier et notifier les nouveaux messages
-Documentation=man:mbsync(1)
+Documentation=file:%h/.local/bin/mail-sync
 Wants=network-online.target
 After=network-online.target
 

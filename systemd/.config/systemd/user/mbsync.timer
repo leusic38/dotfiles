@@ -4,7 +4,9 @@ Description=Synchroniser le courrier toutes les 3 minutes
 [Timer]
 OnBootSec=2min
 OnUnitActiveSec=3min
-Persistent=true
+# Pas de Persistent= : cette directive ne rattrape que les echeances d'un
+# OnCalendar=, jamais celles d'un timer monotone (OnBootSec/OnUnitActiveSec)
+# comme celui-ci. OnBootSec=2min couvre deja le demarrage de session.
 
 [Install]
 WantedBy=timers.target
