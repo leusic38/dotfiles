@@ -185,7 +185,7 @@ Paquets nécessaires — `isync`, `msmtp`, `aerc`, `rbw`, `w3m` : voir
 rbw config set email <adresse-du-compte-bitwarden>
 rbw register    # obligatoire sur bitwarden.com, voir ci-dessous
 rbw login
-rbw config set lock_timeout 3600
+rbw config set lock_timeout 28800
 ```
 
 `rbw register` n'est pas une politesse : le serveur officiel refuse un login par
@@ -200,12 +200,22 @@ et `msmtp` vont chercher. Vérifier qu'elle se relit sans invite :
 rbw unlock && rbw get mail-perso
 ```
 
-Le coffre se verrouille au bout d'une heure. Verrouillé, la synchro échoue en
-silence et la barre passe à `✉N!` au bout de trente minutes — c'est le signal
-qu'il faut ressaisir le mot de passe maître. Pour allonger le délai :
+Le coffre se verrouille au bout de huit heures — en pratique, un déverrouillage
+par journée de travail. Verrouillé, la synchro s'arrête : `mail-sync` le détecte
+avant même d'appeler `mbsync`, émet **une** notification disant de lancer
+`rbw unlock`, et n'en émet plus jusqu'au prochain épisode. La barre passe en
+outre à `✉N!` au bout de trente minutes.
+
+Cette notification n'est pas une politesse : sans elle, la pile est restée morte
+cinq jours sans que rien ne le signale, le coffre s'étant verrouillé pendant que
+le timer accumulait 530 échecs silencieux. `pinentry` ne peut pas s'ouvrir depuis
+une unité systemd utilisateur, qui n'a pas de `DISPLAY` — la saisie du mot de
+passe maître doit donc venir d'un terminal.
+
+Pour changer le délai :
 
 ```bash
-rbw config set lock_timeout 28800   # 8 h
+rbw config set lock_timeout 3600   # 1 h, plus prudent
 rbw stop-agent
 ```
 

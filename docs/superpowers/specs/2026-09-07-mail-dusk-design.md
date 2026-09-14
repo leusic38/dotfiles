@@ -123,14 +123,25 @@ et elle marche, mais elle impose un second magasin de secrets à sauvegarder et
 à synchroniser en parallèle de Bitwarden.
 
 **Le coffre se verrouille**, et c'est la contrepartie assumée : `lock_timeout`
-vaut 3600 s (une heure). Coffre verrouillé, `mbsync` échoue, donc plus de
-notifications — mais le marqueur `!` de la barre (§6) le dit au bout de 30
-minutes, au lieu de laisser croire à une boîte calme. Le téléphone d'Emmanuel
-notifie en parallèle, ce qui rend ce trou acceptable. Le délai se change à tout
-moment, sans rien toucher d'autre :
+vaut 28800 s (huit heures), soit un déverrouillage par journée de travail.
+
+Ce point a été révisé en exploitation, et il mérite d'être raconté. Le délai
+valait d'abord une heure, au motif que le marqueur `!` de la barre signalerait
+un coffre fermé. Deux choses ont démenti ce raisonnement : le marqueur n'était
+pas affichable tant que `dusk` n'avait pas son douzième slot, et l'échec
+n'était pas propre — `pinentry` ne peut pas s'ouvrir depuis une unité systemd
+utilisateur, qui n'a pas de `DISPLAY`, de sorte que `mbsync` se cassait sur lui
+à chaque échéance. Résultat mesuré : cinq jours d'arrêt complet, 530 échecs,
+aucun signal.
+
+`mail-sync` détecte donc désormais le verrouillage **avant** d'appeler `mbsync`,
+et émet **une** notification par épisode — une seule, parce qu'un popup toutes
+les trois minutes s'apprend à ignorer. Le marqueur `!` reste le second filet.
+
+Le délai se change à tout moment, sans rien toucher d'autre :
 
 ```bash
-rbw config set lock_timeout 28800   # 8 h
+rbw config set lock_timeout 3600   # 1 h, plus prudent
 rbw stop-agent
 ```
 
