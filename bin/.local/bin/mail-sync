@@ -11,14 +11,25 @@
 # apres mbsync ; les noms apparus sont les nouveaux messages. Pas de base, pas
 # d'etat a maintenir — le Maildir est deja la source de verite.
 #
-# En cas d'echec (mbsync, ou coffre rbw verrouille detecte en amont) : aucune
-# notification (un reseau coupe n'est pas un evenement digne d'un popup
-# toutes les 3 minutes) et l'horodatage n'est pas mis a jour, ce qui fait
-# apparaitre le suffixe « ! » dans la barre au bout de 30 minutes. Le detail
-# des echecs mbsync est dans journald : journalctl --user -t mail-sync
-# (et non "-u mbsync.service" : ce script est aussi lance hors de cette unite,
-# depuis la molette de la barre, donc son flux d'erreur ne porte que son
-# identifiant syslog, pas les metadonnees de l'unite que "-u" filtre).
+# En cas d'echec, l'horodatage n'est pas mis a jour, ce qui fait apparaitre
+# le suffixe « ! » dans la barre au bout de 30 minutes. Deux causes possibles :
+#   - mbsync echoue (reseau, etc.) : aucune notification -- un reseau coupe
+#     n'est pas un evenement digne d'un popup toutes les 3 minutes, et la
+#     barre suffit a le signaler.
+#   - le coffre rbw est verrouille (detecte en amont, avant mbsync) : UNE
+#     notification dunst, mais une seule par episode de verrouillage. Le
+#     timer tourne en permanence ; sans ce garde-fou, chaque execution
+#     renverrait un popup identique tant que le coffre reste verrouille --
+#     jusqu'a ce qu'Emmanuel apprenne a les ignorer, ce qui viderait la
+#     notification de son interet. Le fichier marqueur pose pres du controle
+#     rbw ci-dessous retient qu'on a deja prevenu pour cet episode ; il est
+#     efface des qu'une synchro reussit de nouveau, pour que le prochain
+#     verrouillage redonne bien lieu a une notification.
+# Le detail des echecs mbsync est dans journald : journalctl --user -t
+# mail-sync (et non "-u mbsync.service" : ce script est aussi lance hors de
+# cette unite, depuis la molette de la barre, donc son flux d'erreur ne
+# porte que son identifiant syslog, pas les metadonnees de l'unite que "-u"
+# filtre).
 #
 # Attention en debug : un "mbsync -D" lance a la main fait passer tout le
 # dialogue IMAP, LOGIN compris, dans ce meme flux -- donc dans journald.
@@ -50,6 +61,10 @@ maildir="${MAIL_ROOT:-${XDG_DATA_HOME:-$HOME/.local/share}/mail}"
 cache="${XDG_CACHE_HOME:-$HOME/.cache}/statusbar"
 stamp="$cache/mail_sync"
 lock="$cache/mail_sync.lock"
+# Marqueur d'episode de verrouillage rbw : sa seule presence dit "on a deja
+# notifie pour ce verrouillage-la". Cree a la premiere detection, efface des
+# qu'une synchro reussit -- voir le commentaire d'en-tete pour le pourquoi.
+locked_marker="$cache/mail_sync.rbw_locked"
 # Surchargeables pour les tests, comme firefox-profile-handler.sh et mdview le
 # font deja : sans ca, verifier la detection du neuf imposerait de s'envoyer de
 # vrais messages et d'attendre, ou de couper le reseau.
@@ -63,7 +78,7 @@ quiet=0
 
 case ${1-} in
     --quiet)   quiet=1 ;;
-    -h|--help) sed -n '2,24p' "$0" | sed 's/^# \?//'; exit 0 ;;
+    -h|--help) sed -n '2,35p' "$0" | sed 's/^# \?//'; exit 0 ;;
     "")        ;;
     *)         echo "option inconnue : $1 (voir --help)" >&2; exit 2 ;;
 esac
@@ -85,6 +100,17 @@ trap 'rm -rf "$tmp"' EXIT
 # outre et on laisse mbsync decider.
 if command -v "$RBW_CMD" >/dev/null 2>&1 && ! "$RBW_CMD" unlocked >/dev/null 2>&1; then
     echo "mail-sync: coffre rbw verrouille -- lancer : rbw unlock" >&2
+    # Une seule notification par episode : sans le marqueur, le timer (toutes
+    # les 3 minutes) en renverrait une identique a chaque execution tant que
+    # le coffre reste verrouille -- noyant dunst au point qu'Emmanuel
+    # apprendrait a les ignorer, ce qui annulerait l'interet de la
+    # notification. On ne notifie donc qu'a la transition (premier echec de
+    # l'episode) ; le marqueur est efface plus bas des qu'une synchro reussit,
+    # pour que le prochain verrouillage redonne bien lieu a une notification.
+    if [ ! -e "$locked_marker" ]; then
+        : > "$locked_marker"
+        $NOTIFY_CMD -u critical "✉ Courrier" "Coffre rbw verrouille -- lancer : rbw unlock"
+    fi
     exit 1
 fi
 
@@ -101,6 +127,10 @@ fi
 
 inventaire > "$tmp/apres"
 comm -13 "$tmp/avant" "$tmp/apres" > "$tmp/nouveaux"
+
+# La synchro a reussi : on remet a zero l'episode de verrouillage rbw, sinon
+# un futur verrouillage ne redonnerait plus jamais de notification.
+rm -f "$locked_marker"
 
 date +%s > "$stamp"
 
