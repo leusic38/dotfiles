@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=aerc
+Comment=Client de courrier en terminal
+Icon=mail-client
+NoDisplay=true
+Terminal=false
+Categories=Network;Email;
+Exec=kitty -e aerc %u
+MimeType=x-scheme-handler/mailto;

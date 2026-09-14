@@ -6,6 +6,7 @@ image/png=feh.desktop;
 image/gif=feh.desktop;
 x-scheme-handler/http=firefox-profile-handler.desktop
 x-scheme-handler/https=firefox-profile-handler.desktop
+x-scheme-handler/mailto=aerc.desktop
 x-scheme-handler/about=brave.desktop
 x-scheme-handler/unknown=brave.desktop
 x-scheme-handler/postman=Postman.desktop
