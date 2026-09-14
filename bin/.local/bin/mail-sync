@@ -16,10 +16,25 @@
 # mis a jour, ce qui fait apparaitre le suffixe « ! » dans la barre au bout de
 # 30 minutes. Le detail est dans journald : systemctl --user status mbsync
 #
+# Pourquoi mbsync est borne par "timeout" : en exploitation, le coffre rbw
+# s'est verrouille pendant qu'un mbsync tournait deja. Sa directive PassCmd a
+# relance "rbw get", qui a lance pinentry en attente d'une saisie -- saisie
+# qui ne viendrait jamais dans un service systemd sans terminal. mbsync n'est
+# jamais mort, le verrou flock ne s'est jamais libere, et comme sortir a 0 sur
+# contention est le comportement correct pour un chevauchement bref avec la
+# molette de la barre, chaque execution suivante du timer repartait en
+# silence avec un code de succes : mbsync.service se disait "reussi" a chaque
+# echeance, pendant cinq jours, sans plus rien synchroniser. Un mbsync qui ne
+# rend pas la main dans le delai imparti est en panne, quelle qu'en soit la
+# cause ; le borner rend "bloque pour toujours" impossible et laisse le
+# chemin d'echec ci-dessus (code non nul, pas de notification, horodatage
+# fige) faire son travail au lieu de rester invisible.
+#
 # Surchargeables pour les tests :
-#   MAIL_ROOT     racine du Maildir
-#   MBSYNC_CMD    commande tenant lieu de mbsync
-#   NOTIFY_CMD    commande tenant lieu de notify-send
+#   MAIL_ROOT       racine du Maildir
+#   MBSYNC_CMD      commande tenant lieu de mbsync
+#   NOTIFY_CMD      commande tenant lieu de notify-send
+#   MBSYNC_TIMEOUT  secondes avant d'abandonner un mbsync qui ne rend pas la main
 
 set -u
 
@@ -32,6 +47,9 @@ lock="$cache/mail_sync.lock"
 # vrais messages et d'attendre, ou de couper le reseau.
 MBSYNC_CMD="${MBSYNC_CMD:-mbsync}"
 NOTIFY_CMD="${NOTIFY_CMD:-notify-send}"
+# Inferieur aux 3 minutes du timer, pour qu'une execution bloquee ne puisse
+# jamais chevaucher la suivante (voir l'incident rbw/pinentry ci-dessus).
+MBSYNC_TIMEOUT="${MBSYNC_TIMEOUT:-120}"
 quiet=0
 
 case ${1-} in
@@ -57,7 +75,7 @@ inventaire() {
 
 inventaire > "$tmp/avant"
 
-if ! $MBSYNC_CMD -a >"$tmp/log" 2>&1; then
+if ! timeout "$MBSYNC_TIMEOUT" $MBSYNC_CMD -a >"$tmp/log" 2>&1; then
     sed 's/^/mbsync: /' "$tmp/log" >&2
     exit 1
 fi
