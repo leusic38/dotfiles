@@ -11,10 +11,17 @@
 # apres mbsync ; les noms apparus sont les nouveaux messages. Pas de base, pas
 # d'etat a maintenir — le Maildir est deja la source de verite.
 #
-# En cas d'echec de mbsync : aucune notification (un reseau coupe n'est pas un
-# evenement digne d'un popup toutes les 3 minutes) et l'horodatage n'est pas
-# mis a jour, ce qui fait apparaitre le suffixe « ! » dans la barre au bout de
-# 30 minutes. Le detail est dans journald : systemctl --user status mbsync
+# En cas d'echec (mbsync, ou coffre rbw verrouille detecte en amont) : aucune
+# notification (un reseau coupe n'est pas un evenement digne d'un popup
+# toutes les 3 minutes) et l'horodatage n'est pas mis a jour, ce qui fait
+# apparaitre le suffixe « ! » dans la barre au bout de 30 minutes. Le detail
+# des echecs mbsync est dans journald : journalctl --user -t mail-sync
+# (et non "-u mbsync.service" : ce script est aussi lance hors de cette unite,
+# depuis la molette de la barre, donc son flux d'erreur ne porte que son
+# identifiant syslog, pas les metadonnees de l'unite que "-u" filtre).
+#
+# Attention en debug : un "mbsync -D" lance a la main fait passer tout le
+# dialogue IMAP, LOGIN compris, dans ce meme flux -- donc dans journald.
 #
 # Pourquoi mbsync est borne par "timeout" : en exploitation, le coffre rbw
 # s'est verrouille pendant qu'un mbsync tournait deja. Sa directive PassCmd a
@@ -54,7 +61,7 @@ quiet=0
 
 case ${1-} in
     --quiet)   quiet=1 ;;
-    -h|--help) sed -n '2,20p' "$0" | sed 's/^# \?//'; exit 0 ;;
+    -h|--help) sed -n '2,24p' "$0" | sed 's/^# \?//'; exit 0 ;;
     "")        ;;
     *)         echo "option inconnue : $1 (voir --help)" >&2; exit 2 ;;
 esac
