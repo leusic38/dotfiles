@@ -41,6 +41,7 @@
 #   MAIL_ROOT       racine du Maildir
 #   MBSYNC_CMD      commande tenant lieu de mbsync
 #   NOTIFY_CMD      commande tenant lieu de notify-send
+#   RBW_CMD         commande tenant lieu de rbw (verification du verrouillage)
 #   MBSYNC_TIMEOUT  secondes avant d'abandonner un mbsync qui ne rend pas la main
 
 set -u
@@ -54,6 +55,7 @@ lock="$cache/mail_sync.lock"
 # vrais messages et d'attendre, ou de couper le reseau.
 MBSYNC_CMD="${MBSYNC_CMD:-mbsync}"
 NOTIFY_CMD="${NOTIFY_CMD:-notify-send}"
+RBW_CMD="${RBW_CMD:-rbw}"
 # Inferieur aux 3 minutes du timer, pour qu'une execution bloquee ne puisse
 # jamais chevaucher la suivante (voir l'incident rbw/pinentry ci-dessus).
 MBSYNC_TIMEOUT="${MBSYNC_TIMEOUT:-120}"
@@ -75,6 +77,16 @@ flock -n 9 || exit 0
 
 tmp=$(mktemp -d) || exit 1
 trap 'rm -rf "$tmp"' EXIT
+
+# Coffre verrouille : PassCmd echouerait dans mbsync avec deux lignes
+# obscures par tentative (voir l'incident pinentry ci-dessus). On le
+# detecte ici pour sortir tout de suite, avec un message qui dit quoi faire.
+# Si rbw n'est pas installe (pile mail utilisable sans Bitwarden), on passe
+# outre et on laisse mbsync decider.
+if command -v "$RBW_CMD" >/dev/null 2>&1 && ! "$RBW_CMD" unlocked >/dev/null 2>&1; then
+    echo "mail-sync: coffre rbw verrouille -- lancer : rbw unlock" >&2
+    exit 1
+fi
 
 inventaire() {
     find "$maildir"/*/INBOX/new -type f 2>/dev/null | sort
