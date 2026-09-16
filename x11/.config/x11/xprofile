@@ -9,6 +9,15 @@ setxkbmap frqw &
 #numlocks &
 dunst &
 udiskie &
+
+# Ouvrir le coffre Bitwarden une fois par session. mbsync en a besoin a chaque
+# synchro, et pinentry ne peut pas s'ouvrir depuis le timer systemd, qui n'a pas
+# de DISPLAY : sans ce deverrouillage, la synchro s'arrete des que le coffre se
+# reverrouille, et le courrier cesse d'arriver en silence.
+#
+# Le delai laisse dusk demarrer : xprofile s'execute avant le gestionnaire de
+# fenetres, et une boite de dialogue lancee sans lui serait ingerable.
+( sleep 4; rbw unlock ) &
 screenCount=$(xrandr --query | grep " connected" | awk '{print $1}' | wc -l)
 if [ "$screenCount" -eq 3 ]; then
   screenConfig --pos left

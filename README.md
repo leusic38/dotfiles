@@ -200,24 +200,39 @@ et `msmtp` vont chercher. Vérifier qu'elle se relit sans invite :
 rbw unlock && rbw get mail-perso
 ```
 
-Le coffre se verrouille au bout de huit heures — en pratique, un déverrouillage
-par journée de travail. Verrouillé, la synchro s'arrête : `mail-sync` le détecte
-avant même d'appeler `mbsync`, émet **une** notification disant de lancer
-`rbw unlock`, et n'en émet plus jusqu'au prochain épisode. La barre passe en
-outre à `✉N!` au bout de trente minutes.
+**Le coffre s'ouvre au démarrage de la session.** `xprofile` (paquet `x11`)
+lance `rbw unlock` quelques secondes après `dusk`, ce qui pose une boîte de
+dialogue au login et une seule. Le délai de verrouillage est réglé à une
+semaine, donc le coffre reste ouvert toute la session.
 
-Cette notification n'est pas une politesse : sans elle, la pile est restée morte
-cinq jours sans que rien ne le signale, le coffre s'étant verrouillé pendant que
-le timer accumulait 530 échecs silencieux. `pinentry` ne peut pas s'ouvrir depuis
-une unité systemd utilisateur, qui n'a pas de `DISPLAY` — la saisie du mot de
-passe maître doit donc venir d'un terminal.
+Le délai est court sur un `sleep` volontaire : `xprofile` s'exécute **avant** le
+gestionnaire de fenêtres, et une boîte de dialogue lancée sans lui serait
+ingérable.
 
-Pour changer le délai :
+Ce déverrouillage au login n'est pas un confort, c'est la condition pour que la
+synchro tourne : `pinentry` ne peut pas s'ouvrir depuis une unité systemd
+utilisateur, qui n'a pas de `DISPLAY`. Le mot de passe maître doit donc être
+saisi depuis la session graphique, jamais depuis le timer.
+
+Si le dialogue est annulé, ou si le coffre se verrouille malgré tout,
+`mail-sync` le détecte avant même d'appeler `mbsync`, émet **une** notification
+disant de lancer `rbw unlock`, et n'en émet plus jusqu'au prochain épisode. La
+barre passe en outre à `✉N!` au bout de trente minutes.
+
+Ces deux signaux ne sont pas de la décoration : avant eux, la pile est restée
+morte cinq jours sans que rien ne le dise, le timer accumulant 530 échecs
+silencieux.
+
+Contrepartie assumée du déverrouillage au login : **tout** le coffre Bitwarden
+est lisible par ce qui tourne sous ce compte pendant toute la session. Pour
+revenir à un déverrouillage à la demande :
 
 ```bash
-rbw config set lock_timeout 3600   # 1 h, plus prudent
+rbw config set lock_timeout 3600   # 1 h
 rbw stop-agent
 ```
+
+et retirer la ligne `rbw unlock` de `xprofile`.
 
 `~/.config/rbw/config.json` n'est pas stowé : `rbw` le réécrit lui-même.
 
