@@ -14,7 +14,7 @@
 # branche et signale l'écart s'il y en a. Pour réépingler après avoir poussé
 # du travail :  suckless-build --pin
 
-dusk                 git@github.com:leusic38/dusk.git                 master  1dbc0cfc90a560504fac91e4a5625ea3b674c869
+dusk                 git@github.com:leusic38/dusk.git                 master  14c0a57f3672ffd89e934f575a5ea46fdefaccb6
 my-dmenu-flexipatch  git@github.com:leusic38/my-dmenu-flexipatch.git  master  76549d014ef6abdecb1d676e5d4de160f86ba2d9
 my-slock-flexipatch  git@github.com:leusic38/my-slock-flexipatch.git  master  c8993e14894026cfcf29d6ed541d678b69b92c5a
 my-st                git@github.com:leusic38/my-st.git                work    a294b84f3ef2a329571e3664a94c9c35139bf337
