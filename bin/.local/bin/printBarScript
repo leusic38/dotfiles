@@ -3,8 +3,52 @@
 # This is bound to Shift+PrintScreen by default, requires maim. It lets you
 # choose the kind of screenshot to take, including copying the image or even
 # highlighting an area to copy. scrotcucks on suicidewatch right now.
+# Video recording requires ffmpeg and slop; stop it from the menu or with
+# `printBarScript stop` (bound to Ctrl+PrintScreen).
 
-case "$(printf "a selected area\\ncurrent window\\nfull screen\\nan annotate selected area\\na selected area (copy)\\ncurrent window (copy)\\nfull screen (copy)" | dmenu -l 7 -i -p "Screenshot which area?")" in
+pidfile="/tmp/printbar-recording.pid"
+viddir="$HOME/Videos/screencasts"
+
+# record <name> [WxH+X,Y] : start ffmpeg in background, whole screen if no geometry
+record() {
+	mkdir -p "$viddir"
+	out="$viddir/vid-$1-$(date '+%y%m%d-%H%M%S').mp4"
+	if [ -n "$2" ]; then
+		size="${2%%+*}" offset="${2#*+}"
+		set -- -video_size "$size" -i "$DISPLAY+$offset"
+	else
+		set -- -i "$DISPLAY"
+	fi
+	ffmpeg -y -loglevel error -f x11grab -framerate 30 "$@" \
+		-c:v libx264 -preset ultrafast -crf 23 -pix_fmt yuv420p "$out" &
+	echo $! >"$pidfile"
+	notify-send "⏺ Recording started" "$out"
+}
+
+# libx264 requires even dimensions
+geometry() { echo "$(($1 / 2 * 2))x$(($2 / 2 * 2))+$3,$4"; }
+
+# monitors as "name W H X Y" lines
+monitors() {
+	xrandr --listactivemonitors | awk 'NR > 1 { split($3, g, /[\/x+]/); print $NF, g[1], g[3], g[5], g[6] }'
+}
+
+recording() { [ -f "$pidfile" ] && kill -0 "$(cat "$pidfile")" 2>/dev/null; }
+
+stop() {
+	kill -INT "$(cat "$pidfile")" && rm -f "$pidfile"
+	notify-send "⏹ Recording stopped" "$viddir"
+}
+
+if [ "$1" = stop ]; then
+	recording && stop || notify-send "No recording in progress"
+	exit
+fi
+
+options="a selected area\\ncurrent window\\nfull screen\\nan annotate selected area\\na selected area (copy)\\ncurrent window (copy)\\nfull screen (copy)\\nrecord a selected area\\nrecord current window\\nrecord a monitor\\nrecord full screen"
+recording && options="stop recording\\n$options"
+
+case "$(printf "$options" | dmenu -l 12 -i -p "Screenshot which area?")" in
 "a selected area") maim -s ~/Images/screenshots/pic-selected-"$(date '+%y%m%d-%H%M%S').png" ;;
 "current window") maim -i "$(xdotool getactivewindow)" ~/Images/screenshots/pic-window-"$(date '+%y%m%d-%H%M%S').png" ;;
 "full screen") maim ~/Images/screenshots/pic-full-"$(date '+%y%m%d-%H%M%S').png" ;;
@@ -12,4 +56,24 @@ case "$(printf "a selected area\\ncurrent window\\nfull screen\\nan annotate sel
 "a selected area (copy)") maim -s | xclip -selection clipboard -t image/png ;;
 "current window (copy)") maim -i "$(xdotool getactivewindow)" | xclip -selection clipboard -t image/png ;;
 "full screen (copy)") maim | xclip -selection clipboard -t image/png ;;
+"stop recording") stop ;;
+"record a selected area")
+	recording && { notify-send "Already recording"; exit 1; }
+	sel="$(slop -f '%w %h %x %y')" || exit 1
+	# shellcheck disable=SC2086
+	record selected "$(geometry $sel)" ;;
+"record current window")
+	recording && { notify-send "Already recording"; exit 1; }
+	eval "$(xdotool getactivewindow getwindowgeometry --shell)"
+	record window "$(geometry "$WIDTH" "$HEIGHT" "$X" "$Y")" ;;
+"record a monitor")
+	recording && { notify-send "Already recording"; exit 1; }
+	mon="$(monitors | awk '{ print $1 " (" $2 "x" $3 ")" }' | dmenu -i -p "Record which monitor?")" || exit 1
+	# shellcheck disable=SC2046
+	set -- $(monitors | awk -v n="${mon%% *}" '$1 == n')
+	[ -n "$1" ] || exit 1
+	record "$1" "$(geometry "$2" "$3" "$4" "$5")" ;;
+"record full screen")
+	recording && { notify-send "Already recording"; exit 1; }
+	record full ;;
 esac
