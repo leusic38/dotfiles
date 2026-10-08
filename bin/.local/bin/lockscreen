@@ -1,4 +1,4 @@
 #!/bin/sh
-pkill xcompmgr || true
+pkill -x picom || true
 XSECURELOCK_SAVER="$HOME/.local/bin/lock-saver" xsecurelock
-xcompmgr -c &
+picom &

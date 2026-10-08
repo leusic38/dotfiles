@@ -167,7 +167,7 @@ Répondre `dusk`. La chaîne complète :
 login tty1
   └─ shell/.config/shell/profile   demande la session, exec startx
        └─ ~/.xinitrc               source ~/.xprofile, puis dispatch
-            ├─ ~/.xprofile         xcompmgr, xss-lock, dunst, udiskie, xrandr
+            ├─ ~/.xprofile         picom, xss-lock, dunst, udiskie, xrandr
             └─ dusklaunch          D-Bus, portails XDG, exec dusk
 ```
 
@@ -267,7 +267,7 @@ vérifiée contre `pacman`.
 sudo pacman -S --needed \
   base-devel git stow \
   xorg-server xorg-xinit xorg-xrdb xorg-xrandr xorg-setxkbmap \
-  xcompmgr xss-lock xdotool xclip maim \
+  picom xss-lock xdotool xclip maim \
   dbus xdg-desktop-portal-gtk \
   dunst libnotify udiskie gvfs gvfs-mtp \
   zsh kitty ranger neovim helix \
@@ -290,7 +290,7 @@ des `-l…` de leurs quatre `config.mk` : `imlib2` pour les fonds d'écran de
 
 | Paquet | Pourquoi |
 | --- | --- |
-| `xcompmgr`, `xss-lock` | lancés par `xprofile` (compositing, verrouillage sur inactivité) |
+| `picom`, `xss-lock` | lancés par `xprofile` (compositing, verrouillage sur inactivité) |
 | `xorg-xrdb` | `xinitrc` charge `~/.Xresources`, dont les thèmes `dusk` |
 | `maim`, `xclip`, `xdotool` | captures d'écran et presse-papiers des scripts `bin/` |
 | `pamixer` | module volume de la barre de statut |
