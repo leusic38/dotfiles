@@ -7,8 +7,8 @@ if [ "$1" == "--pos" ] && [ -n "$2" ]; then
 fi
 
 # Check if the position is valid if specified
-if [[ -n "$POSITION" && "$POSITION" != "left" && "$POSITION" != "vertLeft" && "$POSITION" != "right" && "$POSITION" != "top" ]]; then
-  notify-send "Error: Invalid position. Use '--pos left', '--pos right', '--pos top' or leave it empty for mirror mode."
+if [[ -n "$POSITION" && ! "$POSITION" =~ ^(left|vertLeft|right|vertRight|top|mirror|external)$ ]]; then
+  notify-send "Error: Invalid position. Use '--pos left|vertLeft|right|vertRight|top|mirror|external' or leave it empty for eDP-1 only."
   exit 1
 fi
 
@@ -58,6 +58,54 @@ reset_screen_config() {
   done
   notify-send "Configuration reset."
 }
+
+# Only external screens: turn off eDP-1, keep the current layout of the externals
+if [ "$POSITION" == "external" ]; then
+  if [ -z "$secondary_screens" ]; then
+    notify-send "No external screen detected, eDP-1 stays on."
+    exit 1
+  fi
+
+  # Current geometry of the active externals (WxH+X+Y)
+  declare -A ext_x ext_y
+  for screen in $secondary_screens; do
+    geom=$(xrandr --query | grep "^$screen connected" | grep -oE '[0-9]+x[0-9]+\+-?[0-9]+\+-?[0-9]+')
+    [ -z "$geom" ] && continue
+    pos=${geom#*+}
+    ext_x[$screen]=${pos%+*}
+    ext_y[$screen]=${pos#*+}
+  done
+
+  if [ ${#ext_x[@]} -gt 0 ]; then
+    # Shift the layout so it starts at 0x0 (removes the gap left by eDP-1),
+    # mode and rotation are left untouched
+    min_x=$(printf '%s\n' "${ext_x[@]}" | sort -n | head -1)
+    min_y=$(printf '%s\n' "${ext_y[@]}" | sort -n | head -1)
+    primary=$(for s in "${!ext_x[@]}"; do echo "${ext_x[$s]} ${ext_y[$s]} $s"; done | sort -n -k1,1 -k2,2 | head -1 | awk '{print $3}')
+    args=()
+    for screen in "${!ext_x[@]}"; do
+      args+=(--output "$screen" --pos "$((ext_x[$screen] - min_x))x$((ext_y[$screen] - min_y))")
+      [ "$screen" == "$primary" ] && args+=(--primary)
+    done
+    xrandr --output eDP-1 --off "${args[@]}"
+    notify-send "Applied configuration: external screens only (current layout kept)."
+    exit 0
+  fi
+
+  # No external screen active yet: place them side by side
+  args=()
+  x=0
+  first=1
+  for screen in $(echo "$secondary_screens" | tac); do
+    mode=$(xrandr --query | grep -A1 "^$screen connected" | tail -1 | awk '{print $1}')
+    args+=(--output "$screen" --mode "$mode" --pos "${x}x0" --rotate normal)
+    [ $first -eq 1 ] && args+=(--primary) && first=0
+    x=$((x + ${mode%x*}))
+  done
+  xrandr "${args[@]}" --output eDP-1 --off
+  notify-send "Applied configuration: external screens only (side by side)."
+  exit 0
+fi
 
 # If no additional screens are connected, configure only eDP-1
 if [ "$screen_count" -eq 0 ] || [ -z "$POSITION" ]; then
