@@ -9,13 +9,18 @@ cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/statusbar"
 cache_file="$cache_dir/composer_audit.json"
 lock="$cache_dir/composer_audit.lock"
 
+# If the root is missing (unmounted, renamed), keep the previous cache untouched
+# instead of pruning every project below.
+[ -d "$projects_root" ] || exit 0
+
 mkdir -p "$cache_dir"
 
 exec 9>"$lock"
 flock -n 9 || exit 0
 
 acc=$(mktemp)
-trap 'rm -f "$acc"' EXIT
+seen=$(mktemp)
+trap 'rm -f "$acc" "$acc.new" "$seen"' EXIT
 
 if [ -f "$cache_file" ] && jq -e '.projects' "$cache_file" >/dev/null 2>&1; then
 	jq '.projects' "$cache_file" > "$acc"
@@ -27,6 +32,7 @@ for dir in "$projects_root"/*/; do
 	[ -f "$dir/composer.json" ] || continue
 	[ -f "$dir/composer.lock" ] || continue
 	name=$(basename "$dir")
+	printf '%s\n' "$name" >> "$seen"
 	raw=$(cd "$dir" && composer audit --no-cache --format=json --no-interaction 2>/dev/null)
 	# Only update this project's entry if composer returned valid JSON.
 	# Empty stdout or non-JSON => network/composer error => keep previous value.
@@ -38,6 +44,13 @@ for dir in "$projects_root"/*/; do
 			"$acc" > "$acc.new" && mv "$acc.new" "$acc"
 	fi
 done
+
+# Drop entries whose directory is gone (deleted repo, removed git worktree):
+# audit_click would otherwise send you to a path that no longer exists.
+jq --rawfile seen "$seen" \
+	'($seen | split("\n") | map(select(length > 0))) as $keep
+	 | with_entries(select(.key as $k | $keep | index($k)))' \
+	"$acc" > "$acc.new" && mv "$acc.new" "$acc"
 
 jq -n --argjson ts "$(date +%s)" --slurpfile p "$acc" \
 	'{timestamp: $ts, projects: $p[0]}' > "$cache_file"

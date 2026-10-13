@@ -11,11 +11,16 @@ case $BLOCK_BUTTON in
 - molette haut : relancer l'audit
 - molette bas : ouvrir tous les liens d'advisories" ;;
 2)
-	top=$(jq -r 'first(.projects | to_entries[] | select(.value.count>0) | .key) // ""' "$cache" 2>/dev/null)
-	if [ -n "$top" ]; then
-		setsid -f "$TERMINAL" -e sh -c "cd \"$projects_root/$top\" && composer audit; exec \$SHELL"
-	else
+	top=$(jq -r '[.projects | to_entries[] | select(.value.count > 0)]
+		| max_by(.value.count) | .key // ""' "$cache" 2>/dev/null)
+	if [ -z "$top" ]; then
 		notify-send -t 2000 "🔒 Composer audit" "Aucun projet vulnérable."
+	elif [ ! -d "$projects_root/$top" ]; then
+		notify-send "🔒 Composer audit" "Le projet « $top » n'existe plus.
+Cache périmé : relance l'audit (molette haut)."
+	else
+		setsid -f "$TERMINAL" -e sh -c 'cd "$1" && composer audit; exec $SHELL' \
+			sh "$projects_root/$top"
 	fi
 	;;
 3)
@@ -36,7 +41,17 @@ case $BLOCK_BUTTON in
 	[ "$ts" -gt 0 ] && when=$(date -d "@$ts" "+%d/%m %H:%M") || when="?"
 	notify-send "🔒 Composer audit (maj: $when)" "$body"
 	;;
-4) notify-send -t 2000 "🔒 Composer audit" "Audit en cours…" ; "$mod/audit_refresh" & ;;
+4)
+	notify-send -t 2000 "🔒 Composer audit" "Audit en cours…"
+	# statusbar_launch ne repousse le bloc que toutes les 600s : on le fait
+	# nous-mêmes, sinon un refresh manuel reste invisible jusqu'à 10 min.
+	{
+		"$mod/audit_refresh"
+		command -v duskc >/dev/null &&
+			duskc --ignore-reply run_command setstatus 10 "$("$mod/audit")"
+		notify-send -t 2000 "🔒 Composer audit" "Audit terminé."
+	} &
+	;;
 5)
 	urls=$(jq -r '.projects[].advisories[]?[]?.link // empty' "$cache" 2>/dev/null | sort -u)
 	if [ -z "$urls" ]; then
