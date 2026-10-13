@@ -1,0 +1,124 @@
+#!/usr/bin/env bash
+#
+# Aperçu d'un fichier Markdown dans le navigateur.
+#
+#   mdview fichier.md            demande le profil, puis ouvre un onglet
+#   mdview -p 'Manu Theia' f.md  ouvre dans ce profil, sans rien demander
+#   mdview -c fichier.md         ouvre dans l'instance courante, sans demander
+#   mdview -n fichier.md         rend seulement, affiche le chemin du HTML
+#
+# Pourquoi demander le profil : « firefox <url> » sans -P remet l'onglet dans
+# l'instance déjà ouverte, quelle qu'elle soit — on se retrouve à lire ses
+# notes perso dans le profil de travail. Firefox 138+ fait tourner plusieurs
+# profils en parallèle, donc -P attache à celui qu'on demande ou le démarre.
+#
+# La liste des profils vient de firefox-profile-handler.sh --list-profiles :
+# elle est définie là-bas, pas dupliquée ici, et suit donc profiles.ini.
+#
+# Pourquoi ne pas simplement appeler xdg-open : il passerait par ce même
+# handler, mais en avalant le code de retour — dmenu annulé avec Échap et
+# rien ne s'ouvre, sans un mot. Ici on le dit, et le HTML reste sur le disque.
+#
+# Le HTML est écrit à un emplacement stable, dérivé du nom du fichier source :
+# réexécuter mdview sur le même fichier écrase la même page, et un F5 dans le
+# navigateur suffit à voir la nouvelle version.
+#
+# Surchargeables :
+#   MDVIEW_PROFILE   profil imposé, sans demander (vide = instance courante)
+#   MDVIEW_BROWSER   commande tenant lieu de firefox
+#   MDVIEW_PICKER    commande tenant lieu de dmenu
+#   MDVIEW_OUT       dossier de sortie
+
+set -eu
+
+BROWSER_CMD="${MDVIEW_BROWSER:-firefox}"
+PICKER_CMD="${MDVIEW_PICKER:-dmenu -i -p 'Profil Firefox :'}"
+OUT_DIR="${MDVIEW_OUT:-${XDG_RUNTIME_DIR:-/tmp}/mdview}"
+HANDLER="${MDVIEW_HANDLER:-$HOME/.local/bin/firefox-profile-handler.sh}"
+
+render_only=0
+ask=1
+profile=""
+
+# MDVIEW_PROFILE défini, fût-ce à la chaîne vide, vaut choix explicite : on ne
+# demande plus rien. D'où le « + » plutôt que « :- » dans le test.
+if [ -n "${MDVIEW_PROFILE+defini}" ]; then
+    profile=$MDVIEW_PROFILE
+    ask=0
+fi
+
+usage() { sed -n '2,9p' "$0" | sed 's/^# \?//'; }
+
+while [ $# -gt 0 ]; do
+    case $1 in
+        -h|--help) usage; exit 0 ;;
+        -n)        render_only=1; shift ;;
+        -c)        profile=""; ask=0; shift ;;
+        -p)        profile=${2-}; ask=0; shift 2 ;;
+        --)        shift; break ;;
+        -*)        echo "option inconnue : $1 (voir --help)" >&2; exit 2 ;;
+        *)         break ;;
+    esac
+done
+
+src=${1-}
+[ -n "$src" ] || { usage >&2; exit 2; }
+[ -r "$src" ] || { echo "illisible : $src" >&2; exit 1; }
+command -v pandoc >/dev/null || { echo "pandoc n'est pas installé" >&2; exit 1; }
+
+mkdir -p "$OUT_DIR"
+out="$OUT_DIR/$(basename "${src%.*}").html"
+
+# La feuille de style est ici plutôt que dans un fichier à côté : le script
+# reste un seul fichier, comme les autres utilitaires de bin/.
+style=$(mktemp) && trap 'rm -f "$style"' EXIT
+cat > "$style" <<'CSS'
+<style>
+  :root { color-scheme: light dark; }
+  body { max-width: 46rem; margin: 3rem auto; padding: 0 1.5rem;
+         font: 16px/1.65 -apple-system, "Segoe UI", Roboto, sans-serif; }
+  h1, h2, h3 { line-height: 1.25; margin-top: 2.2em; }
+  h1 { border-bottom: 2px solid currentColor; padding-bottom: .3em; }
+  h2 { border-bottom: 1px solid rgba(128,128,128,.35); padding-bottom: .25em; }
+  code { font-size: .9em; background: rgba(128,128,128,.15);
+         padding: .12em .35em; border-radius: 3px; }
+  pre { background: rgba(128,128,128,.12); padding: 1em; border-radius: 6px;
+        overflow-x: auto; }
+  pre code { background: none; padding: 0; }
+  table { border-collapse: collapse; width: 100%; display: block; overflow-x: auto; }
+  th, td { border: 1px solid rgba(128,128,128,.35); padding: .45em .7em; text-align: left; }
+  blockquote { border-left: 3px solid rgba(128,128,128,.5); margin-left: 0;
+               padding-left: 1em; opacity: .85; }
+  #TOC { background: rgba(128,128,128,.1); padding: 1em 1.5em; border-radius: 6px; }
+</style>
+CSS
+
+pandoc "$src" -s --toc --toc-depth=2 -H "$style" \
+       --metadata title="$(basename "$src")" -o "$out"
+
+if [ "$render_only" -eq 1 ]; then
+    echo "$out"
+    exit 0
+fi
+
+# Demander le profil. Faute de liste ou de sélecteur, on n'invente pas : on
+# ouvre dans l'instance courante, ce que faisait firefox tout seul.
+if [ "$ask" -eq 1 ]; then
+    profiles=""
+    [ -x "$HANDLER" ] && profiles=$("$HANDLER" --list-profiles 2>/dev/null || true)
+
+    if [ -n "$profiles" ] && command -v "${PICKER_CMD%% *}" >/dev/null 2>&1; then
+        profile=$(printf '%s\n' "$profiles" | eval "$PICKER_CMD" || true)
+        if [ -z "$profile" ]; then
+            echo "annulé — la page reste disponible : $out" >&2
+            exit 0
+        fi
+    fi
+fi
+
+if [ -n "$profile" ]; then
+    setsid -f "$BROWSER_CMD" -P "$profile" "file://$out" >/dev/null 2>&1
+else
+    setsid -f "$BROWSER_CMD" "file://$out" >/dev/null 2>&1
+fi
+echo "$out"
