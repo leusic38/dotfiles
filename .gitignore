@@ -31,3 +31,12 @@ awesome/.config/awesome/rc_copicats.lua
 awesome/.config/awesome/theme.lua
 awesome/.config/awesome/themes/
 awesome/.config/awesome/xrandr.lua
+
+# --- Fichiers reecrits automatiquement par les programmes eux-memes :
+# --- les versionner ne fait que produire du bruit dans git status.
+# Lien vers la version courante, mis a jour a chaque auto-update de Claude Code
+bin/.local/bin/claude
+# Regenere par Claude Code au demarrage
+mimeapps/.local/share/applications/claude-code-url-handler.desktop
+# Le favori ' (derniere position) est reecrit par ranger a chaque sortie
+ranger/.config/ranger/bookmarks
