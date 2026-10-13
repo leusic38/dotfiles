@@ -1,0 +1,150 @@
+#!/usr/bin/env bash
+# Report the OS and runtime versions actually running inside containers, as
+# opposed to the tag written in the compose file (often `latest`, which says
+# nothing). Works on any docker compose project: run it from the project
+# directory, or point it elsewhere with -C.
+# Without a compose project, falls back to every container on the host.
+set -uo pipefail
+
+usage() {
+    cat <<'EOF'
+Usage: container-versions [-C DIR] [--all] [--host]
+
+  -C DIR   run against the compose project in DIR (default: current directory)
+  --all    also list stopped / not created services
+  --host   ignore compose, inspect every container running on the host
+
+Env:
+  DOCKER_COMPOSE   compose command to use (default: "docker compose")
+EOF
+}
+
+DOCKER_COMPOSE=${DOCKER_COMPOSE:-docker compose}
+show_all=false
+host_mode=false
+dir=.
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+        -C) dir=${2:?-C needs a directory}; shift 2 ;;
+        --all|-a) show_all=true; shift ;;
+        --host) host_mode=true; shift ;;
+        -h|--help) usage; exit 0 ;;
+        *) usage >&2; exit 1 ;;
+    esac
+done
+
+cd "$dir" || exit 1
+
+# Probe executed inside the container: one "label<TAB>value" line per finding.
+# POSIX sh, and single-quoted below, so it must not contain single quotes.
+read -r -d '' probe <<'PROBE'
+if [ -r /etc/os-release ]; then
+    . /etc/os-release
+    printf "os\t%s\n" "${PRETTY_NAME:-${NAME:-?} ${VERSION_ID:-}}"
+elif [ -r /etc/alpine-release ]; then
+    printf "os\tAlpine Linux %s\n" "$(cat /etc/alpine-release)"
+fi
+
+# node & co often live in nvm, out of the non-interactive PATH.
+if ! command -v node >/dev/null 2>&1; then
+    nvm_bin=$(ls -d "$HOME"/.nvm/versions/node/*/bin 2>/dev/null | tail -n1)
+    [ -n "$nvm_bin" ] && PATH="$nvm_bin:$PATH"
+fi
+
+# corepack shims and some CLIs reach out to the network; never wait on them.
+run() { if command -v timeout >/dev/null 2>&1; then timeout 5 "$@"; else "$@"; fi; }
+v() { [ -n "$2" ] && printf "bin\t%s %s\n" "$1" "$2"; }
+has() { command -v "$1" >/dev/null 2>&1; }
+
+# Languages & runtimes
+has php && v PHP "$(php -r "echo PHP_VERSION;" 2>/dev/null)"
+has composer && v Composer "$(run composer --version --no-ansi 2>/dev/null | sed -n "s/^Composer version \([^ ]*\).*/\1/p")"
+has node && v Node "$(node -v 2>/dev/null | tr -d v)"
+has yarn && v Yarn "$(run yarn --version 2>/dev/null | tail -n1)"
+has pnpm && v pnpm "$(run pnpm --version 2>/dev/null | tail -n1)"
+has python3 && v Python "$(python3 --version 2>&1 | awk "{print \$2}")"
+has ruby && v Ruby "$(ruby -e "print RUBY_VERSION" 2>/dev/null)"
+has java && v Java "$(java -version 2>&1 | head -n1 | sed -n "s/.*version \"\([^\"]*\)\".*/\1/p")"
+has go && v Go "$(go version 2>/dev/null | awk "{print \$3}" | sed "s/^go//")"
+has bun && v Bun "$(bun --version 2>/dev/null)"
+has deno && v Deno "$(deno --version 2>/dev/null | head -n1 | awk "{print \$2}")"
+has dotnet && v .NET "$(run dotnet --version 2>/dev/null)"
+
+# Servers & datastores
+has nginx && v Nginx "$(nginx -v 2>&1 | sed -n "s|.*nginx/||p")"
+has httpd && v Apache "$(httpd -v 2>/dev/null | sed -n "s|.*Apache/\([^ ]*\).*|\1|p")"
+has apache2 && v Apache "$(apache2 -v 2>/dev/null | sed -n "s|.*Apache/\([^ ]*\).*|\1|p")"
+has postgres && v PostgreSQL "$(postgres --version 2>/dev/null | awk "{print \$NF}")"
+has mariadbd && v MariaDB "$(mariadbd --version 2>/dev/null | sed -n "s/.*Ver \([0-9][^ -]*\).*/\1/p")"
+if ! has mariadbd && has mysqld; then v MySQL "$(mysqld --version 2>/dev/null | sed -n "s/.*Ver \([0-9][^ -]*\).*/\1/p")"; fi
+has redis-server && v Redis "$(redis-server --version 2>/dev/null | sed -n "s/.*v=\([^ ]*\).*/\1/p")"
+has mongod && v MongoDB "$(mongod --version 2>/dev/null | sed -n "s/^db version v//p" | head -n1)"
+has rabbitmqctl && v RabbitMQ "$(run rabbitmqctl version 2>/dev/null | tail -n1)"
+
+# Misc tooling worth pinning down
+has supervisord && v Supervisor "$(supervisord --version 2>/dev/null)"
+has wkhtmltopdf && v wkhtmltopdf "$(wkhtmltopdf --version 2>/dev/null | head -n1 | awk "{print \$2}")"
+PROBE
+
+probe_container() { # $1 = container name -> sets $os / $versions
+    os='-'
+    versions='-'
+    local out
+    out=$(docker exec -e COREPACK_ENABLE_DOWNLOAD_PROMPT=0 -e CI=1 "$1" sh -c "$probe" 2>/dev/null)
+    if [ -n "$out" ]; then
+        os=$(printf '%s\n' "$out" | sed -n 's/^os\t//p' | head -n1)
+        versions=$(printf '%s\n' "$out" | sed -n 's/^bin\t//p' | paste -sd '|' - | sed 's/|/, /g')
+    fi
+    # A distroless image has no shell to probe.
+    [ -n "$os" ] || os='pas de shell'
+    [ -n "$versions" ] || versions='-'
+}
+
+# No compose file here? Report every container on the host instead.
+if ! $host_mode && ! $DOCKER_COMPOSE config --services >/dev/null 2>&1; then
+    echo "⚠️  Pas de projet docker compose dans $(pwd) — bascule sur tous les conteneurs de la machine." >&2
+    host_mode=true
+fi
+
+if $host_mode; then
+    rows=$'CONTENEUR\tÉTAT\tOS\tVERSIONS\tIMAGE\tIMAGE CRÉÉE'
+    list=$(docker ps $($show_all && echo -a) --format '{{.Names}}|{{.Image}}|{{.State}}' 2>/dev/null | sort)
+    while IFS='|' read -r name image state; do
+        [ -n "${name:-}" ] || continue
+        built=$(docker image inspect --format '{{.Created}}' "$image" 2>/dev/null | cut -c1-10)
+        os='-'; versions='-'
+        [ "$state" = running ] && probe_container "$name"
+        rows+=$'\n'"${name}"$'\t'"${state}"$'\t'"${os}"$'\t'"${versions}"$'\t'"${image}"$'\t'"${built:--}"
+    done <<< "$list"
+else
+    rows=$'SERVICE\tÉTAT\tOS\tVERSIONS\tIMAGE\tIMAGE CRÉÉE'
+    seen=""
+    ps_args=()
+    $show_all && ps_args=(-a)
+    list=$($DOCKER_COMPOSE ps "${ps_args[@]}" --format '{{.Service}}|{{.Name}}|{{.Image}}|{{.State}}' 2>/dev/null | sort -t'|' -k1,1)
+    while IFS='|' read -r service name image state; do
+        [ -n "${service:-}" ] || continue
+        seen+="${service}"$'\n'
+        built=$(docker image inspect --format '{{.Created}}' "$image" 2>/dev/null | cut -c1-10)
+        os='-'; versions='-'
+        [ "$state" = running ] && probe_container "$name"
+        rows+=$'\n'"${service}"$'\t'"${state}"$'\t'"${os}"$'\t'"${versions}"$'\t'"${image}"$'\t'"${built:--}"
+    done <<< "$list"
+
+    if $show_all; then
+        while read -r service; do
+            [ -n "$service" ] || continue
+            printf '%s' "$seen" | grep -qx "$service" && continue
+            image=$($DOCKER_COMPOSE config --images "$service" 2>/dev/null | head -n1)
+            built=$(docker image inspect --format '{{.Created}}' "$image" 2>/dev/null | cut -c1-10)
+            rows+=$'\n'"${service}"$'\tnon créé\t-\t-\t'"${image:--}"$'\t'"${built:--}"
+        done < <($DOCKER_COMPOSE config --services 2>/dev/null | sort)
+    fi
+fi
+
+if command -v column >/dev/null 2>&1; then
+    printf '%s\n' "$rows" | column -t -s $'\t'
+else
+    printf '%s\n' "$rows"
+fi
