@@ -40,3 +40,6 @@ bin/.local/bin/claude
 mimeapps/.local/share/applications/claude-code-url-handler.desktop
 # Le favori ' (derniere position) est reecrit par ranger a chaque sortie
 ranger/.config/ranger/bookmarks
+
+# neovimanu : worktree de nvim-config (branche sans-lazyvim), versionné là-bas
+neovimanu/.config/neovimanu/

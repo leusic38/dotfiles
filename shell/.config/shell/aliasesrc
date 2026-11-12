@@ -3,6 +3,7 @@ command -v nvim >/dev/null && alias vim="nvim" vi="nvim" v="nvim" vimdiff="nvim 
 command -v make >/dev/null && alias m="make"
 
 alias mnv='NVIM_APPNAME=neovimanu nvim'
+alias nn='NVIM_APPNAME=neovimanu nvim'
 
 alias mu='mirror && update'
 alias u='sudo pacman -Syu'
