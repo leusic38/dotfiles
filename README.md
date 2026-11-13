@@ -65,7 +65,7 @@ plugins restent vides, sans message d'erreur. Six sous-modules :
 ```bash
 cd ~/dotfiles
 stow -t ~ awesome bin cargo dunst dusk gtk-3.0 gtk-4.0 helix i3 i3status-rust \
-          ideavim kitty mail mimeapps neovimanu nvim ranger shell sql_formatter \
+          ideavim kitty mimeapps neovimanu nvim ranger shell sql_formatter \
           systemd x11 zsh
 ```
 
@@ -171,88 +171,6 @@ login tty1
             └─ dusklaunch          D-Bus, portails XDG, exec dusk
 ```
 
-### 1.10 Courrier
-
-Le paquet `mail` ne suffit pas : il ne contient aucun secret, par construction.
-Deux choses sont à recréer à la main sur une machine neuve.
-
-Paquets nécessaires — `isync`, `msmtp`, `aerc`, `rbw`, `w3m` : voir
-[Paquets requis](#2-paquets-requis).
-
-**Le raccordement à Bitwarden**, où le mot de passe vit déjà :
-
-```bash
-rbw config set email <adresse-du-compte-bitwarden>
-rbw register    # obligatoire sur bitwarden.com, voir ci-dessous
-rbw login
-rbw config set lock_timeout 28800
-```
-
-`rbw register` n'est pas une politesse : le serveur officiel refuse un login par
-mot de passe seul, avec un laconique `api request returned error: 400`. Il faut
-enregistrer l'appareil avec la clé d'API personnelle du compte (coffre web →
-Paramètres du compte → Sécurité → onglet Clés → Afficher la clé d'API).
-
-L'entrée doit s'appeler exactement `mail-perso` — c'est ce nom que `mbsyncrc`
-et `msmtp` vont chercher. Vérifier qu'elle se relit sans invite :
-
-```bash
-rbw unlock && rbw get mail-perso
-```
-
-**Le coffre s'ouvre au démarrage de la session.** `xprofile` (paquet `x11`)
-lance `rbw unlock` quelques secondes après `dusk`, ce qui pose une boîte de
-dialogue au login et une seule. Le délai de verrouillage est réglé à une
-semaine, donc le coffre reste ouvert toute la session.
-
-Le délai est court sur un `sleep` volontaire : `xprofile` s'exécute **avant** le
-gestionnaire de fenêtres, et une boîte de dialogue lancée sans lui serait
-ingérable.
-
-Ce déverrouillage au login n'est pas un confort, c'est la condition pour que la
-synchro tourne : `pinentry` ne peut pas s'ouvrir depuis une unité systemd
-utilisateur, qui n'a pas de `DISPLAY`. Le mot de passe maître doit donc être
-saisi depuis la session graphique, jamais depuis le timer.
-
-Si le dialogue est annulé, ou si le coffre se verrouille malgré tout,
-`mail-sync` le détecte avant même d'appeler `mbsync`, émet **une** notification
-disant de lancer `rbw unlock`, et n'en émet plus jusqu'au prochain épisode. La
-barre passe en outre à `✉N!` au bout de trente minutes.
-
-Ces deux signaux ne sont pas de la décoration : avant eux, la pile est restée
-morte cinq jours sans que rien ne le dise, le timer accumulant 530 échecs
-silencieux.
-
-Contrepartie assumée du déverrouillage au login : **tout** le coffre Bitwarden
-est lisible par ce qui tourne sous ce compte pendant toute la session. Pour
-revenir à un déverrouillage à la demande :
-
-```bash
-rbw config set lock_timeout 3600   # 1 h
-rbw stop-agent
-```
-
-et retirer la ligne `rbw unlock` de `xprofile`.
-
-`~/.config/rbw/config.json` n'est pas stowé : `rbw` le réécrit lui-même.
-
-**Le Maildir et la première synchro** :
-
-```bash
-mkdir -p ~/.local/share/mail/perso
-mbsync -a --dry-run    # controle l'authentification, n'ecrit rien
-mbsync -a              # peut prendre plusieurs minutes
-systemctl --user enable --now mbsync.timer
-```
-
-Ensuite, `aerc` lit le Maildir local — jamais l'IMAP directement. C'est ce qui
-rend le compteur de la barre cohérent avec le client, et le client utilisable
-hors ligne.
-
-Le segment `✉` de la barre exige un `dusk` recompilé avec `NUM_STATUSES 12`
-(§1.6) : sans ça, tous les autres modules s'affichent et seul le courrier
-manque, sans aucun message d'erreur.
-
 ---
 
 ## 2. Paquets requis
@@ -273,7 +191,6 @@ sudo pacman -S --needed \
   zsh kitty ranger neovim helix \
   i3status-rust pamixer networkmanager \
   jq fzf eza reflector pacman-contrib \
-  isync msmtp aerc rbw w3m \
   android-tools android-file-transfer \
   ttf-jetbrains-mono-nerd ttf-hack-nerd \
   libx11 libxft libxinerama libxrender libxext libxcursor libxrandr \
@@ -297,8 +214,6 @@ des `-l…` de leurs quatre `config.mk` : `imlib2` pour les fonds d'écran de
 | `jq` | parsing JSON dans les modules de la barre |
 | `eza` | `aliasesrc` alias `ls` sur la commande `exa` ; le paquet `exa` n'existe plus, `eza` le remplace et fournit `/usr/bin/exa` en lien de compatibilité |
 | `reflector`, `pacman-contrib` | `mirrors` et le module `sysupdatemod` (`checkupdates`) |
-| `isync` | fournit `mbsync`, la synchro IMAP → Maildir du courrier |
-| `w3m` | rendu des messages HTML dans `aerc` |
 | `gvfs-mtp` | neutralisé pour le téléphone (§4), mais requis pour les autres appareils |
 | `android-file-transfer` | fournit `aft-mtp-mount`, utilisé par le montage MTP |
 | `ttf-jetbrains-mono-nerd` | police de `kitty` (`JetBrainsMono NF`) |
@@ -344,7 +259,6 @@ fournit.
 | `dunst` | notifications |
 | `i3status-rust` | barre de statut |
 | `mimeapps` | associations de types MIME, handlers d'URL Firefox / PhpStorm |
-| `mail` | `mbsyncrc`, `msmtp`, `aerc` — le compte perso, sans aucun secret (voir §1.10) |
 | `gtk-3.0`, `gtk-4.0` | thème des applications GTK |
 | `systemd` | unités utilisateur (`ssh-agent.service`) |
 | `cargo` | environnement Rust (`~/.cargo/env`) |
@@ -410,17 +324,6 @@ trace des quatre dépôts. Mais le manifeste ne vaut que si les commits qu'il
 épingle **existent sur le serveur** : après avoir patché et poussé, lancer
 `suckless-build --pin` puis committer le manifeste. Un `--check` de temps en
 temps dit si les deux ont divergé.
-
-### Le segment courrier exige un `dusk` recompilé
-
-`dusk.c` définit `NUM_STATUSES`, la taille du tableau des segments de barre.
-Le WM **ignore silencieusement** tout indice au-delà, sans rien journaliser :
-`duskc run_command setstatus 11 …` ne renvoie aucune erreur, la barre reste
-simplement vide à cet endroit.
-
-Le fork est donc épinglé sur une valeur de `12` (§1.6). Un `dusk` recompilé
-depuis une version antérieure du manifeste fera disparaître le segment `✉`
-sans le moindre signal.
 
 ### Les deux liens de session ne sont pas stowés
 

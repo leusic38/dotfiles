@@ -1,9 +1,0 @@
-[Unit]
-Description=Synchroniser le courrier et notifier les nouveaux messages
-Documentation=file:%h/.local/bin/mail-sync
-Wants=network-online.target
-After=network-online.target
-
-[Service]
-Type=oneshot
-ExecStart=%h/.local/bin/mail-sync
