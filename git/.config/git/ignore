@@ -1,0 +1,6 @@
+**/.claude/settings.local.json
+
+# Editor config (Neovim, phpactor)
+.editorconfig
+.nvim/
+.phpactor.json

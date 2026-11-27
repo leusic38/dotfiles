@@ -1,0 +1,11 @@
+[init]
+	defaultBranch = main
+[safe]
+	directory = /srv/app
+[url "git@github.com:"]
+	insteadOf = https://github.com/
+[core]
+	autocrlf = input
+# Identity and signing key, kept out of the dotfiles repo
+[include]
+	path = ~/.gitconfig.local
