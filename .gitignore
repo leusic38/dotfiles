@@ -8,6 +8,7 @@ bin/.local/bin/connectWeblate
 bin/.local/bin/exec-commandAWS
 bin/.local/bin/launchSymfonyCommand
 bin/.local/bin/ipad-wifi-dns-change
+bin/.local/bin/claude-epic-status
 
 # --- Sauvegarde de config nvim contenant son propre .git : l'ajouter
 # --- creerait un gitlink casse (contenu absent de tout clone).
@@ -43,3 +44,6 @@ ranger/.config/ranger/bookmarks
 
 # neovimanu : worktree de nvim-config (branche sans-lazyvim), versionné là-bas
 neovimanu/.config/neovimanu/
+
+# --- Config locale non versionnee
+ranger/.config/ranger/rc.local.conf
