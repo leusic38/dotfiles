@@ -1,6 +1,13 @@
 #!/bin/sh
 
-[ $(pamixer --get-mute) = true ] && echo 🔇 && exit
+# Micro : icône Nerd Font, barrée quand il est coupé.
+if [ "$(pamixer --default-source --get-mute)" = true ]; then
+	mic="󰍭"
+else
+	mic="󰍬"
+fi
+
+[ $(pamixer --get-mute) = true ] && echo "$mic 🔇" && exit
 
 vol="$(pamixer --get-volume)"
 
@@ -12,4 +19,4 @@ else
 	icon="🔉"
 fi
 
-echo "$icon $vol%"
+echo "$mic $icon $vol%"

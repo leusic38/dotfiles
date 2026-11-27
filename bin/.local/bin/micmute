@@ -1,0 +1,24 @@
+#!/bin/sh
+# Coupe ou réactive le micro (source par défaut) et l'annonce par notification.
+#
+#   micmute          bascule
+#   micmute on       coupe
+#   micmute off      réactive
+#   micmute status   affiche l'état sans rien changer
+
+case ${1-toggle} in
+    toggle) pamixer --default-source -t ;;
+    on)     pamixer --default-source -m ;;
+    off)    pamixer --default-source -u ;;
+    status) ;;
+    *)      echo "usage : micmute [toggle|on|off|status]" >&2; exit 2 ;;
+esac
+
+if [ "$(pamixer --default-source --get-mute)" = true ]; then
+    msg="🎙️ Micro coupé"
+else
+    msg="🎤 Micro actif"
+fi
+
+echo "$msg"
+[ "${1-toggle}" = status ] || notify-send -h string:x-dunst-stack-tag:micmute -t 1500 "$msg"
